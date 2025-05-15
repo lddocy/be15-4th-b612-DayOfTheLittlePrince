@@ -1,0 +1,11 @@
+Model Information:
+* title:	El principito- Escena con Rosa
+* source:	https://sketchfab.com/3d-models/el-principito-escena-con-rosa-53149922773146099ff884fb1a7486f7
+* author:	eliangomonkey (https://sketchfab.com/eliangomonkey)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "El principito- Escena con Rosa" (https://sketchfab.com/3d-models/el-principito-escena-con-rosa-53149922773146099ff884fb1a7486f7) by eliangomonkey (https://sketchfab.com/eliangomonkey) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

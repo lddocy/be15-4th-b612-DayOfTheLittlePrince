@@ -5,6 +5,6 @@ export const mainRoutes = [
         path: '/',
         name: 'main',
         component: MainView,
-        meta: { layout: 'none' },
+        meta: { layout: 'default' },
     },
 ];

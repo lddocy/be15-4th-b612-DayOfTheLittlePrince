@@ -1,5 +1,19 @@
 <template>
-  <div class="bg-black text-white p-10">
-    <h1 class="text-4xl font-bold text-pink-500">Tailwind 테스트 🎉</h1>
+  <div class="main-layout">
+    <PlanetScene />
   </div>
 </template>
+
+<script setup>
+import PlanetScene from "@/features/main/components/PlanetScene.vue";
+</script>
+
+<style scoped>
+.main-layout {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+</style>
