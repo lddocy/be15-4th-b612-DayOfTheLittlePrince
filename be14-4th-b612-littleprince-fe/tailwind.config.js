@@ -9,11 +9,11 @@ export default {
                 cafe24: ['Cafe24Oneprettynight', 'sans-serif'],
             },
             colors: {
-                purple: '#8F87F1',
-                lavender: '#C68EFD',
-                pinkPurple: '#E9A5F1',
-                pink: '#FED2E2',
-                yellow: '#FFFCCB'
+                'dlp_purple': '#8F87F1',
+                'dlp_lavender': '#C68EFD',
+                'dlp_pinkPurple': '#E9A5F1',
+                'dlp_pink': '#FED2E2',
+                'dlp_yellow': '#FFFCCB',
             },
         },
     },

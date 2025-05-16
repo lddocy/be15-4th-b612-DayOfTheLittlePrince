@@ -47,7 +47,7 @@ onMounted(() => {
 
 <template>
   <div class="scene-wrapper relative w-full h-full">
-    <div v-if="isLoading" class="absolute inset-0 z-20 flex items-center justify-center bg-pinkPurple/20 text-purple text-xl font-bold">
+    <div v-if="isLoading" class="absolute inset-0 z-20 flex items-center justify-center bg-dlp_pinkPurple/20 text-purple text-xl font-bold">
         어린왕자가 당신을 기다리고 있어요...
     </div>
     <div ref="container" class="scene-container"></div>
