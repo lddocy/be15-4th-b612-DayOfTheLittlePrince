@@ -36,6 +36,20 @@ const todos = ref([
   }
 ])
 
+const addTodo = () => {
+  const newTodo = {
+    content: '새 할 일',
+    is_checked: 'N',
+    project_id: null
+  }
+  todos.value.push(newTodo)
+  alert('할 일이 추가되었습니다.')
+}
+
+const deleteTodo = (taskId) => {
+  todos.value = todos.value.filter(todo => todo.task_id !== taskId)
+  alert(`ID ${taskId} 삭제 완료`)
+}
 </script>
 
 <template>
@@ -57,18 +71,21 @@ const todos = ref([
           {{ todo.content }}
         </span>
       </div>
+      <button @click="deleteTodo(todo.task_id)" class="hidden group-hover:block transition bg-transparent p-0 border-none shadow-none">
+        <img src="@/assets/icons/trash.png" alt="삭제" class="w-4 h-4 object-contain" />
+      </button>
+    </div>
 
-      <!-- 삭제 버튼 (trash.png) -->
-      <button class="hidden group-hover:block transition bg-transparent p-0 border-none shadow-none">
-        <img
-            src="@/assets/icons/trash.png"
-            alt="삭제"
-            class="w-4 h-4 object-contain"
-        />
+    <!-- 리스트 하단: + 버튼 & AI 버튼 -->
+    <div class="flex gap-2 mt-2">
+      <button @click="addTodo"
+              class="bg-[#C9C3E3]/30 hover:bg-[#A49CAC]/60 text-black px-2 rounded-xl text-sm border border-white/10 transition">
+        +
+      </button>
+      <button
+          class="bg-[#C9C3E3]/30 hover:bg-[#A49CAC]/60 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
+        AI 생성하기
       </button>
     </div>
   </div>
 </template>
-
-
-
