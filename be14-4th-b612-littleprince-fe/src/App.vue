@@ -1,7 +1,9 @@
 <script setup>
 import SideBar from '@/components/layout/SideBar.vue';
+
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
+
 const route = useRoute();
 const useLayout = computed(() => route.meta.layout !== 'none');
 </script>
