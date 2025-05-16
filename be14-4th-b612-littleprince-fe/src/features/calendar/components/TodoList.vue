@@ -51,9 +51,9 @@ const todos = ref([
             v-model="todo.is_checked"
             true-value="Y"
             false-value="N"
-            class="w-4 h-4 accent-blue-400 bg-white/20 border-white/30 rounded"
+            class="w-4 h-4 accent-[#60A5FA]/50 bg-white/20 border-white/30 rounded"
         />
-        <span :class="{ 'line-through opacity-60': todo.is_checked === 'Y' }" class="text-sm">
+        <span :class="{ 'line-through opacity-60': todo.is_checked === 'Y' }" class="text-sm text-[#161717]">
           {{ todo.content }}
         </span>
       </div>
