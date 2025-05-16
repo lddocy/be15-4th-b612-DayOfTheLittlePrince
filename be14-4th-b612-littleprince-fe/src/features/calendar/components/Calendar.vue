@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import MonthPicker from '@/features/calendar/components/MonthPicker.vue'
@@ -8,7 +8,6 @@ import '@/assets/styles/calendar.css'
 
 const calendarRef = ref(null)
 const selectedDate = ref(new Date())
-const showPicker = ref(false)
 
 const calendarOptions = {
   plugins: [dayGridPlugin],
@@ -28,6 +27,9 @@ const calendarOptions = {
     center: '',
     right: 'today prev,next'
   },
+    datesSet(info) {
+        selectedDate.value = new Date(info.view.currentStart)
+    }
 }
 
 function onDateSelected(date) {
