@@ -12,7 +12,8 @@ const useLayout = computed(() => route.meta.layout !== 'none');
 <template>
   <div id="app" class="flex h-screen w-screen overflow-hidden">
     <SideBar v-if="useLayout" />
-    <PlanetScene/>
+<!-- '/' 경로에서는 배경으로 안쓰이게 -->
+    <PlanetScene :class="{'planet-front' : route.path === '/'}"/>
     <div class="flex-1" :class="{ layout: useLayout }">
       <router-view />
     </div>
@@ -31,12 +32,20 @@ html, body {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  position: relative;
 }
-
-.layout {
+/*.layout {
   height: 100%;
   overflow: auto;
+}*/
+
+.layout {
+  position: relative;
+  z-index: 1;
+}
+
+.planet-front {
+  z-index: 2 !important;
+  pointer-events: auto;
 }
 
 @font-face {
