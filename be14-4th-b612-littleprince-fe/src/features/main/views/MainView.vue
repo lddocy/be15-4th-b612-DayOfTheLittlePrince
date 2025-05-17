@@ -1,11 +1,9 @@
 <template>
   <div class="main-layout">
-    <PlanetScene />
   </div>
 </template>
 
 <script setup>
-import PlanetScene from "@/features/main/components/PlanetScene.vue";
 </script>
 
 <style scoped>
