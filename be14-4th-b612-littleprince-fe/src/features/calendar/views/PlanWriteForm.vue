@@ -27,7 +27,7 @@ const handleConfirm = () => {
 <template>
   <div class="relative w-full h-screen z-10 flex justify-center items-center gap-12 px-8">
 
-    <!-- 캘린더 영역 -->
+    <!-- 캘린더 영역  -->
     <div class="w-[720px] h-[90vh] rounded-2xl p-6 shadow-lg transform -translate-x-20">
       <Calendar />
     </div>
