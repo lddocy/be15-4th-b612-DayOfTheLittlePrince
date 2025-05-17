@@ -4,6 +4,19 @@ const props = defineProps({
   editableMap: Object
 })
 
+// 임시
+const deleteTodo = (taskId) => {
+  if (props.editableMap[taskId]) {
+    const index = props.todos.findIndex(todo => todo.task_id === taskId)
+    if (index !== -1) {
+      props.todos.splice(index, 1)
+      delete props.editableMap[taskId]
+    }
+  } else {
+    alert(`ID ${taskId} 삭제`)
+  }
+}
+
 const addTodo = () => {
   const newId = Date.now()
   props.todos.push({
@@ -14,15 +27,8 @@ const addTodo = () => {
   })
   props.editableMap[newId] = true
 }
-
-const deleteTodo = (taskId) => {
-  const index = props.todos.findIndex(todo => todo.task_id === taskId)
-  if (index !== -1) {
-    props.todos.splice(index, 1)
-    delete props.editableMap[taskId]
-  }
-}
 </script>
+
 
 <template>
   <div class="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-1 w-[90%] ml-4">
@@ -41,11 +47,11 @@ const deleteTodo = (taskId) => {
         />
         <input
             v-model="todo.content"
-            :readonly="!editableMap[todo.task_id]"
+            :readonly="!props.editableMap[todo.task_id]"
             :class="[
               'bg-transparent text-sm text-[#161717] outline-none w-full',
               todo.is_checked === 'Y' ? 'line-through opacity-60' : '',
-              !editableMap[todo.task_id] ? 'cursor-default' : ''
+              !props.editableMap[todo.task_id] ? 'cursor-default' : ''
             ]"
             placeholder="할 일을 입력하세요"
         />

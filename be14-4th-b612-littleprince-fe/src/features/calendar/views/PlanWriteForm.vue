@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import TodoList from '@/features/calendar/components/TodoList.vue'
-import calendarBg from '@/assets/images/calendar-background.jpg'
 import { useRouter } from 'vue-router'
 import Calendar from '@/features/calendar/components/Calendar.vue'
 
@@ -16,26 +15,27 @@ const todos = ref([
   { task_id: 5, content: '프론트엔드 초기 세팅 끝내기', is_checked: 'Y', project_id: null }
 ])
 
-const editableMap = ref({})
+const editable = ref({})
 
-// 등록 버튼 눌렀을 때 모두 수정 불가하게
 const handleConfirm = () => {
   todos.value = todos.value.filter(todo => todo.content.trim() !== '')
-  editableMap.value = {}
+  editable.value = {}
   alert('할 일이 등록되었습니다.')
 }
 </script>
 
 <template>
-  <div :style="{ backgroundImage: `url(${calendarBg})` }" class="scene-container relative bg-cover bg-center w-full h-screen">
-    <div class="relative w-full h-screen">
-      <div class="absolute top-[5%] left-[10%] w-1/2">
-        <Calendar />
-      </div>
+  <div class="relative w-full h-screen z-10 flex justify-center items-center gap-12 px-8">
+
+    <!-- 캘린더 영역 -->
+    <div class="w-[720px] h-[90vh] rounded-2xl p-6 shadow-lg transform -translate-x-20">
+      <Calendar />
     </div>
-    <div class="fixed top-[60px] bottom-[100px] right-[5%] w-[32%] h-[80%]
-                bg-[#E8D0FF]/30 rounded-2xl p-6 flex flex-col gap-4 text-white shadow-lg z-10">
-      <!-- 날짜 + 토글 -->
+
+    <!-- 투두 패널 영역 -->
+    <div class="w-[500px] h-[75vh] bg-[#E8D0FF]/30 rounded-2xl p-6 flex flex-col gap-4 text-white shadow-lg">
+
+      <!-- 날짜 -->
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
           <label class="px-3 py-[3px] bg-[#C9C3E3]/40 rounded-xl text-sm text-black border-white/10">날짜</label>
@@ -53,14 +53,13 @@ const handleConfirm = () => {
       <!-- 제목 입력 -->
       <div class="flex flex-col">
         <input v-if="toggle" type="text" placeholder="제목을 입력하세요."
-               class="w-30% px-3 py-2 rounded-xl bg-[#C9C3E3]/40 text-black placeholder-[#161717]/50 border-none focus:outline-none text-sm" />
+               class="w-full px-3 py-2 rounded-xl bg-[#C9C3E3]/40 text-black placeholder-[#161717]/50 border-none focus:outline-none text-sm" />
       </div>
 
       <div class="w-full h-[1px] bg-white/40" />
-      <br>
 
-      <!-- Todo 리스트 전달 -->
-      <TodoList :todos="todos" :editable-map="editableMap" />
+      <!-- 투두 리스트 -->
+      <TodoList :todos="todos" :editable-map="editable" />
 
       <!-- 하단 버튼 -->
       <div class="flex justify-between mt-auto">
