@@ -3,6 +3,7 @@ import SideBar from '@/components/layout/SideBar.vue';
 
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
+import PlanetScene from "@/features/main/components/PlanetScene.vue";
 
 const route = useRoute();
 const useLayout = computed(() => route.meta.layout !== 'none');
@@ -11,6 +12,7 @@ const useLayout = computed(() => route.meta.layout !== 'none');
 <template>
   <div id="app" class="flex h-screen w-screen overflow-hidden">
     <SideBar v-if="useLayout" />
+    <PlanetScene/>
     <div class="flex-1" :class="{ layout: useLayout }">
       <router-view />
     </div>
