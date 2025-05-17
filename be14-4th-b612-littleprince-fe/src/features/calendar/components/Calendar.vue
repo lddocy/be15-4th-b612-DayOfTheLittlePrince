@@ -5,6 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import MonthPicker from '@/features/calendar/components/MonthPicker.vue'
 
 import '@/assets/styles/calendar.css'
+import '@/assets/styles/calendar-event.css'
 
 const calendarRef = ref(null)
 const selectedDate = ref(new Date())
