@@ -1,65 +1,37 @@
 <script setup>
-import { ref } from 'vue'
-
-const todos = ref([
-  {
-    task_id: 1,
-    content: '요구사항 명세서 작성 끝내기',
-    is_checked: 'N',
-    project_id: null
-  },
-  {
-    task_id: 2,
-    content: '인프런 스프링부트 1강 듣기',
-    is_checked: 'N',
-    project_id: 5,
-    project_title: '투두 프로젝트'
-  },
-  {
-    task_id: 3,
-    content: '피그마 작업 마무리하기',
-    is_checked: 'N',
-    project_id: null
-  },
-  {
-    task_id: 4,
-    content: 'ERD 작업 시작하기',
-    is_checked: 'N',
-    project_id: 5,
-    project_title: '투두 프로젝트'
-  },
-  {
-    task_id: 5,
-    content: '프론트엔드 초기 세팅 끝내기',
-    is_checked: 'Y',
-    project_id: null
-  }
-])
+const props = defineProps({
+  todos: Array,
+  editableMap: Object
+})
 
 const addTodo = () => {
-  const newTodo = {
-    content: '새 할 일',
+  const newId = Date.now()
+  props.todos.push({
+    task_id: newId,
+    content: '',
     is_checked: 'N',
     project_id: null
-  }
-  todos.value.push(newTodo)
-  alert('할 일이 추가되었습니다.')
+  })
+  props.editableMap[newId] = true
 }
 
 const deleteTodo = (taskId) => {
-  todos.value = todos.value.filter(todo => todo.task_id !== taskId)
-  alert(`ID ${taskId} 삭제 완료`)
+  const index = props.todos.findIndex(todo => todo.task_id === taskId)
+  if (index !== -1) {
+    props.todos.splice(index, 1)
+    delete props.editableMap[taskId]
+  }
 }
 </script>
 
 <template>
-  <div class="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-1">
+  <div class="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-1 w-[90%] ml-4">
     <div
         v-for="todo in todos"
         :key="todo.task_id"
-        class="group flex items-center justify-between px-3 py-2 rounded-md bg-white/10 backdrop-blur-sm"
+        class="group flex items-center justify-between px-3 py-2 rounded-xl bg-[#C9C3E3]/40 hover:bg-[#A49CAC]/60 h-[40px]"
     >
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 w-full">
         <input
             type="checkbox"
             v-model="todo.is_checked"
@@ -67,23 +39,33 @@ const deleteTodo = (taskId) => {
             false-value="N"
             class="w-4 h-4 accent-[#60A5FA]/50 bg-white/20 border-white/30 rounded"
         />
-        <span :class="{ 'line-through opacity-60': todo.is_checked === 'Y' }" class="text-sm text-[#161717]">
-          {{ todo.content }}
-        </span>
+        <input
+            v-model="todo.content"
+            :readonly="!editableMap[todo.task_id]"
+            :class="[
+              'bg-transparent text-sm text-[#161717] outline-none w-full',
+              todo.is_checked === 'Y' ? 'line-through opacity-60' : '',
+              !editableMap[todo.task_id] ? 'cursor-default' : ''
+            ]"
+            placeholder="할 일을 입력하세요"
+        />
       </div>
-      <button @click="deleteTodo(todo.task_id)" class="hidden group-hover:block transition bg-transparent p-0 border-none shadow-none">
+      <button
+          @click="deleteTodo(todo.task_id)"
+          class="hidden group-hover:block transition bg-transparent p-0 border-none shadow-none"
+      >
         <img src="@/assets/icons/trash.png" alt="삭제" class="w-4 h-4 object-contain" />
       </button>
     </div>
 
-    <!-- 리스트 하단: + 버튼 & AI 버튼 -->
+    <!-- + 버튼 & AI 버튼 -->
     <div class="flex gap-2 mt-2">
       <button @click="addTodo"
-              class="bg-[#C9C3E3]/30 hover:bg-[#A49CAC]/60 text-black px-2 rounded-xl text-sm border border-white/10 transition">
+              class="bg-[#C9C3E3]/40 hover:bg-[#A49CAC]/60 text-black px-2 rounded-xl text-sm border border-white/10 transition">
         +
       </button>
       <button
-          class="bg-[#C9C3E3]/30 hover:bg-[#A49CAC]/60 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
+          class="bg-[#C9C3E3]/40 hover:bg-[#A49CAC]/60 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
         AI 생성하기
       </button>
     </div>

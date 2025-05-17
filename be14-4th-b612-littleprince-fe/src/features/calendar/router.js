@@ -9,9 +9,10 @@ export const calendarRoutes = [
         meta: { layout: 'default' },
     },
     {
-        path: '/plan/write',
+        path: '/calendar/plan/write',
         name: 'PlanWriteForm',
         component: PlanWriteForm,
         meta: { layout: 'default' },
-    }
+    },
+
 ];
