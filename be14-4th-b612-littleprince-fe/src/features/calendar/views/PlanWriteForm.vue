@@ -65,7 +65,7 @@ const handleConfirm = () => {
       <div class="flex justify-between mt-auto">
         <div class="flex gap-2 ml-auto">
           <button
-              @click="router.push('../calendar')"
+              @click="router.push('../../calendar')"
               class="bg-[#C9C3E3]/30 hover:bg-[#A49CAC]/60 text-black px-3 py-1 rounded-xl text-sm border border-white/10 transition">취소</button>
           <button
               @click="handleConfirm"
