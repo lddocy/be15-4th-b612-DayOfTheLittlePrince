@@ -81,7 +81,7 @@ public class AuthQueryServiceImpl implements AuthQueryService{
         String newAccessToken = jwtTokenProvider.createAccessToken(requestMemberId, requestEmail);
         String newRefreshToken = jwtTokenProvider.createRefreshToken(requestMemberId, requestEmail);
 
-        refreshTokenRepository.save(requestMemberId, requestEmail);
+        refreshTokenRepository.save(requestMemberId, newRefreshToken);
 
         return TokenResponse.builder()
                 .accessToken(newAccessToken)
