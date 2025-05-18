@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from 'vue-router';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 import SideBar from '@/components/layout/SideBar.vue';
 import PlanetScene from "@/features/main/components/PlanetScene.vue";
