@@ -28,7 +28,13 @@ const goToDailyTodos = () => {
 }
 
 const goToProject = (projectId) => {
-  alert(`장기 프로젝트 ${projectId} 상세 페이지로 이동`)
+  router.push({
+    name: 'LongTermListView',
+    params: {
+      date: selectedDate.value,
+      projectId: projectId
+    }
+  })
 }
 
 const createNewTodo = () => {
