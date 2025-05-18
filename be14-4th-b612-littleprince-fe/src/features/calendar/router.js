@@ -2,6 +2,7 @@ import CalendarView from "@/features/calendar/views/CalendarView.vue";
 import PlanWriteForm from "@/features/calendar/views/PlanWriteForm.vue";
 import PlanListView from "@/features/calendar/views/PlanListView.vue";
 import ShortTermListView from "@/features/calendar/views/ShortTermListView.vue";
+import LongTermListView from "@/features/calendar/views/LongTermListView.vue";
 
 export const calendarRoutes = [
     {
@@ -28,4 +29,10 @@ export const calendarRoutes = [
         component: ShortTermListView,
         meta: { layout: 'default' }
     },
+    {
+        path: '/calendar/:date/project/:projectId',
+        name: 'LongTermListView',
+        component: LongTermListView,
+        meta: { layout: 'default' }
+    }
 ];
