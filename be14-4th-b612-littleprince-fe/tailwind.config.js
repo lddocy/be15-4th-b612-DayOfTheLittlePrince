@@ -17,7 +17,7 @@ export default {
                 'dlp_white40': 'rgba(253, 254, 254, 0.4)',
                 'dlp_button-primary': 'var(--dlp-color-bg-button-primary)',
 
-                <!-- 투두 리스트 -->
+                // 투두리스트 박스 색상
                 dlp_card: '#C9C3E3',        // 기본 카드 배경
                 dlp_card_hover: '#A49CAC'   // Hover 할 시 색깔
             },
@@ -33,8 +33,14 @@ export default {
         },
     },
     safelist: [
-        'bg-dlp_card/40',
-        'hover:bg-dlp_card_hover/80'
+        {
+            pattern: /bg-dlp_card\/40/,
+            variants: ['hover']
+        },
+        {
+            pattern: /bg-dlp_card_hover\/80/,
+            variants: ['hover']
+        }
     ],
     plugins: [],
 }
