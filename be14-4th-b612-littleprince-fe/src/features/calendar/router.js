@@ -1,6 +1,6 @@
 import CalendarView from "@/features/calendar/views/CalendarView.vue";
 import PlanWriteForm from "@/features/calendar/views/PlanWriteForm.vue";
-import TodoListView from "@/features/calendar/views/TodoListView.vue";
+import PlanListView from "@/features/calendar/views/PlanListView.vue";
 
 export const calendarRoutes = [
     {
@@ -17,8 +17,8 @@ export const calendarRoutes = [
     },
     {
         path: '/calendar/:date',
-        name: 'TodoListView',
-        component: TodoListView,
+        name: 'PlanListView',
+        component: PlanListView,
         meta: { layout: 'default' }
     },
 ];
