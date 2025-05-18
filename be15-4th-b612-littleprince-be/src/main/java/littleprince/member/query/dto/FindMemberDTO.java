@@ -6,4 +6,5 @@ import lombok.Data;
 public class FindMemberDTO {
     private Long memberId;
     private String email;
+    private String password;
 }
