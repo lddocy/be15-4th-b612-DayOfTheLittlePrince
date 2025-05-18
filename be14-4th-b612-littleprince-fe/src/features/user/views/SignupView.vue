@@ -58,7 +58,7 @@ const handleSignup = async () => {
             type="submit"
             class="auth-primary-btn"
         >
-          로그인
+          회원가입
         </button>
       </form>
     </div>
