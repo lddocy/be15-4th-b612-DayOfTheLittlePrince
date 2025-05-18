@@ -6,8 +6,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createCamera, createRenderer, addBasicLighting } from '@/utils/setupThreeScene.js';
 import { loadHDRI, loadGLTF } from '@/utils/loaders.js';
 import {useRoute} from "vue-router";
+
+const emit = defineEmits(['loaded']);
+
 const container = ref(null);
-const isLoading = ref(true);
 const princeRef = ref(null);
 const route = useRoute();
 
@@ -37,7 +39,7 @@ onMounted(() => {
     model.visible = shouldShowPrince(route.path);
     scene.add(model);
     princeRef.value = model;
-    isLoading.value = false;
+    emit('loaded');
   });
 
   const animate = () => {
@@ -74,19 +76,18 @@ watch(
 
 <template>
   <div class="scene-wrapper relative w-full h-full">
-    <div v-if="isLoading" class="absolute inset-0 z-20 flex items-center justify-center bg-dlp_pinkPurple/20 text-dlp_purple text-xl font-bold">
-        어린왕자가 당신을 기다리고 있어요...
-    </div>
     <div ref="container" class="scene-container"></div>
   </div>
 </template>
 
 <style scoped>
 .scene-container {
-  position: fixed;
-/*  position: absolute;*/
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
 }
 </style>
