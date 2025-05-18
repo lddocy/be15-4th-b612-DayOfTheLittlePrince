@@ -36,7 +36,7 @@ const createNewTodo = () => {
 </script>
 
 <template>
-  <div class="w-screen h-screen flex justify-center items-center bg-white">
+  <div class="w-screen h-screen flex justify-center items-center">
     <!-- 가운데 너비 확보 -->
     <div class="flex gap-12 w-[1240px]">
 
