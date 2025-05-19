@@ -1,5 +1,6 @@
 <script setup>
 
+import '@/assets/styles/auth-container.css'
 import MainLogo from "@/features/user/components/MainLogo.vue";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
