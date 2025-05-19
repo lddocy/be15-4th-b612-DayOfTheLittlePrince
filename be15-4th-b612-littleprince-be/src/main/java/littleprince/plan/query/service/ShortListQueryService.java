@@ -1,6 +1,6 @@
 package littleprince.plan.query.service;
 
-import littleprince.plan.query.dto.ShortListDTO;
+import littleprince.plan.query.dto.response.ShortListDTO;
 import littleprince.plan.query.dto.response.ShortListResponse;
 import littleprince.plan.query.mapper.ShortListQueryMapper;
 import lombok.RequiredArgsConstructor;

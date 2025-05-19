@@ -1,6 +1,6 @@
 package littleprince.plan.query.mapper;
 
-import littleprince.plan.query.dto.ShortListDTO;
+import littleprince.plan.query.dto.response.ShortListDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.Date;
