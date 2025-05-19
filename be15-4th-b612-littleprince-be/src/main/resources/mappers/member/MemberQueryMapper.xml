@@ -6,7 +6,8 @@
     <select id="findMemberByEmail" resultType="littleprince.member.query.dto.FindMemberDTO">
         SELECT
             m.member_id,
-            m.email
+            m.email,
+            m.password
         FROM
             member m
         WHERE
