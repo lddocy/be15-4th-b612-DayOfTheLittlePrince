@@ -44,9 +44,9 @@ public class SecurityConfig {
                         auth
                                 /* 일반 권한 */
                                 /* TODO : 필요 할 때 주석 풀고 작성 해 주세요!*/
-//                                .requestMatchers(HttpMethod.GET,
-//
-//                                ).permitAll()
+                                .requestMatchers(HttpMethod.GET,
+                                        "/plan/short"
+                                ).permitAll()
                                 .requestMatchers(HttpMethod.POST,
                                         "/auth/login",
                                         "/member/signup"
