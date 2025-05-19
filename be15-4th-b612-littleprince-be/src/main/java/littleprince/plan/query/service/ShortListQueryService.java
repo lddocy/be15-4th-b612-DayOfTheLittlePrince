@@ -6,8 +6,7 @@ import littleprince.plan.query.mapper.ShortListQueryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Service

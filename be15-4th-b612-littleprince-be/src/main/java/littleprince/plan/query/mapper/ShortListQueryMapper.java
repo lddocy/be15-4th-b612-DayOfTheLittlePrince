@@ -3,8 +3,7 @@ package littleprince.plan.query.mapper;
 import littleprince.plan.query.dto.ShortListDTO;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Mapper

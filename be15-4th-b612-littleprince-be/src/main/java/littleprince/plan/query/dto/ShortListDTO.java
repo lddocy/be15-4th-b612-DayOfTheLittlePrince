@@ -4,8 +4,8 @@ import littleprince.common.domain.StatusType;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.sql.Date;
+
 
 @Getter
 @Builder
