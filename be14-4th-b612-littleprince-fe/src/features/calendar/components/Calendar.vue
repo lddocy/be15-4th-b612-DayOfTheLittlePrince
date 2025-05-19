@@ -3,15 +3,18 @@ import { ref } from 'vue'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import MonthPicker from '@/features/calendar/components/MonthPicker.vue'
+import interactionPlugin from '@fullcalendar/interaction'
 
 import '@/assets/styles/calendar.css'
 import '@/assets/styles/calendar-event.css'
+import {useRouter} from "vue-router";
 
 const calendarRef = ref(null)
 const selectedDate = ref(new Date())
+const router = useRouter()
 
 const calendarOptions = {
-  plugins: [dayGridPlugin],
+  plugins: [dayGridPlugin,interactionPlugin],
   initialView: 'dayGridMonth',
   height: '100%',
   events: [
@@ -28,9 +31,12 @@ const calendarOptions = {
     center: '',
     right: 'today prev,next'
   },
-    datesSet(info) {
+  datesSet(info) {
         selectedDate.value = new Date(info.view.currentStart)
-    }
+  },
+  dateClick(info) {
+    router.push({ path: `/calendar/${info.dateStr}`})
+  },
 }
 
 function onDateSelected(date) {

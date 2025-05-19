@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import {ref, computed, watch} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Calendar from '@/features/calendar/components/Calendar.vue'
 
@@ -52,6 +52,14 @@ const saveLog = () => {
   isEditingLog.value = false
   // 저장 처리 (API 연동 or localStorage 등)
 }
+
+const handleDateSelected = (dateStr) => {
+  router.push({ name: 'PlanListView', params: { date: dateStr } })
+}
+
+watch(() => route.params.date, (newDate) => {
+  selectedDate.value = newDate
+})
 </script>
 
 <template>
@@ -61,7 +69,7 @@ const saveLog = () => {
 
       <!-- 캘린더 -->
       <div class="w-[1000px] h-[90vh] rounded-2xl p-2 shadow-lg overflow-hidden">
-        <Calendar />
+        <Calendar @date-selected="handleDateSelected" />
       </div>
 
       <!-- 플랜 리스트 -->
