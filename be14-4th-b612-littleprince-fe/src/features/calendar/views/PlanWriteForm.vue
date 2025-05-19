@@ -1,11 +1,16 @@
 <script setup>
 import { ref } from 'vue'
-import TodoList from '@/features/calendar/components/TodoList.vue'
-import { useRouter } from 'vue-router'
-import Calendar from '@/features/calendar/components/Calendar.vue'
+import { useRoute, useRouter } from 'vue-router'
+import Calendar from "@/features/calendar/components/Calendar.vue";
+import TodoList from "@/features/calendar/components/TodoList.vue";
 
+const route = useRoute()
 const router = useRouter()
 const toggle = ref(false)
+
+// 날짜 값을 쿼리에서 받음
+const startDate = ref(route.query.date || '')
+const endDate = ref('')
 
 const todos = ref([
   { task_id: 1, content: '요구사항 명세서 작성 끝내기', is_checked: 'N', project_id: null },
@@ -22,54 +27,54 @@ const handleConfirm = () => {
   editable.value = {}
   alert('할 일이 등록되었습니다.')
 }
+
 </script>
 
 <template>
-  <div class="relative w-full h-screen z-10 flex justify-center items-center gap-12 px-8">
-
-    <!-- 캘린더 영역  -->
-    <div class="w-[720px] h-[90vh] rounded-2xl p-6 shadow-lg transform -translate-x-20">
-      <Calendar />
-    </div>
-
-    <!-- 투두 패널 영역 -->
-    <div class="w-[500px] h-[75vh] bg-[#E8D0FF]/30 rounded-2xl p-6 flex flex-col gap-4 text-white shadow-lg">
-
-      <!-- 날짜 -->
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <label class="px-3 py-[3px] bg-[#C9C3E3]/40 rounded-xl text-sm text-black border-white/10">날짜</label>
-          <input type="date" class="px-5 py-[3px] bg-[#C9C3E3]/40 text-sm text-black rounded-xl border-white/10" />
-          <span v-if="toggle" class="text-sm">~</span>
-          <input v-if="toggle" type="date" class="px-5 py-[3px] bg-[#C9C3E3]/40 text-sm text-black rounded-xl border-white/10" />
-        </div>
-        <div @click="toggle = !toggle" class="w-10 h-6 rounded-full relative cursor-pointer transition-all duration-300"
-             :class="toggle ? 'bg-[#60A5FA]/60' : 'bg-gray-400'">
-          <div class="absolute top-[2px] w-5 h-5 bg-white rounded-full shadow transition-all duration-300"
-               :class="toggle ? 'right-[2px]' : 'left-[2px]'" />
-        </div>
+  <div class="w-screen h-screen flex justify-center items-center">
+    <div class="flex gap-12 w-[1240px]">
+      <div class="w-[1000px] h-[90vh] rounded-2xl p-2 shadow-lg overflow-hidden">
+        <Calendar />
       </div>
 
-      <!-- 제목 입력 -->
-      <div class="flex flex-col">
-        <input v-if="toggle" type="text" placeholder="제목을 입력하세요."
-               class="w-full px-3 py-2 rounded-xl bg-[#C9C3E3]/40 text-black placeholder-[#161717]/50 border-none focus:outline-none text-sm" />
-      </div>
+      <!-- 플랜 리스트 -->
+      <div class="w-[500px] h-[75vh] bg-[#E8D0FF]/30 rounded-2xl p-6 flex flex-col text-black gap-4 shadow-lg overflow-y-auto self-center">
+        <!-- 날짜 -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <label class="px-3 py-[3px] bg-[#C9C3E3]/40 rounded-xl text-[12px] text-black border-white/10">날짜</label>
+            <input v-model="startDate" type="date" class="px-3 py-[3px] bg-[#C9C3E3]/40 text-[12px] text-black rounded-xl border-white/10" />
+            <span v-if="toggle" class="text-[20px]">~</span>
+            <input v-if="toggle" v-model="endDate" type="date" class="px-3 py-[3px] bg-[#C9C3E3]/40 text-[12px] text-black rounded-xl border-white/10" />
+          </div>
+          <div @click="toggle = !toggle" class="w-10 h-6 rounded-full relative cursor-pointer transition-all duration-300"
+               :class="toggle ? 'bg-[#60A5FA]/60' : 'bg-gray-400'">
+            <div class="absolute top-[2px] w-5 h-5 bg-white rounded-full shadow transition-all duration-300"
+                 :class="toggle ? 'right-[2px]' : 'left-[2px]'" />
+          </div>
+        </div>
 
-      <div class="w-full h-[1px] bg-white/40" />
+        <!-- 제목 입력 -->
+        <div class="flex flex-col">
+          <input v-if="toggle" type="text" placeholder="제목을 입력하세요."
+                 class="w-full px-3 py-2 rounded-xl bg-[#C9C3E3]/40 text-black placeholder-[#161717]/50 border-none focus:outline-none text-sm" />
+        </div>
 
-      <!-- 투두 리스트 -->
-      <TodoList :todos="todos" :editable-map="editable" />
+        <div class="w-full h-[1px] bg-white/40" />
 
-      <!-- 하단 버튼 -->
-      <div class="flex justify-between mt-auto">
-        <div class="flex gap-2 ml-auto">
-          <button
-              @click="router.push('../../calendar')"
-              class="bg-[#C9C3E3]/30 hover:bg-[#A49CAC]/60 text-black px-3 py-1 rounded-xl text-sm border border-white/10 transition">취소</button>
-          <button
-              @click="handleConfirm"
-              class="bg-[#C9C3E3]/30 hover:bg-[#A49CAC]/60 text-black px-3 py-1 rounded-xl text-sm border border-white/10 transition">확인</button>
+        <!-- 투두 리스트 -->
+        <TodoList :todos="todos" :editable-map="editable" />
+
+        <!-- 하단 버튼 -->
+        <div class="flex justify-between mt-auto">
+          <div class="flex gap-2 ml-auto">
+            <button
+                @click="router.push('../../calendar')"
+                class="bg-[#C9C3E3]/30 hover:bg-[#A49CAC]/60 text-black px-3 py-1 rounded-xl text-sm border border-white/10 transition">취소</button>
+            <button
+                @click="handleConfirm"
+                class="bg-[#C9C3E3]/30 hover:bg-[#A49CAC]/60 text-black px-3 py-1 rounded-xl text-sm border border-white/10 transition">확인</button>
+          </div>
         </div>
       </div>
     </div>
