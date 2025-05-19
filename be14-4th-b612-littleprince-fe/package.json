@@ -12,6 +12,7 @@
     "@fullcalendar/common": "^5.11.5",
     "@fullcalendar/core": "^6.1.17",
     "@fullcalendar/daygrid": "^6.1.17",
+    "@fullcalendar/interaction": "^6.1.17",
     "@fullcalendar/vue3": "^6.1.17",
     "date-fns": "^4.1.0",
     "flatpickr": "^4.6.13",
