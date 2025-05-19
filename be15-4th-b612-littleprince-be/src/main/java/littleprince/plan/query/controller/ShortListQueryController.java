@@ -16,18 +16,18 @@ import java.sql.Date;
 
 
 @RestController
-    @RequestMapping("/plan")
-    @RequiredArgsConstructor
-    public class PlanQueryController {
+@RequestMapping("/plan")
+@RequiredArgsConstructor
+public class ShortListQueryController {
 
-        private final ShortListQueryService planQueryService;
+    private final ShortListQueryService planQueryService;
 
-        /* 단기리스트 조회 */
-        @GetMapping("/short/{date}")
-        public ResponseEntity<ApiResponse<ShortListResponse>> getShortList(
-                @AuthenticationPrincipal CustomUserDetail customUserDetail,
-                @PathVariable Date date
-        )
+    /* 단기리스트 조회 */
+    @GetMapping("/short/{date}/todo")
+    public ResponseEntity<ApiResponse<ShortListResponse>> getShortList(
+            @AuthenticationPrincipal CustomUserDetail customUserDetail,
+            @PathVariable Date date
+    )
     {
         Long memberId =  customUserDetail.getMemberId();
 
