@@ -14,72 +14,79 @@
             :key="tab"
             @click="activeTab = tab"
             :class="[
-            'px-6 py-1.5 rounded-full font-semibold transition',
-            'bg-[rgba(254,210,226,0.6)] text-[#C65D7B]',
-            activeTab === tab
-              ? 'shadow-inner translate-y-[1px]'
-              : 'shadow-md hover:shadow-lg translate-y-[-1px]'
-          ]"
+      'px-6 py-1.5 rounded-full font-semibold transition text-[#C65D7B]'
+    ]"
+            :style="activeTab === tab
+      ? 'background-color: #FED2E2; box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25); transform: translateY(1px);'
+      : 'background-color: rgba(254,210,226,0.6); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); transform: translateY(-1px);'"
         >
           {{ tab }}
         </button>
       </div>
-
       <!-- 칭호 탭 -->
       <section v-if="activeTab === '칭호'" class="mb-8">
         <h3 class="font-semibold mb-3 text-lg text-left">⭐ 나의 칭호</h3>
+
+        <!-- 첫 줄 -->
         <div class="flex justify-center flex-wrap gap-3 mb-2">
-          <span
+          <button
               v-for="(title, idx) in titles.slice(0, 5)"
               :key="idx"
-              :class="[
-              'px-4 py-2 text-sm',
-              title.selected
-                ? 'bg-[rgba(143,135,241,0.4)] text-[#5B5B5B] rounded-[20px] shadow-inner'
-                : 'bg-[rgba(255,252,203,0.4)] text-[#5B5B5B] rounded-[20px] shadow-md'
-            ]"
+              @click="selectTitle(idx)"
+              class="px-4 py-2 text-sm transition cursor-pointer rounded-[20px] text-[#5B5B5B]"
+              :style="title.selected
+        ? 'background-color: rgba(143,135,241,0.4); box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);'
+        : 'background-color: rgba(255,252,203,0.4); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);'"
           >
             {{ title.label }}
-          </span>
+          </button>
         </div>
+
+        <!-- 두 번째 줄 -->
         <div class="flex justify-center flex-wrap gap-3">
-          <span
+          <button
               v-for="(title, idx) in titles.slice(5)"
               :key="idx + 5"
-              :class="[
-              'px-4 py-2 text-sm',
-              title.selected
-                ? 'bg-[rgba(143,135,241,0.4)] text-[#5B5B5B] rounded-[20px] shadow-inner'
-                : 'bg-[rgba(255,252,203,0.4)] text-[#5B5B5B] rounded-[20px] shadow-md'
-            ]"
+              @click="selectTitle(idx + 5)"
+              class="px-4 py-2 text-sm transition cursor-pointer rounded-[20px] text-[#5B5B5B]"
+              :style="title.selected
+        ? 'background-color: rgba(143,135,241,0.4); box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);'
+        : 'background-color: rgba(255,252,203,0.4); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);'"
           >
             {{ title.label }}
-          </span>
+          </button>
         </div>
       </section>
-
       <!-- 달성률 탭 -->
       <section v-if="activeTab === '달성률'" class="mb-8">
         <h3 class="font-semibold mb-6 text-lg text-left">⭐ 나의 달성률</h3>
         <div class="flex justify-center gap-16 mb-8">
           <!-- 총 달성률 -->
           <div class="flex flex-col items-center">
-            <div
-                class="w-24 h-24 rounded-full relative flex items-center justify-center"
-                :style="`background: conic-gradient(#8F87F1 ${animatedTotalRate * 3.6}deg, #eee ${animatedTotalRate * 3.6}deg)`"
-            >
-              <div class="absolute text-lg font-bold text-[#333]">{{ totalRate }}%</div>
+            <div class="relative w-24 h-24 flex items-center justify-center">
+              <!-- 도넛 배경 -->
+              <div
+                  class="w-full h-full rounded-full"
+                  :style="`background: conic-gradient(#8F87F1 ${animatedTotalRate * 3.6}deg, #eee ${animatedTotalRate * 3.6}deg); transition: background 1s ease;`"
+              ></div>
+
+              <!-- 도넛 구멍 -->
+              <div class="absolute w-16 h-16 bg-[#f9f9fb] rounded-full z-10"></div>
+
+              <!-- 텍스트 -->
+              <div class="absolute text-lg font-bold text-[#333] z-20">{{ totalRate }}%</div>
             </div>
             <p class="text-sm text-[#8F87F1] mt-2">총 달성률</p>
           </div>
-
           <!-- 이번 달 달성률 -->
           <div class="flex flex-col items-center">
-            <div
-                class="w-24 h-24 rounded-full relative flex items-center justify-center"
-                :style="`background: conic-gradient(#8F87F1 ${animatedMonthlyRate * 3.6}deg, #eee ${animatedMonthlyRate * 3.6}deg)`"
-            >
-              <div class="absolute text-lg font-bold text-[#333]">{{ monthlyRate }}%</div>
+            <div class="relative w-24 h-24 flex items-center justify-center">
+              <div
+                  class="w-full h-full rounded-full"
+                  :style="`background: conic-gradient(#8F87F1 ${animatedMonthlyRate * 3.6}deg, #eee ${animatedMonthlyRate * 3.6}deg); transition: background 1s ease;`"
+              ></div>
+              <div class="absolute w-16 h-16 bg-[#f9f9fb] rounded-full z-10"></div>
+              <div class="absolute text-lg font-bold text-[#333] z-20">{{ monthlyRate }}%</div>
             </div>
             <p class="text-sm text-[#8F87F1] mt-2">이번 달 달성률</p>
           </div>
@@ -90,15 +97,19 @@
       <section v-if="activeTab === '경험치'" class="mb-10">
         <h3 class="font-semibold mb-6 text-lg text-left">⭐ 나의 경험치</h3>
 
-        <!-- 경험치 로그 -->
-        <div class="bg-[#FCEEF3] text-sm text-gray-700 p-4 rounded-xl w-[320px] mx-auto mb-6">
-          <ul class="space-y-2">
-            <li v-for="(log, idx) in expLogs" :key="idx">• {{ log }}</li>
-          </ul>
-        </div>
+        <!-- Exp Bar + 툴팁 -->
+        <div class="relative w-full max-w-3xl mx-auto h-8 mt-4 group">
+          <!-- 경험치 로그 (툴팁) -->
+          <div
+              class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3
+             bg-[#FCEEF3] text-sm text-gray-700 px-4 py-2 rounded-xl
+             whitespace-nowrap shadow transition-opacity duration-300 opacity-0 group-hover:opacity-100 z-50"
+          >
+            <ul class="space-y-1">
+              <li v-for="(log, idx) in expLogs" :key="idx">• {{ log }}</li>
+            </ul>
+          </div>
 
-        <!-- Exp Bar -->
-        <div class="relative w-full max-w-3xl mx-auto h-8 mt-4">
           <!-- 배경 바 -->
           <div class="w-full h-6 bg-gray-300 rounded-full overflow-hidden relative">
             <!-- 채운 노란색 바 -->
@@ -115,11 +126,8 @@
                 :style="`left: calc(${expPercent}% - 12px); top: 50%; transform: translateY(-50%);`"
             />
 
-
             <!-- Exp 텍스트 -->
-            <div
-                class="absolute inset-0 flex items-center justify-center text-sm font-bold text-[#C6A82F]"
-            >
+            <div class="absolute inset-0 flex items-center justify-center text-sm font-bold text-[#C6A82F]">
               {{ currentExp }} / {{ maxExp }}
             </div>
           </div>
@@ -137,18 +145,20 @@
         <div class="flex items-center justify-between">
           <button class="text-xl text-gray-400 hover:text-gray-600">◀</button>
           <div class="flex gap-6">
-            <div
-                v-for="(item, idx) in items.slice(0, 4)"
+            <button
+                v-for="(item, idx) in items"
                 :key="idx"
-                class="w-20 h-20 bg-white rounded-2xl shadow flex items-center justify-center"
+                @click="selectItem(idx)"
+                :style="item.selected ? 'background-color: #FFE5EC; box-shadow: inset 0px 4px 4px rgba(0,0,0,0.25);' : 'background-color: white; box-shadow: 0px 4px 4px rgba(0,0,0,0.25);'"
+                class="w-20 h-20 rounded-2xl flex items-center justify-center transition"
             >
-              <template v-if="item">
-                <div class="text-2xl">🌸</div>
+              <template v-if="item.emoji">
+                <div class="text-2xl">{{ item.emoji }}</div>
               </template>
               <template v-else>
                 <div class="text-sm text-gray-400">아이템 없음</div>
               </template>
-            </div>
+            </button>
           </div>
           <button class="text-xl text-gray-400 hover:text-gray-600">▶</button>
         </div>
@@ -173,7 +183,7 @@ const tabs = ['칭호', '달성률', '경험치']
 const activeTab = ref(null)
 
 // 칭호
-const titles = [
+const titles = ref([
   { label: '조용한 별빛', selected: true },
   { label: '밝은 장미', selected: false },
   { label: '꾸준한 여우', selected: false },
@@ -183,7 +193,7 @@ const titles = [
   { label: '지혜로운 행성지기', selected: false },
   { label: '온전한 친구', selected: false },
   { label: '영원한 별의 수호자', selected: false }
-]
+])
 
 // 달성률
 const totalRate = ref(75)
@@ -223,5 +233,22 @@ const expLogs = [
 ]
 
 // 아이템
-const items = [true, true, false, false, false]
+const items = ref([
+  { emoji: '🌸', selected: false },
+  { emoji: '🌼', selected: false },
+  { emoji: '🌻', selected: false },
+  { emoji: '🌷', selected: false },
+  { emoji: '', selected: false }
+])
+
+function selectTitle(selectedIdx) {
+  titles.value.forEach((t, idx) => {
+    t.selected = idx === selectedIdx
+  })
+}
+
+function selectItem(idx) {
+  items.value[idx].selected = !items.value[idx].selected
+}
+
 </script>
