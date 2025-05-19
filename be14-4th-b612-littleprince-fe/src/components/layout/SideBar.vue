@@ -1,7 +1,14 @@
 <script setup>
 import {useRouter} from "vue-router";
+import { ref } from 'vue';
+import MyPageModal from '@/features/user/components/MyPageModal.vue'
 
 const router = useRouter();
+const isMyPageOpen = ref(false)
+const openMyPage = () => {
+  isMyPageOpen.value = true
+}
+
 
 // const handleLogout = async () => {
 //   try {
@@ -45,6 +52,7 @@ function navigate(target) {
       <div class="flex flex-col items-center space-y-12">
         <!-- 마이페이지 -->
         <div
+            @click="openMyPage"
             class="bg-white/20 p-1 rounded-2xl hover:bg-purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20"
         >
           <img src="@/assets/icons/mypage.png" alt="mypage" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" />
@@ -70,6 +78,7 @@ function navigate(target) {
         </div>
       </div>
     </div>
+    <MyPageModal :isOpen="isMyPageOpen" @close="isMyPageOpen = false" />
   </div>
 </template>
 
