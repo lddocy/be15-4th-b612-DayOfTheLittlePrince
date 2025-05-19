@@ -56,6 +56,9 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST,
                                         "/auth/logout"
                                 ).authenticated()
+                                .requestMatchers(HttpMethod.GET,
+                                        "/badges/{userId}"
+                                ).authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
