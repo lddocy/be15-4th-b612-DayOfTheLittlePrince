@@ -37,7 +37,7 @@ const handleLogin = async () => {
   <div class="login-layout">
     <MainLogo/>
 
-    <div class="card-style w-[500px]">
+    <div class="card-style">
       <div class="title text-center mb-8">
         <h1 class="text-dlp_title-lg font-bold">로그인</h1>
       </div>

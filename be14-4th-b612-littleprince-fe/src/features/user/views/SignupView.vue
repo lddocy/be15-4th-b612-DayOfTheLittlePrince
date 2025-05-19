@@ -39,6 +39,7 @@ const handleSignup = async () => {
     // const resp = await signup(formData);
 
     /* 4. 성공 시 로그인 페이지로 이동*/
+    alert("회원가입이 완료되었습니다.")
     await router.replace("/login")
 
   }catch(e){
@@ -51,7 +52,7 @@ const handleSignup = async () => {
 <template>
   <div class="signup-layout">
     <MainLogo/>
-    <div class="card-style w-[500px]">
+    <div class="card-style">
       <div class="title text-center mb-8">
         <h1 class="text-dlp_title-lg font-bold">회원가입</h1>
       </div>

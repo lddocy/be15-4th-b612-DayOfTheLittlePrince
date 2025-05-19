@@ -7,8 +7,7 @@
 /* 컴포넌트 스타일 정의 */
 @layer components {
     .card-style {
-        @apply px-10 pt-7 pb-4 rounded-[28px];
-        background-color: var(--dlp-color-bg-frame);
+        @apply w-[500px] px-10 pt-7 pb-4 rounded-[28px];        background-color: var(--dlp-color-bg-frame);
     }
 
     .input-box {
@@ -17,11 +16,11 @@
     }
 
     .input-box-label{
-        @apply text-dlp_text-md font-semibold
+        @apply text-dlp_text-sm font-semibold
     }
 
     .auth-primary-btn {
-        @apply h-[56px] mt-6 mb-12 rounded-[16px] bg-dlp_button-primary text-white text-dlp_primary-button transition duration-200;
+        @apply h-[56px] mt-3 mb-6 rounded-[16px] bg-dlp_button-primary text-white text-dlp_primary-button transition duration-200;
     }
 
     .auth-primary-btn:hover {
