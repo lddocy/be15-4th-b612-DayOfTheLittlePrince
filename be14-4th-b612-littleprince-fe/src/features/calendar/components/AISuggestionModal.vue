@@ -9,7 +9,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'addTodo'])
 
-// 항목 추가하면 자동 제거되게
+// 항목 추가하면 자동 제거 되도록 구현
 const internalList = ref([...props.suggestionList])
 
 watch(() => props.suggestionList, (newVal) => {
