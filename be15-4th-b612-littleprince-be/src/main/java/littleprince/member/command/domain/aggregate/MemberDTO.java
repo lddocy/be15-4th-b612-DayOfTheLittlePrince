@@ -1,4 +1,4 @@
-package littleprince.member.command.aggregate.domain;
+package littleprince.member.command.domain.aggregate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -2,7 +2,7 @@ package littleprince.member.command.application.service;
 
 
 import littleprince.common.exception.BusinessException;
-import littleprince.member.command.aggregate.domain.MemberDTO;
+import littleprince.member.command.domain.aggregate.MemberDTO;
 import littleprince.member.command.application.dto.request.SignupRequest;
 import littleprince.member.command.mapper.MemberCommandMapper;
 import littleprince.member.exception.MemberErrorCode;
