@@ -118,7 +118,12 @@ const handleConfirm = () => {
 
         <!-- 버튼 -->
         <div class="flex gap-2 mt-2 ml-4">
-          <button @click="addTodo" class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 rounded-xl text-sm border border-white/10 transition">+</button>
+          <button @click="addTodo"
+                  class="w-8 h-8 flex items-center justify-center text-lg font-bold
+                 bg-[#C9C3E3]/40 hover:bg-[#A49CAC]/60
+                 text-black rounded-full border border-white/10 transition">
+            +
+          </button>
           <button @click="isModalOpen = true"
               class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">AI 생성하기</button>
         </div>
