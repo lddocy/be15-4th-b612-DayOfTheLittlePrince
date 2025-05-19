@@ -59,18 +59,18 @@ function navigate(target) {
         </div>
         <!-- 캘린더 -->
         <div
-            class="bg-white/20 p-1 rounded-2xl hover:bg-purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20"
+            class="bg-white/20 p-1 rounded-2xl hover:bg-dlp_purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20"
             @click="navigate('calendar')"
         >
           <img src="@/assets/icons/calendar.png" alt="calendar" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" />
         </div>
         <!-- 캡처모드 -->
-        <div class="bg-white/20 p-1 rounded-2xl hover:bg-purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20">
+        <div class="bg-white/20 p-1 rounded-2xl hover:bg-dlp_purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20">
           <img src="@/assets/icons/capture.png" alt="capture" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" />
         </div>
         <!-- 로그아웃 -->
         <div
-            class="bg-white/20 p-1 rounded-2xl hover:bg-pinkPurple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20"
+            class="bg-white/20 p-1 rounded-2xl hover:bg-dlp_pinkPurple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20"
             @click="handleLogout"
         >
 

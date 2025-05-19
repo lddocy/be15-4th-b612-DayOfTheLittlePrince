@@ -1,21 +1,11 @@
 <script setup>
-import calendarBg from '@/assets/images/calendar-background.jpg'
-
+import Calendar from "@/features/calendar/components/Calendar.vue";
 </script>
 
 <template>
   <div
-      :style="{ backgroundImage: `url(${calendarBg})` }"
-      class="scene-container bg-cover bg-center"
+      class="w-screen h-screen bg-cover bg-center bg-no-repeat flex justify-center items-center box-border p-4 overflow-hidden"
   >
-    <!-- 내용 -->
+    <Calendar />
   </div>
 </template>
-
-<style scoped>
-.scene-container {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-</style>
