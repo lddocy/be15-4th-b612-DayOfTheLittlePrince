@@ -15,4 +15,22 @@
         AND #{ date } BETWEEN start_date AND end_date
         ORDER BY created_at
     </select>
+
+    <!-- 장기 플랜 상세 조회 -->
+    <select id="getLongDetailList" resultType="littleprince.plan.query.dto.response.LongDetailDTO">
+        SELECT
+              a.task_id
+            , a.project_id
+            , a.member_id
+            , a.content
+            , a.is_checked
+            , a.date
+         FROM task a
+         JOIN project b ON a.project_id = b.project_id
+        WHERE a.member_id = #{ memberId }
+          AND a.date = #{ date }
+          AND a.project_id = #{ projectId }
+          AND a.project_id IS NOT NULL
+        ORDER BY a.created_at
+    </select>
 </mapper>

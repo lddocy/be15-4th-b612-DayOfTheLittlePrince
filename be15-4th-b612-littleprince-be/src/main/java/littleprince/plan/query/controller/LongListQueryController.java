@@ -2,6 +2,7 @@ package littleprince.plan.query.controller;
 
 import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
+import littleprince.plan.query.dto.response.LongDetailResponse;
 import littleprince.plan.query.dto.response.LongListResponse;
 import littleprince.plan.query.service.LongListQueryService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,20 @@ public class LongListQueryController {
     {
         Long memberId = customUserDetail.getMemberId();
         LongListResponse response = longListQueryService.getLongList(memberId, date);
+
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /* 장기 플랜 상세 조회 */
+    @GetMapping("/long/{date}/{projectId}")
+    public ResponseEntity<ApiResponse<LongDetailResponse>> getLongDetail(
+            @AuthenticationPrincipal CustomUserDetail customUserDetail,
+            @PathVariable Date date,
+            @PathVariable Long projectId
+    )
+    {
+        Long memberId = customUserDetail.getMemberId();
+        LongDetailResponse response = longListQueryService.getLongDetail(memberId, date, projectId);
 
         return ResponseEntity.ok(ApiResponse.success(response));
     }
