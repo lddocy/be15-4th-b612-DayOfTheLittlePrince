@@ -88,6 +88,5 @@ watch(
     z-index: 0;
     width: 100vw;
     height: 100vh;
-    pointer-events: none;
 }
 </style>
