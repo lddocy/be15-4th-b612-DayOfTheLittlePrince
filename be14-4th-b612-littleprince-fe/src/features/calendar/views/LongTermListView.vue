@@ -2,13 +2,14 @@
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Calendar from '@/features/calendar/components/Calendar.vue'
+import AISuggestionModal from '@/features/calendar/components/AISuggestionModal.vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const selectedDate = ref(route.params.date)
 const projectId = route.params.projectId
-const projectTitle = ref('바디 프로필') // 실제는 projectId로 제목을 조회해야 함
+const projectTitle = ref('바디 프로필') // TODO: 실제 API로 제목 가져오기
 
 const todos = ref([
   { task_id: 1, content: '공복 유산소 30분', is_checked: 'N' },
@@ -19,6 +20,15 @@ const todos = ref([
 ])
 
 const editable = ref({})
+
+const isModalOpen = ref(false)
+const aiSuggestions = ref([
+  { content: '유산소 후 스트레칭 하기' },
+  { content: '단백질 보충제 챙기기' },
+  { content: '운동 전 근비대 영상 시청' },
+  { content: '폼롤러 마사지' },
+  { content: '식단하기' }
+])
 
 const deleteTodo = (taskId) => {
   if (editable.value[taskId]) {
@@ -31,6 +41,11 @@ const addTodo = () => {
   const newId = Date.now()
   todos.value.push({ task_id: newId, content: '', is_checked: 'N' })
   editable.value[newId] = true
+}
+
+const addSuggestedTodo = (content) => {
+  const newId = Date.now()
+  todos.value.push({ task_id: newId, content, is_checked: 'N' })
 }
 
 const goBack = () => {
@@ -101,10 +116,16 @@ const handleConfirm = () => {
           </div>
         </div>
 
-        <!-- 버튼들 -->
+        <!-- 버튼 -->
         <div class="flex gap-2 mt-2 ml-4">
-          <button @click="addTodo" class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 rounded-xl text-sm border border-white/10 transition">+</button>
-          <button class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">AI 생성하기</button>
+          <button @click="addTodo"
+                  class="w-8 h-8 flex items-center justify-center text-lg font-bold
+                 bg-[#C9C3E3]/40 hover:bg-[#A49CAC]/60
+                 text-black rounded-full border border-white/10 transition">
+            +
+          </button>
+          <button @click="isModalOpen = true"
+              class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">AI 생성하기</button>
         </div>
 
         <div class="flex justify-end mt-auto gap-2">
@@ -114,6 +135,15 @@ const handleConfirm = () => {
 
       </div>
     </div>
+
+    <!-- AI 추천 모달 -->
+    <AISuggestionModal
+        :visible="isModalOpen"
+        :date="selectedDate"
+        :suggestion-list="aiSuggestions"
+        @close="isModalOpen = false"
+        @addTodo="addSuggestedTodo"
+    />
   </div>
 </template>
 

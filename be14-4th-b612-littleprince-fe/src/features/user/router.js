@@ -7,13 +7,29 @@ export const userRoutes = [
             layout: 'none'
         },
     },
+
     {
-        path: '/'
+        path: '/findPassword',
+        name: 'findPassword',
+        component: () => import('@/features/user/views/findPasswordView.vue'),
+        meta: {
+        layout: 'none'
+        },
     },
+
     {
         path: '/signup',
         name: 'signup',
         component: () => import('@/features/user/views/SignupView.vue'),
+        meta: {
+            layout: 'none'
+        },
+    },
+
+    {
+        path: '/changePassword',
+        name: 'changePassword',
+        component: () => import('@/features/user/views/ChangePasswordView.vue'),
         meta: {
             layout: 'none'
         },

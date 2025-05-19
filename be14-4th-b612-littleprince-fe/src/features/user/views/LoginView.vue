@@ -7,7 +7,6 @@ import '@/assets/styles/auth-container.css'
 
 const router = useRouter();
 
-
 const userId = ref('');
 const password = ref('');
 
@@ -22,7 +21,7 @@ const handleLogin = async () => {
       return;
     }
 
-    /* 입력 전송*/
+    /* 입력 전송 */
     // const resp = await loginUser({userId: userId.value, password: password.value})
     console.log(userId.value + " " +  password.value)
     await router.replace('/')
@@ -30,14 +29,13 @@ const handleLogin = async () => {
     console.log(e)
   }
 }
-
 </script>
 
 <template>
   <div class="login-layout">
     <MainLogo/>
 
-    <div class="card-style w-[500px]">
+    <div class="card-style">
       <div class="title text-center mb-8">
         <h1 class="text-dlp_title-lg font-bold">로그인</h1>
       </div>
@@ -79,8 +77,8 @@ const handleLogin = async () => {
   overflow: hidden;
 
   display: flex;
-  flex-direction: column; /* 세로 방향 정렬 */
-  justify-content: flex-start; /* 수직 중앙 정렬 */
-  align-items: center; /* 수평 중앙 정렬 */
+  flex-direction: column;         /* 세로 방향 정렬 */
+  justify-content: flex-start;    /* 수직 중앙 정렬 */
+  align-items: center;            /* 수평 중앙 정렬 */
 }
 </style>

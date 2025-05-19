@@ -44,14 +44,18 @@ public class SecurityConfig {
                         auth
                                 /* 일반 권한 */
                                 /* TODO : 필요 할 때 주석 풀고 작성 해 주세요!*/
-//                                .requestMatchers(HttpMethod.GET,
-//
-//                                ).permitAll()
+                                .requestMatchers(HttpMethod.GET,
+                                        "/plan/short/{date}"
+                                ).permitAll()
                                 .requestMatchers(HttpMethod.POST,
                                         "/auth/login",
                                         "/member/signup"
                                 ).permitAll()
+
                                 /* 유저 권한 */
+                                .requestMatchers(HttpMethod.POST,
+                                        "/auth/logout"
+                                ).authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
