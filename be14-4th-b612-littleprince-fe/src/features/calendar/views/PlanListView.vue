@@ -57,6 +57,10 @@ const handleDateSelected = (dateStr) => {
   router.push({ name: 'PlanListView', params: { date: dateStr } })
 }
 
+const deleteTodo = () => {
+  alert('삭제')
+}
+
 watch(() => route.params.date, (newDate) => {
   selectedDate.value = newDate
 })
@@ -118,10 +122,23 @@ watch(() => route.params.date, (newDate) => {
             v-for="item in filteredProjects"
             :key="item.id"
             @click="goToProject(item.id)"
-            class="rounded-xl px-4 py-3 text-left text-black transition bg-dlp_card/40 hover:bg-dlp_card_hover/80"
+            class="group relative rounded-xl px-4 py-3 text-left text-black transition bg-dlp_card/40 hover:bg-dlp_card_hover/80"
         >
           {{ item.title }}
+
+          <!-- 삭제 버튼 -->
+          <button
+              @click.stop="deleteTodo(item.id)"
+              class="hidden group-hover:block absolute top-3 right-4 transition bg-transparent p-0 border-none shadow-none"
+          >
+            <img
+                src="@/assets/icons/trash.png"
+                alt="삭제"
+                class="w-6 h-6 object-contain"
+            />
+          </button>
         </button>
+
 
         <!-- + 버튼 -->
         <button
