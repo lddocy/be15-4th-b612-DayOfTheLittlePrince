@@ -12,6 +12,6 @@ public interface LongListQueryMapper {
     /* 장기 플랜 목록 조회 */
     List<LongListDTO> getLongList(Long memberId, Date date);
 
-    /* 장기 플랜 상세 조회 */
+    /* 장기 플랜 상세 조회  */
     List<LongDetailDTO> getLongDetailList(Long memberId, Date date, Long projectId);
 }
