@@ -1,6 +1,6 @@
 package littleprince.plan.command.mapper;
 
-import littleprince.member.command.aggregate.domain.MemberDTO;
+import littleprince.member.command.domain.aggregate.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
