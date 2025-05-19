@@ -6,6 +6,17 @@ const props = defineProps({
   editableMap: Object
 })
 
+const emit = defineEmits(['request-ai-modal', 'add-suggested-todo'])
+
+const isModalOpen = ref(false)
+const aiSuggestions = ref([
+  { content: '요구사항 명세서 작성 끝내기' },
+  { content: '인프런 스프링부트 1강 듣기' },
+  { content: '피그마 작업 마무리하기' },
+  { content: 'ERD 작업 시작하기' },
+  { content: '프론트엔드 초기 세팅 끝내기' }
+])
+
 const listContainerRef = ref(null)
 
 const deleteTodo = (taskId) => {
@@ -36,8 +47,17 @@ const addTodo = async () => {
     listContainerRef.value.scrollTop = listContainerRef.value.scrollHeight
   }
 }
-</script>
 
+const addSuggestedTodo = (content) => {
+  const newId = Date.now()
+  props.todos.push({
+    task_id: newId,
+    content,
+    is_checked: 'N',
+    project_id: null
+  })
+}
+</script>
 
 <template>
   <div ref="listContainerRef" class="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-1 w-[90%] ml-4">
@@ -72,6 +92,7 @@ const addTodo = async () => {
           <img src="@/assets/icons/trash.png" alt="삭제" class="w-5 h-4 object-contain" />
         </button>
       </div>
+
     </div>
 
     <!-- + 버튼 & AI 버튼 -->
@@ -80,7 +101,7 @@ const addTodo = async () => {
               class="bg-[#C9C3E3]/40 hover:bg-[#A49CAC]/60 text-black px-2 rounded-xl text-sm border border-white/10 transition">
         +
       </button>
-      <button
+      <button @click="emit('request-ai-modal')"
           class="bg-[#C9C3E3]/40 hover:bg-[#A49CAC]/60 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
         AI 생성하기
       </button>
