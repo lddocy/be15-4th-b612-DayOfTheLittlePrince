@@ -51,7 +51,11 @@ public class SecurityConfig {
                                         "/auth/login",
                                         "/member/signup"
                                 ).permitAll()
+
                                 /* 유저 권한 */
+                                .requestMatchers(HttpMethod.POST,
+                                        "/auth/logout"
+                                ).authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
