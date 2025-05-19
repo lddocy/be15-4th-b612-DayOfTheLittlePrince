@@ -92,33 +92,31 @@
           </div>
         </div>
       </section>
-
       <!-- 경험치 탭 -->
       <section v-if="activeTab === '경험치'" class="mb-10">
         <h3 class="font-semibold mb-6 text-lg text-left">⭐ 나의 경험치</h3>
 
         <!-- Exp Bar + 툴팁 -->
-        <div class="relative w-full max-w-3xl mx-auto h-8 mt-4 group">
-          <!-- 경험치 로그 (툴팁) -->
+        <div class="relative w-full max-w-3xl mx-auto mt-4 group">
+          <!-- 툴팁 -->
           <div
               class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3
              bg-[#FCEEF3] text-sm text-gray-700 px-4 py-2 rounded-xl
-             whitespace-nowrap shadow transition-opacity duration-300 opacity-0 group-hover:opacity-100 z-50"
+             whitespace-nowrap shadow transition-opacity duration-300
+             opacity-0 group-hover:opacity-100 z-50"
           >
             <ul class="space-y-1">
               <li v-for="(log, idx) in expLogs" :key="idx">• {{ log }}</li>
             </ul>
           </div>
 
-          <!-- 배경 바 -->
+          <!-- Exp Bar -->
           <div class="w-full h-6 bg-gray-300 rounded-full overflow-hidden relative">
-            <!-- 채운 노란색 바 -->
             <div
                 class="h-full rounded-full transition-all duration-700"
                 :style="`width: ${expPercent}%; background-color: #FFFCCB;`"
             ></div>
 
-            <!-- 별 아이콘 -->
             <img
                 src="@/assets/icons/star.svg"
                 alt="exp-star"
@@ -126,19 +124,19 @@
                 :style="`left: calc(${expPercent}% - 12px); top: 50%; transform: translateY(-50%);`"
             />
 
-            <!-- Exp 텍스트 -->
             <div class="absolute inset-0 flex items-center justify-center text-sm font-bold text-[#C6A82F]">
               {{ currentExp }} / {{ maxExp }}
             </div>
           </div>
 
-          <!-- 레벨 텍스트 -->
+          <!-- 레벨 -->
           <div class="flex justify-between text-sm text-gray-600 mt-1">
             <span>LV.1</span>
             <span>LV.2</span>
           </div>
         </div>
       </section>
+
       <!-- 나의 아이템 -->
       <section>
         <h3 class="font-semibold mb-3 text-lg text-left">나의 아이템</h3>
@@ -167,14 +165,26 @@
 
       <!-- 회원 탈퇴 -->
       <div class="mt-6 text-right">
-        <button class="text-sm text-gray-500 underline">회원 탈퇴</button>
+        <button
+            class="text-sm text-gray-500 underline"
+            @click="showDeleteModal = true"
+        >
+          회원 탈퇴
+        </button>
+
       </div>
     </div>
+    <DeleteAccountModal
+        :isOpen="showDeleteModal"
+        @close="showDeleteModal = false"
+        @confirm="handleAccountDeletion"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, watchEffect } from 'vue'
+import DeleteAccountModal from "@/features/user/components/DeleteAccountModal.vue";
 
 defineProps({ isOpen: Boolean })
 defineEmits(['close'])
@@ -242,13 +252,22 @@ const items = ref([
 ])
 
 function selectTitle(selectedIdx) {
-  titles.value.forEach((t, idx) => {
-    t.selected = idx === selectedIdx
-  })
+  const alreadySelected = titles.value[selectedIdx].selected
+
+  if (alreadySelected) {
+    // 이미 선택된 걸 다시 클릭한 경우 → 해제
+    titles.value[selectedIdx].selected = false
+  } else {
+    // 나머지 전부 false로 만들고, 해당 칭호만 true
+    titles.value.forEach((t, idx) => {
+      t.selected = idx === selectedIdx
+    })
+  }
 }
 
 function selectItem(idx) {
   items.value[idx].selected = !items.value[idx].selected
 }
 
+const showDeleteModal = ref(false)
 </script>
