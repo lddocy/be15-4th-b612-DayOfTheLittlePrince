@@ -44,9 +44,9 @@ public class SecurityConfig {
                         auth
                                 /* 일반 권한 */
                                 /* TODO : 필요 할 때 주석 풀고 작성 해 주세요!*/
-                                .requestMatchers(HttpMethod.GET,
-                                        "/plan/short/{date}"
-                                ).permitAll()
+//                                .requestMatchers(HttpMethod.GET,
+//
+//                                ).permitAll()
                                 .requestMatchers(HttpMethod.POST,
                                         "/auth/login",
                                         "/member/signup"
@@ -55,6 +55,10 @@ public class SecurityConfig {
                                 /* 유저 권한 */
                                 .requestMatchers(HttpMethod.POST,
                                         "/auth/logout"
+                                ).authenticated()
+                                .requestMatchers(HttpMethod.GET,
+                                        "/plan/short/{date}/todo",
+                                        "/plan/long/{date}"
                                 ).authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

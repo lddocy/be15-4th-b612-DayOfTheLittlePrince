@@ -1,4 +1,4 @@
-package littleprince.plan.query.dto;
+package littleprince.plan.query.dto.response;
 
 import littleprince.common.domain.StatusType;
 import lombok.Builder;

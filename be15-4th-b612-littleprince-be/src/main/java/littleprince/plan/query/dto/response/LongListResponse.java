@@ -5,8 +5,8 @@ import lombok.Getter;
 
 import java.util.List;
 
-@Builder
 @Getter
-public class ShortListResponse {
-    private final List<ShortListDTO> shortList;
+@Builder
+public class LongListResponse {
+    private List<LongListDTO> longListDTOS;
 }
