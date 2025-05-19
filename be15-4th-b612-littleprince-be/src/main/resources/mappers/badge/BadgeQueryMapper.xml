@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="littleprince.item.query.mapper.GetBadgeMapper">
+
+    <select id="findBadgesByMemberId" resultType="littleprince.item.query.dto.response.BadgeDto">
+        SELECT
+        b.badge_id AS badgeId,
+        b.badge_name AS badgeName,
+        b.badge_mean AS badgeMean,
+        b.level AS level
+        FROM get_badge gb
+        JOIN badge b ON gb.badge_id = b.badge_id
+        WHERE gb.member_id = #{memberId}
+    </select>
+
+</mapper>
