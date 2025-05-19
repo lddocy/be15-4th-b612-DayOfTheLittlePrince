@@ -1,4 +1,4 @@
-package littleprince.config.security;
+package littleprince.utils.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;

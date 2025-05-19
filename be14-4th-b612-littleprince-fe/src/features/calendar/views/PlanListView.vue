@@ -22,13 +22,19 @@ const filteredProjects = computed(() =>
 
 const goToDailyTodos = () => {
   router.push({
-    name: 'PlanWriteForm',
-    query: { date: selectedDate.value, type: 'short' }
+    name: 'ShortTermListView',
+    params: {date: selectedDate.value}
   })
 }
 
 const goToProject = (projectId) => {
-  alert(`장기 프로젝트 ${projectId} 상세 페이지로 이동`)
+  router.push({
+    name: 'LongTermListView',
+    params: {
+      date: selectedDate.value,
+      projectId: projectId
+    }
+  })
 }
 
 const createNewTodo = () => {
@@ -67,7 +73,7 @@ const saveLog = () => {
         </div>
 
         <!-- 오늘의 일기 -->
-        <div class="flex items-center gap-2 text-sm text-gray-800 mb-2">
+        <div class="flex items-center gap-2 text-sm text-gray-800 mb-1">
           <img src="@/assets/icons/note.png" alt="note" class="w-6 h-6" />
           <div v-if="!isEditingLog" class="flex items-center gap-1">
             <span>오늘의 일기 · {{ todayLog }}</span>
@@ -88,6 +94,8 @@ const saveLog = () => {
             <button @click="saveLog" class="text-xs text-dlp_lavender hover:underline">저장</button>
           </div>
         </div>
+
+        <div class="w-full h-[1px] bg-white/20 mb-2" />
 
         <!-- 하루 일정 -->
         <button
