@@ -56,9 +56,23 @@ jobs:
             touch "$SENT_FILE"
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
+          
+      - name: Skip if not last reviewer
+        id: check-reviewer-count
+        env:
+          REVIEWERS_JSON: ${{ toJson(github.event.pull_request.requested_reviewers) }}
+        run: |
+          reviewer_count=$(echo "$REVIEWERS_JSON" | jq length)
+          echo "👀 Reviewer count: $reviewer_count"
+
+          if [ "$reviewer_count" -gt 1 ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Send Discord Notification
-        if: steps.check.outputs.skip == 'false'
+        if: steps.check-reviewer-count.outputs.skip == 'false'
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           MENTIONS: ${{ steps.map-reviewers.outputs.mentions }}
