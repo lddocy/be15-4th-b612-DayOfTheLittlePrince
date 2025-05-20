@@ -66,6 +66,9 @@ public class SecurityConfig {
                                         "/plan/long/{date}/{projectId}",
                                         "/badges/{userId}"
                                 ).authenticated()
+                                .requestMatchers(HttpMethod.PATCH,
+                                        "/badges/select"
+                                ).authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

@@ -11,4 +11,43 @@
         VALUES (#{memberId}, #{badgeId}, 'N')
     </insert>
 
+    <!-- 기존 선택 해제 -->
+    <update id="clearSelectedBadge">
+        UPDATE get_badge
+        SET is_selected = 'N'
+        WHERE member_id = #{memberId}
+    </update>
+
+    <!-- 선택한 뱃지를 선택 상태로 설정 -->
+    <update id="updateSelectedBadge">
+        UPDATE get_badge
+        SET is_selected = 'Y'
+        WHERE member_id = #{memberId} AND badge_id = #{badgeId}
+    </update>
+
+    <!-- 칭호 보유 여부 -->
+    <select id="hasBadge" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM get_badge
+        WHERE member_id = #{memberId}
+        AND badge_id = #{badgeId}
+    </select>
+
+    <!-- 현재 선택된 칭호가 존재하는지 -->
+    <select id="existsSelectedBadge" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM get_badge
+        WHERE member_id = #{memberId}
+        AND is_selected = 'Y'
+    </select>
+
+    <!-- LV0 칭호 자동 선택 -->
+    <update id="selectLv0Badge">
+        UPDATE get_badge
+        SET is_selected = 'Y'
+        WHERE member_id = #{memberId}
+        AND badge_id = (
+        SELECT badge_id FROM badge WHERE level = 0 LIMIT 1
+        )
+    </update>
 </mapper>
