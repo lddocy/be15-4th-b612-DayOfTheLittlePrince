@@ -2,14 +2,13 @@ package littleprince.plan.command.domain.aggregate;
 
 import jakarta.persistence.*;
 import littleprince.common.domain.StatusType;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "task")
 @Getter
@@ -27,23 +26,23 @@ public class Task {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private StatusType isChecked;
+    private StatusType checked;
 
     private LocalDate date;
 
     private LocalDateTime createdAt;
 
     @Builder
-    public Task(Long memberId, Long projectId, String content, LocalDate date) {
+    public Task(Long memberId, Long projectId, String content, LocalDate date, StatusType checked) {
         this.memberId = memberId;
         this.projectId = projectId;
         this.content = content;
         this.date = date;
-        this.isChecked = StatusType.N;
+        this.checked = checked;
         this.createdAt = LocalDateTime.now();
     }
 
     public void toggleCheck() {
-        this.isChecked = this.isChecked == StatusType.Y ? StatusType.N : StatusType.Y;
+        this.checked = this.checked == StatusType.Y ? StatusType.N : StatusType.Y;
     }
 }
