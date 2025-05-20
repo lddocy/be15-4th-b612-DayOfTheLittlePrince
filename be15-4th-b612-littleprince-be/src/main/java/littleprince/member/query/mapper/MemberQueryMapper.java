@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface MemberQueryMapper {
     Optional<FindMemberDTO> findMemberByEmail(String email);
     Optional<MemberDTO> findById(Long memberId);
-    MemberInfoResponse findMemberByMemberId(Long memberId);
+    Optional<MemberInfoResponse> findMemberByMemberId(Long memberId);
 }

@@ -1,6 +1,6 @@
 package littleprince.item.query.dto;
 
-import littleprince.item.command.domain.aggregate.HiddenItem;
+import littleprince.item.command.domain.aggregate.entity.HiddenItem;
 import lombok.Builder;
 
 @Builder

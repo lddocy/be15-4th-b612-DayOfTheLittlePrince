@@ -1,4 +1,4 @@
-package littleprince.item.command.domain.aggregate;
+package littleprince.item.command.domain.aggregate.entity;
 
 import jakarta.persistence.*;
 import littleprince.item.command.domain.GetItemId;

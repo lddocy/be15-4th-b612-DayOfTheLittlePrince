@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class MemberInfoResponse {
-
     private Long memberId;
     
     private int exp;

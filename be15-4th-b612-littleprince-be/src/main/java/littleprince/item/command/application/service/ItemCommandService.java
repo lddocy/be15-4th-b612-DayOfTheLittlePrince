@@ -2,9 +2,9 @@ package littleprince.item.command.application.service;
 
 import littleprince.common.exception.BusinessException;
 import littleprince.item.Exception.ItemErrorCode;
-import littleprince.item.command.domain.aggregate.GetItem;
-import littleprince.item.command.domain.aggregate.HiddenItem;
-import littleprince.item.command.domain.aggregate.Item;
+import littleprince.item.command.domain.aggregate.entity.GetItem;
+import littleprince.item.command.domain.aggregate.entity.HiddenItem;
+import littleprince.item.command.domain.aggregate.entity.Item;
 import littleprince.item.command.domain.repository.GetItemRepository;
 import littleprince.item.command.domain.repository.ItemRepository;
 import littleprince.member.command.domain.aggregate.MemberDTO;

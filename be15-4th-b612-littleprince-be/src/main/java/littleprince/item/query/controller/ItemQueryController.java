@@ -1,5 +1,6 @@
 package littleprince.item.query.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
 import littleprince.item.query.dto.response.ItemListResponse;
@@ -22,6 +23,7 @@ public class ItemQueryController {
 
     /* 사용자 보유 아이템 조회 */
     @GetMapping("/list")
+    @Operation(summary = "아이템 리스트 조회", description = "사용자가 보유한 아이템 리스트를 조회합니다.")
     public ResponseEntity<ApiResponse<ItemListResponse>> getItemList(
             @AuthenticationPrincipal CustomUserDetail customUserDetail
     ) {
