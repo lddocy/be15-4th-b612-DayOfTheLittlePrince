@@ -1,21 +1,29 @@
 package littleprince.item.command.domain.aggregate;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import littleprince.item.command.domain.GetItemId;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
+@IdClass(GetItemId.class)
 @Getter
-@Table(name = "get_item")
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class GetItem {
     @Id
-    private int memberId;
+    private Long memberId;
 
-    private int itemId;
+    @Id
+    private Long itemId;
 
     @Enumerated(EnumType.STRING)
     private HiddenItem isHidden;
 
-    private LocalDateTime createAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }
