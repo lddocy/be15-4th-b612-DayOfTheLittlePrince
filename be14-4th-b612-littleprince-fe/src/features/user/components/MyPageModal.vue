@@ -185,6 +185,20 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue'
 import DeleteAccountModal from "@/features/user/components/DeleteAccountModal.vue";
+import { fetchMyBadges } from '@/features/user/api'
+
+onMounted(async () => {
+  try {
+    const res = await fetchMyBadges()
+    titles.value = res.data.data.badges.map(badge => ({
+      label: badge.badgeName,
+      selected: false // 이건 착용 여부 체크하는 API 생기면 수정 가능
+    }))
+  } catch (e) {
+    console.error('칭호 조회 실패:', e)
+  }
+})
+
 
 defineProps({ isOpen: Boolean })
 defineEmits(['close'])
