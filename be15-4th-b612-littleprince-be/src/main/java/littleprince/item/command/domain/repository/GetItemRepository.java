@@ -1,6 +1,6 @@
 package littleprince.item.command.domain.repository;
 
-import littleprince.item.command.domain.aggregate.GetItem;
+import littleprince.item.command.domain.aggregate.entity.GetItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

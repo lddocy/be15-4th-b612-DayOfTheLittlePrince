@@ -1,5 +1,8 @@
 package littleprince.member.query.service;
 
-public interface MemberQueryService {
+import littleprince.config.security.model.CustomUserDetail;
+import littleprince.member.query.dto.response.MemberInfoResponse;
 
+public interface MemberQueryService {
+    MemberInfoResponse getMemberInfo(CustomUserDetail userDetail);
 }

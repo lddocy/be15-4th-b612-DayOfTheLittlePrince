@@ -1,11 +1,11 @@
 package littleprince.item.query.dto;
 
-import littleprince.item.command.domain.aggregate.HiddenItem;
+import littleprince.common.domain.StatusType;
 import lombok.Builder;
 
 @Builder
 public class GetItemDTO {
     private Long memberId;
     private Long itemId;
-    private HiddenItem idHidden;
+    private StatusType idHidden;
 }
