@@ -13,4 +13,21 @@
         WHERE
             m.email = #{ email }
     </select>
+
+    <!-- 회원 관련 정보 조회 -->
+    <select id="findMemberByMemberId" resultType="littleprince.member.query.dto.response.MemberInfoResponse">
+        SELECT
+            m.member_id,
+            m.exp,
+            m.level,
+            m.planet_name,
+            gb.is_selected,
+            b.badge_name
+        FROM member m
+        JOIN get_badge gb ON gb.member_id = m.member_id
+        JOIN badge b ON b.badge_id = gb.badge_id
+        WHERE m.member_id = #{ member_id }
+            AND is_deleted = 'N'
+            AND gb.is_selected = 'Y'
+    </select>
 </mapper>

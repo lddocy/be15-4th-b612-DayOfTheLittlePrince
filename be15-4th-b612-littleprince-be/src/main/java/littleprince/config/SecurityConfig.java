@@ -51,20 +51,21 @@ public class SecurityConfig {
                                         "/auth/login",
                                         "/member/signup"
                                 ).permitAll()
-                                .requestMatchers(HttpMethod.GET,
-                                        "/item/list"
-                                ).authenticated()
                                 /* 유저 권한 */
                                 .requestMatchers(HttpMethod.POST,
-                                        "/auth/logout"
+                                        "/auth/logout",
+                                        "/item/add"
                                 ).authenticated()
                                 .requestMatchers(HttpMethod.GET,
                                         "/plan/short/{date}/todo",
                                         "/plan/long/{date}",
-                                        "/plan/long/{date}/{projectId}"
-                                ).authenticated()
-                                .requestMatchers(HttpMethod.GET,
+                                        "/plan/long/{date}/{projectId}",
+                                        "/item/list",
+                                        "/item/{itemId}/toggle",
                                         "/badges/{userId}"
+                                ).authenticated()
+                                .requestMatchers(HttpMethod.PATCH,
+                                        "/item/{itemId}/toggle"
                                 ).authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
