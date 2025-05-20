@@ -16,4 +16,13 @@
             #{ password }
         )
     </insert>
+    <update id="updateLevelAndExp">
+        UPDATE member
+        SET
+        exp = #{exp},
+        level = #{level}
+        WHERE member_id = #{memberId}
+    </update>
+
+
 </mapper>

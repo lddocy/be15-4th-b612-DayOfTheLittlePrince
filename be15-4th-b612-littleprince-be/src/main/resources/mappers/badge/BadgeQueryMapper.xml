@@ -3,8 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="littleprince.item.query.mapper.GetBadgeMapper">
+<mapper namespace="littleprince.item.query.mapper.GetBadgeQueryMapper">
 
+    <!--내가 얻은 칭호들 조회-->
     <select id="findBadgesByMemberId" resultType="littleprince.item.query.dto.response.BadgeDto">
         SELECT
         b.badge_id AS badgeId,
@@ -15,5 +16,11 @@
         JOIN badge b ON gb.badge_id = b.badge_id
         WHERE gb.member_id = #{memberId}
     </select>
+
+    <!--해당 레벨에 따른 칭호 조회-->
+    <select id="findBadgeIdByLevel" resultType="long">
+        SELECT badge_id FROM badge WHERE level = #{level}
+    </select>
+
 
 </mapper>

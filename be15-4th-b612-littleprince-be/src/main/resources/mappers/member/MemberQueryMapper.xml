@@ -13,4 +13,20 @@
         WHERE
             m.email = #{ email }
     </select>
+
+    <select id="findById" resultType="littleprince.member.command.aggregate.domain.MemberDTO">
+        SELECT
+        member_id,
+        email,
+        password,
+        is_deleted,
+        exp,
+        level,
+        planet_name,
+        is_notification_enabled,
+        is_bgm_enabled
+        FROM member
+        WHERE member_id = #{memberId}
+    </select>
+
 </mapper>

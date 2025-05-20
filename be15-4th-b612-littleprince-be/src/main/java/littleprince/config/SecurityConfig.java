@@ -54,7 +54,9 @@ public class SecurityConfig {
 
                                 /* 유저 권한 */
                                 .requestMatchers(HttpMethod.POST,
-                                        "/auth/logout"
+                                        "/auth/logout",
+                                        "/exp"
+
                                 ).authenticated()
                                 .requestMatchers(HttpMethod.GET,
                                         "/plan/short/{date}/todo",
