@@ -14,7 +14,7 @@
             m.email = #{ email }
     </select>
 
-    <select id="findById" resultType="littleprince.member.command.aggregate.domain.MemberDTO">
+    <select id="findById" resultType="littleprince.member.command.domain.aggregate.MemberDTO">
         SELECT
         member_id,
         email,
@@ -28,5 +28,4 @@
         FROM member
         WHERE member_id = #{memberId}
     </select>
-
 </mapper>
