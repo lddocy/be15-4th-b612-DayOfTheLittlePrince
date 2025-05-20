@@ -2,7 +2,7 @@ package littleprince.item.query.service;
 
 import littleprince.item.query.dto.response.BadgeDto;
 import littleprince.item.query.dto.response.MyBadgeResponse;
-import littleprince.item.query.mapper.GetBadgeMapper;
+import littleprince.item.query.mapper.GetBadgeQueryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BadgeQueryService {
 
-    private final GetBadgeMapper getBadgeMapper;
+    private final GetBadgeQueryMapper getBadgeQueryMapper;
 
     public MyBadgeResponse getObtainedBadges(Long memberId) {
         // 1. get_badge 기준 badge 목록 조회
-        List<BadgeDto> obtainedBadges = getBadgeMapper.findBadgesByMemberId(memberId);
+        List<BadgeDto> obtainedBadges = getBadgeQueryMapper.findBadgesByMemberId(memberId);
 
         // 2. 변환
         List<BadgeDto> badgeDtos = obtainedBadges.stream()

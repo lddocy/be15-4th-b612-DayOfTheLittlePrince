@@ -42,30 +42,32 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler))
                 .authorizeHttpRequests(auth ->
                         auth
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html")
+                                .permitAll()
                                 /* 일반 권한 */
                                 /* TODO : 필요 할 때 주석 풀고 작성 해 주세요!*/
-//                                .requestMatchers(HttpMethod.GET,
-//
-//                                ).permitAll()
                                 .requestMatchers(HttpMethod.POST,
                                         "/auth/login",
                                         "/member/signup"
                                 ).permitAll()
                                 /* 유저 권한 */
                                 .requestMatchers(HttpMethod.POST,
-                                        "/auth/logout",
-                                        "/item/add"
+                                        "/**"
                                 ).authenticated()
                                 .requestMatchers(HttpMethod.GET,
-                                        "/plan/short/{date}/todo",
-                                        "/plan/long/{date}",
-                                        "/plan/long/{date}/{projectId}",
-                                        "/item/list",
-                                        "/item/{itemId}/toggle",
-                                        "/badges/{userId}"
+                                        "/**"
+                                ).authenticated()
+                                .requestMatchers(HttpMethod.PUT,
+                                        "/**"
                                 ).authenticated()
                                 .requestMatchers(HttpMethod.PATCH,
-                                        "/item/{itemId}/toggle"
+                                        "/**"
+                                ).authenticated()
+                                .requestMatchers(HttpMethod.DELETE,
+                                        "/**"
                                 ).authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
