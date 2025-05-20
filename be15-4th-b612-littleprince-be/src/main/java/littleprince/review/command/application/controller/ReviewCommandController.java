@@ -2,11 +2,11 @@ package littleprince.review.command.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
 import littleprince.review.command.application.dto.request.CreateReviewRequest;
 import littleprince.review.command.application.service.ReviewCommandService;
-import littleprince.review.query.service.ReviewQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,12 +31,11 @@ public class ReviewCommandController {
     public ResponseEntity<ApiResponse<Void>> createReview(
             @AuthenticationPrincipal CustomUserDetail customUserDetail,
             @PathVariable Date date,
-            @RequestBody CreateReviewRequest createReviewRequest
+            @RequestBody @Valid CreateReviewRequest createReviewRequest
     )
     {
         Long memberId = customUserDetail.getMemberId();
-        String content = createReviewRequest.getReviewContent();
-        reviewCommandService.createReview(memberId, date, content);
+        reviewCommandService.createReview(memberId, date, createReviewRequest);
 
         return ResponseEntity.ok(ApiResponse.success(null));
     }

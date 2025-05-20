@@ -1,12 +1,12 @@
 package littleprince.review.command.application.service;
 
-import littleprince.common.exception.BusinessException;
+import littleprince.review.command.application.dto.request.CreateReviewRequest;
 import littleprince.review.command.domain.aggregate.Review;
 import littleprince.review.command.domain.repository.JpaReviewRepository;
-import littleprince.review.exception.ReviewErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 
@@ -18,18 +18,14 @@ public class ReviewCommandService {
     private final JpaReviewRepository jpaReviewJpaRepository;
 
     /* 리뷰 등록 */
-    public void createReview(Long memberId, Date date, String content) {
+    @Transactional
+    public void createReview(Long memberId, Date date, CreateReviewRequest createReviewRequest) {
 
-        Review review = modelMapper.map(content, Review.class);
+        Review review = modelMapper.map(createReviewRequest, Review.class);
 
         review.setMemberId(memberId);
-        review.setRivewDate(date);
+        review.setReviewDate(date);
 
-//        jpa
-
-//        Review review = jpaReviewJpaRepository.findById(memberId).
-//                orElseThrow( () -> new BusinessException(ReviewErrorCode.REVIEW_SUBMIT_FAILED));
-
-
+        jpaReviewJpaRepository.save(review);
     }
 }
