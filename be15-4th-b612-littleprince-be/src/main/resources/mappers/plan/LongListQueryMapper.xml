@@ -26,6 +26,7 @@
             , a.member_id
             , a.content
             , a.is_checked
+            , a.date
          FROM task a
          JOIN project b ON a.project_id = b.project_id
         WHERE a.member_id = #{ memberId }
