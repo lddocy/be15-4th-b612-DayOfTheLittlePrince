@@ -62,9 +62,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET,
                                         "/plan/short/{date}/todo",
                                         "/plan/long/{date}",
-                                        "/plan/long/{date}/{projectId}"
-                                ).authenticated()
-                                .requestMatchers(HttpMethod.GET,
+                                        "/plan/long/{date}/{projectId}",
+                                        "/review/{date}",
                                         "/badges/{userId}"
                                 ).authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
