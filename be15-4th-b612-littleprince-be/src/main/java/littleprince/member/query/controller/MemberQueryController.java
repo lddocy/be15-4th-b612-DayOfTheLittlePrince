@@ -5,7 +5,6 @@ import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
 import littleprince.member.query.dto.response.MemberInfoResponse;
 import littleprince.member.query.service.MemberQueryService;
-import littleprince.member.query.service.MemberQueryServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
