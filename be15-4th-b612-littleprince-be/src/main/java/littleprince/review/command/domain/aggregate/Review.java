@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "review")
+@Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Review {
     @Id
@@ -21,6 +23,8 @@ public class Review {
     private Long reviewId;
 
     private Long memberId;
+
+    private String reviewContent;
 
     private Date rivewDate;
 

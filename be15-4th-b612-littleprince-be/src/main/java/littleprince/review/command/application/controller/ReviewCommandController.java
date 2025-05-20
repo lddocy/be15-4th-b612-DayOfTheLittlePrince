@@ -3,9 +3,13 @@ package littleprince.review.command.application.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import littleprince.common.dto.ApiResponse;
+import littleprince.config.security.model.CustomUserDetail;
 import littleprince.review.command.application.dto.request.CreateReviewRequest;
+import littleprince.review.command.application.service.ReviewCommandService;
+import littleprince.review.query.service.ReviewQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,10 +24,21 @@ import java.sql.Date;
 @RequiredArgsConstructor
 public class ReviewCommandController {
 
+    private final ReviewCommandService reviewCommandService;
+
     @Operation(summary = "회고 작성", description = "해당요일에 회고를 작성한다.")
     @PostMapping("/{date}")
-    public ResponseEntity<ApiResponse<Void>> createReview(@PathVariable Date date, @RequestBody CreateReviewRequest createReviewRequest) {
+    public ResponseEntity<ApiResponse<Void>> createReview(
+            @AuthenticationPrincipal CustomUserDetail customUserDetail,
+            @PathVariable Date date,
+            @RequestBody CreateReviewRequest createReviewRequest
+    )
+    {
+        Long memberId = customUserDetail.getMemberId();
+        String content = createReviewRequest.getReviewContent();
+        reviewCommandService.createReview(memberId, date, content);
 
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
 }
