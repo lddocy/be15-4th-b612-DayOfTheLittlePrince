@@ -3,6 +3,7 @@ package littleprince.plan.query.controller;
 import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
 import littleprince.plan.query.dto.response.ShortListResponse;
+import littleprince.plan.query.dto.response.ShortPlanDateResponse;
 import littleprince.plan.query.service.ShortListQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,19 @@ public class ShortListQueryController {
         Long memberId =  customUserDetail.getMemberId();
 
         ShortListResponse response = planQueryService.getShortList(memberId, date);
+
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /* 단기플랜 날짜 여부 조회 */
+    @GetMapping("/short")
+    public ResponseEntity<ApiResponse<ShortPlanDateResponse>> getShortDates(
+            @AuthenticationPrincipal CustomUserDetail customUserDetail
+    )
+    {
+        Long memberId = customUserDetail.getMemberId();
+
+        ShortPlanDateResponse response = planQueryService.getShortDates(memberId);
 
         return ResponseEntity.ok(ApiResponse.success(response));
     }
