@@ -1,7 +1,10 @@
 package littleprince.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,14 +13,26 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
+        SecurityScheme apiKey = new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
+                .in(SecurityScheme.In.HEADER)
+                .name("Authorization")
+                .scheme("bearer")
+                .bearerFormat("JWT");
+
+        SecurityRequirement securityRequirement = new SecurityRequirement()
+                .addList("Bearer Token");
+
         return new OpenAPI()
-                .info(swaggerInfo());
+                .info(swaggerInfo())
+                .components(new Components().addSecuritySchemes("Bearer Token", apiKey))
+                .addSecurityItem(securityRequirement);
     }
 
     private Info swaggerInfo() {
         return new Info()
-                .title("B612 API Docs")
-                .description("B612 API 명세서")
+                .title("걸한 API 테스트")
+                .description("걸한 Swagger 테스트")
                 .version("1.0.0");
     }
 }
