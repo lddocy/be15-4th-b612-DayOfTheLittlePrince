@@ -20,10 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ItemCommandService {
     private final ItemRepository jpaItemRepository;
-    private final MemberQueryMapper memberQueryMapper;
     private final MemberRepository memberRepository;
     private final GetItemRepository getItemRepository;
-    private final ItemMapper itemMapper;
 
     // 사용자 아이템 추가
     public void addItem(Long memberId) {
@@ -58,7 +56,7 @@ public class ItemCommandService {
                 .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
 
         GetItem getItem = getItemRepository.findByMemberIdAndItemId(memberId, itemId)
-                .orElseThrow(() -> new BusinessException(ItemErrorCode.ITEM_NOT_FOUND));;
+                .orElseThrow(() -> new BusinessException(ItemErrorCode.ITEM_NOT_FOUND));
 
         getItem.setIsHidden(
                 getItem.getIsHidden() == HiddenItem.Y ? HiddenItem.N : HiddenItem.Y
