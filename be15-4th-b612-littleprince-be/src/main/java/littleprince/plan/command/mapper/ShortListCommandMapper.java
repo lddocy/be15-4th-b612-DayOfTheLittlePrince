@@ -1,9 +1,0 @@
-package littleprince.plan.command.mapper;
-
-import littleprince.member.command.domain.aggregate.MemberDTO;
-import org.apache.ibatis.annotations.Mapper;
-
-@Mapper
-public interface ShortListCommandMapper {
-    void insertMember(MemberDTO member);
-}
