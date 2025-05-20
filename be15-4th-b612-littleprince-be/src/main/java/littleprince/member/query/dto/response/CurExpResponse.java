@@ -7,4 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CurExpResponse {
     private int currentExp;
+    private int currentLevel;
+    private int totalExpToNextLevel;
 }
+
