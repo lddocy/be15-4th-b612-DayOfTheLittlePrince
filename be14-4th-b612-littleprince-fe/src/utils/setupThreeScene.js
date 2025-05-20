@@ -9,7 +9,7 @@ export function createRenderer(container) {
 export function createCamera(container) {
     const aspect = container.clientWidth / container.clientHeight;
     const camera = new THREE.PerspectiveCamera(60, aspect, 0.1, 1000);
-    camera.position.set(0, 20, 30);
+    camera.position.set(-5, 40, 30);
     camera.lookAt(0, 0, 0);
     return camera;
 }
