@@ -1,0 +1,29 @@
+package littleprince.review.command.application.controller;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import littleprince.common.dto.ApiResponse;
+import littleprince.review.command.application.dto.request.CreateReviewRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.Date;
+
+@Tag(name = "회고")
+@RestController
+@RequestMapping("/plan/review")
+@RequiredArgsConstructor
+public class ReviewCommandController {
+
+    @Operation(summary = "회고 작성", description = "해당요일에 회고를 작성한다.")
+    @PostMapping("/{date}")
+    public ResponseEntity<ApiResponse<Void>> createReview(@PathVariable Date date, @RequestBody CreateReviewRequest createReviewRequest) {
+
+    }
+
+}
