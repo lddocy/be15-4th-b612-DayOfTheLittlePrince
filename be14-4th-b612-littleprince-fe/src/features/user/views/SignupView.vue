@@ -13,7 +13,7 @@ const confirmPassword = ref('');
 
 const handleSignup = async () => {
   try {
-    /* 1. 공백 제거*/
+    /* 1. 공백 제거 */
     email.value = email.value.trim();
     password.value = password.value.trim();
     confirmPassword.value = confirmPassword.value.trim();
@@ -33,16 +33,13 @@ const handleSignup = async () => {
     }
 
     /* 3. 입력 전송 */
-
     const formData = {email: email.value, password: password.value, confirmPassword: confirmPassword.value}
-
     // const resp = await signup(formData);
 
-    /* 4. 성공 시 로그인 페이지로 이동*/
+    /* 4. 성공 시 로그인 페이지로 이동 */
     alert("회원가입이 완료되었습니다.")
     await router.replace("/login")
-
-  }catch(e){
+  } catch(e) {
     console.log(e.message)
     alert(e.message)
   }
@@ -98,8 +95,8 @@ const handleSignup = async () => {
   overflow: hidden;
 
   display: flex;
-  flex-direction: column; /* 세로 방향 정렬 */
-  justify-content: flex-start; /* 수직 중앙 정렬 */
-  align-items: center; /* 수평 중앙 정렬 */
+  flex-direction: column;         /* 세로 방향 정렬 */
+  justify-content: flex-start;    /* 수직 중앙 정렬 */
+  align-items: center;            /* 수평 중앙 정렬 */
 }
 </style>

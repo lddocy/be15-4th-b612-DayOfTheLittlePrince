@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Calendar from '@/features/calendar/components/Calendar.vue'
+import AISuggestionModal from '@/features/calendar/components/AISuggestionModal.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -16,6 +17,14 @@ const todos = ref([
 ])
 
 const editable = ref({})
+const isModalOpen = ref(false)
+const aiSuggestions = ref([
+  { content: '어린왕자랑 놀아주기' },
+  { content: '바오밥 나무' },
+  { content: '푸바오밥주기' },
+  { content: '얼른 쉬기' },
+  { content: '프론트엔드 초기 세팅 끝내기' }
+])
 
 const deleteTodo = (taskId) => {
   if (editable.value[taskId]) {
@@ -34,6 +43,15 @@ const addTodo = () => {
     is_checked: 'N'
   })
   editable.value[newId] = true
+}
+
+const addSuggestedTodo = (content) => {
+  const newId = Date.now()
+  todos.value.push({
+    task_id: newId,
+    content,
+    is_checked: 'N'
+  })
 }
 
 const handleConfirm = () => {
@@ -104,10 +122,13 @@ const goBack = () => {
         <!-- + 버튼 -->
         <div class="flex gap-2 mt-2 ml-4">
           <button @click="addTodo"
-                  class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 rounded-xl text-sm border border-white/10 transition">
+                  class="w-8 h-8 flex items-center justify-center text-lg font-bold
+                 bg-[#C9C3E3]/40 hover:bg-[#A49CAC]/60
+                 text-black rounded-full border border-white/10 transition">
             +
           </button>
           <button
+              @click="isModalOpen = true"
               class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
             AI 생성하기
           </button>
@@ -124,9 +145,15 @@ const goBack = () => {
             확인
           </button>
         </div>
-
       </div>
     </div>
+    <AISuggestionModal
+        :visible="isModalOpen"
+        :date="selectedDate"
+        :suggestion-list="aiSuggestions"
+        @close="isModalOpen = false"
+        @addTodo="addSuggestedTodo"
+    />
   </div>
 </template>
 

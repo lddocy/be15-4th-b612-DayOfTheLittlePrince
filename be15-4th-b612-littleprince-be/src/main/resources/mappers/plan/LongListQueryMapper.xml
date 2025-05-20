@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="littleprince.plan.query.mapper.LongListQueryMapper">
+    <!-- 장기 플랜 전체 조회getLongPlan-->
+    <!-- 캘린더에서 보여줄 응답 값-->
+    <select id="getLongPlan" resultType="littleprince.plan.query.dto.response.LongPlanDTO">
+        SELECT
+        project_id
+        , title
+        , start_date
+        , end_date
+        FROM project
+        WHERE member_id = #{ memberId }
+    </select>
+
+    <!-- 장기 플랜 목록 조회 -->
+    <!-- 시작일과 종료일 사이에 DATE 존재하면 출력 -->
+    <select id="getLongList" resultType="littleprince.plan.query.dto.response.LongListDTO">
+        SELECT
+              project_id
+            , member_id
+            , title
+            , start_date
+            , end_date
+        FROM project
+        WHERE member_id = #{ memberId }
+        AND #{ date } BETWEEN start_date AND end_date
+        ORDER BY created_at
+    </select>
+
+    <!-- 장기 플랜 상세 조회 -->
+    <select id="getLongDetailList" resultType="littleprince.plan.query.dto.response.LongDetailDTO">
+        SELECT
+              a.task_id
+            , a.project_id
+            , a.member_id
+            , a.content
+            , a.is_checked
+            , a.date
+         FROM task a
+         JOIN project b ON a.project_id = b.project_id
+        WHERE a.member_id = #{ memberId }
+          AND a.date = #{ date }
+          AND a.project_id = #{ projectId }
+          AND a.project_id IS NOT NULL
+        ORDER BY a.created_at
+    </select>
+</mapper>

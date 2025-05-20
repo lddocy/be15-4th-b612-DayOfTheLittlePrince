@@ -43,14 +43,14 @@ public class GlobalExceptionHandler {
 //        return new ResponseEntity<>(response, errorCode.getHttpStatus());
 //    }
 
-//    @ExceptionHandler(UnAuthorizationException.class)
-//    public ResponseEntity<ApiResponse<Void>> handleUnAuthorizationException(UnAuthorizationException e){
-//        ErrorCode errorCode = ErrorCode.UNAUTHORIZED_REQUEST;
-//
-//        ApiResponse<Void> response = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
-//
-//        return new ResponseEntity<>(response, errorCode.getHttpStatus());
-//    }
+    @ExceptionHandler(UnAuthorizationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUnAuthorizationException(UnAuthorizationException e){
+        ErrorCode errorCode = GlobalErrorCode.UNAUTHORIZED_REQUEST;
+
+        ApiResponse<Void> response = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response, errorCode.getHttpStatus());
+    }
 
 //    @ExceptionHandler(MessagingException.class)
 //    public ResponseEntity<ApiResponse<Void>> handleMessagingException(MessagingException e){

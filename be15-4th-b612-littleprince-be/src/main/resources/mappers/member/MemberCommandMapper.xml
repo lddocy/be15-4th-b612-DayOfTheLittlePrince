@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="littleprince.member.command.mapper.MemberCommandMapper">
-    <insert id="insertMember" parameterType="littleprince.member.command.aggregate.domain.MemberDTO"
+    <insert id="insertMember" parameterType="littleprince.member.command.domain.aggregate.MemberDTO"
             useGeneratedKeys="true" keyProperty="memberId">
         INSERT INTO member
         (
@@ -16,4 +16,13 @@
             #{ password }
         )
     </insert>
+    <update id="updateLevelAndExp">
+        UPDATE member
+        SET
+        exp = #{exp},
+        level = #{level}
+        WHERE member_id = #{memberId}
+    </update>
+
+
 </mapper>
