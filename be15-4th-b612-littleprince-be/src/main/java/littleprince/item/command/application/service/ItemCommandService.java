@@ -27,12 +27,11 @@ public class ItemCommandService {
     // 사용자 아이템 추가
     @Transactional
     @Async
-    public void addItem(Long memberId) {
+    public void addItem(Long memberId, int level) {
         log.info("=== addItem() 호출 ===" + memberId);
         MemberDTO member = memberQueryMapper.findById(memberId)
                 .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
         log.info("아이템 지급을 위한 유저 찾음!");
-        int level = member.getLevel();
 
         Item newItem = jpaItemRepository.findByLevel(level);
 

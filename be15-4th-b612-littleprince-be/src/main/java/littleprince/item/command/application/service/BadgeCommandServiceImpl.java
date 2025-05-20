@@ -48,16 +48,28 @@ public class BadgeCommandServiceImpl implements BadgeCommandService {
     @Override
     @Async
     @Transactional
-    public void addBadge(Long memberId) {
+    public void addBadge(Long memberId, int level) {
         /* 1. 유저 레벨 확인하기! */
 //        MemberInfoResponse member = memberQueryService.getMemberInfo(memberId);
         MemberDTO member = memberQueryMapper.findById(memberId)
                 .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
         log.info("뱃지 지급을 위한 유저 찾음!");
-        int level = member.getLevel();
 
         /* 2. DB에 벳지 추가해주기! */
-        getBadgeCommandMapper.insertDefaultGetBadge(memberId, level);
+        getBadgeCommandMapper.insertDefaultGetBadge(member.getMemberId(), level);
+    }
+
+    @Async
+    @Transactional
+    public void addDefaultBadge(Long memberId) {
+        /* 1. 유저 레벨 확인하기! */
+//        MemberInfoResponse member = memberQueryService.getMemberInfo(memberId);
+        MemberDTO member = memberQueryMapper.findById(memberId)
+                .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
+        log.info("뱃지 지급을 위한 유저 찾음!");
+
+        /* 2. DB에 벳지 추가해주기! */
+        getBadgeCommandMapper.insertDefaultGetBadge(memberId, 0);
     }
 
 }
