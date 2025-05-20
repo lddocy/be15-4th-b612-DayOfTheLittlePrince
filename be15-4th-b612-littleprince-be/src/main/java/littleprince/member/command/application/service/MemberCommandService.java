@@ -9,6 +9,5 @@ import littleprince.member.command.application.dto.response.ExpResponse;
 public interface MemberCommandService {
     void signup(@Valid SignupRequest request);
 
-    ExpResponse addExp(ExpRequest request);
-
+    ExpResponse addExp(Long memberId, int expPoint); // ✅
 }

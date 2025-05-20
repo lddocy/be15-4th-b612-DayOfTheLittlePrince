@@ -6,6 +6,5 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ExpRequest {
-    private Long memberId;
     private int expPoint;
 }

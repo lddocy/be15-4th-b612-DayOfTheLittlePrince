@@ -63,10 +63,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
     @Override
     @Transactional
-    public ExpResponse addExp(ExpRequest request) {
-        Long memberId = request.getMemberId();
-        int amount = request.getExpPoint();
-
+    public ExpResponse addExp(Long memberId, int amount) {
         MemberDTO member = memberQueryMapper.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
 
@@ -74,12 +71,11 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         int currentExp = member.getExp() + amount;
         boolean levelUp = false;
 
-        // 경험치 획득 기록
+        // 경험치 기록 저장
         expHistoryCommandMapper.insertExpHistory(memberId, amount);
 
         int nextLevel = currentLevel + 1;
 
-        // 다음 레벨이 존재하는 경우에만 레벨업 시도
         if (nextLevel < LEVEL_REQUIRED_EXP.size()) {
             int requiredTotalExpForNextLevel = LEVEL_REQUIRED_EXP.get(nextLevel);
             int requiredTotalExpForCurrent = LEVEL_REQUIRED_EXP.get(currentLevel);
@@ -98,7 +94,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
             }
         }
 
-        // 최종 상태 반영
         member.setLevel(currentLevel);
         member.setExp(currentExp);
         memberCommandMapper.updateLevelAndExp(member);
