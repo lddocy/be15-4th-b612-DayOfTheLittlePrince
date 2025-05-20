@@ -32,3 +32,11 @@ jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION}
   refresh-expiration: ${JWT_REFRESH_EXPIRATION}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  packages-to-scan: littleprince
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+

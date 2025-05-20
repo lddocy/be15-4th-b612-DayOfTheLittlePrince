@@ -18,6 +18,16 @@
         ORDER BY created_at
     </select>
 
+    <!-- 단기플랜 리스트 있는 날 조회 -->
+    <!-- 있는지 없는지만 알려주면 되니까 DISTINCT 로 중복처리 -->
+    <select id="getShortDates" resultType="littleprince.plan.query.dto.response.ShortPlanDateDTO">
+        SELECT
+            DISTINCT date
+         FROM task
+        WHERE member_id = #{ memberId }
+          AND project_id IS NULL
+    </select>
+
     <select id="getShortPlanByMemberId" resultType="littleprince.plan.query.dto.response.AiShortPlanDTO">
         SELECT
               content

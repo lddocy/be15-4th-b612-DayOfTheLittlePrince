@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Table(name = "item")
 public class Item {
     @Id
-    private int itemId;
+    private Long itemId;
 
     private String itemName;
 

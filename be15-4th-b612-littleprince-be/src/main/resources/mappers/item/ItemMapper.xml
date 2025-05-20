@@ -18,4 +18,12 @@
             AND gi.is_hidden = 'N'
         ]]>
     </select>
+
+    <select id="findGetItemListByMemberId" resultType="littleprince.item.query.dto.GetItemDTO">
+        SELECT *
+        FROM get_item gi
+        WHERE gi.get_item_id = #{ get_item_id }
+            AND gi.member_id = #{ member_id }
+    </select>
+
 </mapper>
