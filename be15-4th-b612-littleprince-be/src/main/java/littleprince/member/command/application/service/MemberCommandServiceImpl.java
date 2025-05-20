@@ -2,11 +2,13 @@ package littleprince.member.command.application.service;
 
 
 import littleprince.common.exception.BusinessException;
+import littleprince.item.command.application.service.ItemCommandService;
 import littleprince.item.query.mapper.GetBadgeCommandMapper;
 import littleprince.item.query.mapper.GetBadgeQueryMapper;
 import littleprince.member.command.application.dto.request.ExpRequest;
 import littleprince.member.command.application.dto.request.SignupRequest;
 import littleprince.member.command.application.dto.response.ExpResponse;
+import littleprince.member.command.application.respository.MemberRepository;
 import littleprince.member.command.domain.aggregate.MemberDTO;
 import littleprince.member.command.mapper.ExpHistoryCommandMapper;
 import littleprince.member.command.mapper.MemberCommandMapper;
@@ -32,7 +34,8 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     private final GetBadgeCommandMapper getBadgeCommandMapper;
     private final ExpHistoryCommandMapper expHistoryCommandMapper;
     private final GetBadgeQueryMapper getBadgeQueryMapper;
-
+    private final ItemCommandService itemCommandService;
+    private final MemberRepository memberRepository;
 
     @Override
     public void signup(SignupRequest request) {
@@ -59,6 +62,9 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         /* 2. 회원 가입 완료 */
         memberCommandMapper.insertMember(member);
+        
+        /* 3. 기본 아이템, 칭호 지급 */
+//        itemCommandService.addItem();
     }
 
     @Override
