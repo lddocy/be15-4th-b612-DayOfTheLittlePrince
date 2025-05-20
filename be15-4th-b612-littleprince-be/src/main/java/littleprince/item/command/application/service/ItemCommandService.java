@@ -11,10 +11,13 @@ import littleprince.member.command.domain.aggregate.MemberDTO;
 import littleprince.member.exception.MemberErrorCode;
 import littleprince.member.query.mapper.MemberQueryMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ItemCommandService {
     private final ItemRepository jpaItemRepository;
@@ -22,10 +25,13 @@ public class ItemCommandService {
     private final GetItemRepository getItemRepository;
 
     // 사용자 아이템 추가
+    @Transactional
+    @Async
     public void addItem(Long memberId) {
+        log.info("=== addItem() 호출 ===" + memberId);
         MemberDTO member = memberQueryMapper.findById(memberId)
                 .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
-
+        log.info("아이템 지급을 위한 유저 찾음!");
         int level = member.getLevel();
 
         Item newItem = jpaItemRepository.findByLevel(level);

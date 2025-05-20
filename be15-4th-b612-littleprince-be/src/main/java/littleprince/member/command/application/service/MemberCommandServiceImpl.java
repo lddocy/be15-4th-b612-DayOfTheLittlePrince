@@ -2,13 +2,13 @@ package littleprince.member.command.application.service;
 
 
 import littleprince.common.exception.BusinessException;
+import littleprince.item.command.application.service.BadgeCommandService;
 import littleprince.item.command.application.service.ItemCommandService;
 import littleprince.item.query.mapper.GetBadgeCommandMapper;
 import littleprince.item.query.mapper.GetBadgeQueryMapper;
-import littleprince.member.command.application.dto.constant.MemberLevel;
 import littleprince.member.command.application.dto.request.SignupRequest;
 import littleprince.member.command.application.dto.response.ExpResponse;
-import littleprince.member.command.application.respository.MemberRepository;
+import littleprince.member.command.application.repository.MemberRepository;
 import littleprince.member.command.domain.aggregate.MemberDTO;
 import littleprince.member.command.mapper.ExpHistoryCommandMapper;
 import littleprince.member.command.mapper.MemberCommandMapper;
@@ -34,9 +34,11 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     private final ExpHistoryCommandMapper expHistoryCommandMapper;
     private final GetBadgeQueryMapper getBadgeQueryMapper;
     private final ItemCommandService itemCommandService;
+    private final BadgeCommandService badgeCommandService;
     private final MemberRepository memberRepository;
 
     @Override
+    @Transactional
     public void signup(SignupRequest request) {
 
         /* 비밀번호와 비밀번호 확인 일치 확인 */
@@ -63,49 +65,55 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         memberCommandMapper.insertMember(member);
         
         /* 3. 기본 아이템, 칭호 지급 */
-//        itemCommandService.addItem();
+        itemCommandService.addItem(member.getMemberId());
+        badgeCommandService.addBadge(member.getMemberId());
     }
 
     @Override
-    @Transactional
-    public ExpResponse addExp(Long memberId, int amount) {
-        MemberDTO member = memberQueryMapper.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
-
-        int currentLevel = member.getLevel();
-        int currentExp = member.getExp() + amount;
-        boolean levelUp = false;
-
-        expHistoryCommandMapper.insertExpHistory(memberId, amount);
-
-        int nextLevel = currentLevel + 1;
-
-        if (MemberLevel.fromLevel(nextLevel).isPresent()) {
-            int requiredTotalExpForNextLevel = MemberLevel.getTotalExpByLevel(nextLevel);
-            int requiredTotalExpForCurrent = MemberLevel.getTotalExpByLevel(currentLevel);
-            int requiredThisLevelExp = requiredTotalExpForNextLevel - requiredTotalExpForCurrent;
-
-            if (currentExp >= requiredThisLevelExp) {
-                currentExp -= requiredThisLevelExp;
-                currentLevel++;
-                levelUp = true;
-
-                Long badgeId = getBadgeQueryMapper.findBadgeIdByLevel(currentLevel);
-                if (badgeId != null) {
-                    getBadgeCommandMapper.insertGetBadge(memberId, badgeId);
-                }
-            }
-        }
-
-        member.setLevel(currentLevel);
-        member.setExp(currentExp);
-        memberCommandMapper.updateLevelAndExp(member);
-
-        return ExpResponse.builder()
-                .memberId(memberId)
-                .updatedExp(currentExp)
-                .updatedLevel(currentLevel)
-                .levelUp(levelUp)
-                .build();
+    public ExpResponse addExp(Long memberId, int expPoint) {
+        return null;
     }
+
+//    @Override
+//    @Transactional
+//    public ExpResponse addExp(Long memberId, int amount) {
+//        MemberDTO member = memberQueryMapper.findById(memberId)
+//                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
+//
+//        int currentLevel = member.getLevel();
+//        int currentExp = member.getExp() + amount;
+//        boolean levelUp = false;
+//
+//        expHistoryCommandMapper.insertExpHistory(memberId, amount);
+//
+//        int nextLevel = currentLevel + 1;
+//
+//        if (MemberLevel.fromLevel(nextLevel).isPresent()) {
+//            int requiredTotalExpForNextLevel = MemberLevel.getTotalExpByLevel(nextLevel);
+//            int requiredTotalExpForCurrent = MemberLevel.getTotalExpByLevel(currentLevel);
+//            int requiredThisLevelExp = requiredTotalExpForNextLevel - requiredTotalExpForCurrent;
+//
+//            if (currentExp >= requiredThisLevelExp) {
+//                currentExp -= requiredThisLevelExp;
+//                currentLevel++;
+//                levelUp = true;
+//
+//                Long badgeId = getBadgeQueryMapper.findBadgeIdByLevel(currentLevel);
+//                if (badgeId != null) {
+//                    getBadgeCommandMapper.insertGetBadge(memberId, badgeId);
+//                }
+//            }
+//        }
+//
+//        member.setLevel(currentLevel);
+//        member.setExp(currentExp);
+//        memberCommandMapper.updateLevelAndExp(member);
+//
+//        return ExpResponse.builder()
+//                .memberId(memberId)
+//                .updatedExp(currentExp)
+//                .updatedLevel(currentLevel)
+//                .levelUp(levelUp)
+//                .build();
+//    }
 }
