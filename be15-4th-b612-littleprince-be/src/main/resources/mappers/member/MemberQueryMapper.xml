@@ -23,8 +23,7 @@
         exp,
         level,
         planet_name,
-        is_notification_enabled,
-        is_bgm_enabled
+        is_notification_enabled
         FROM member
         WHERE member_id = #{memberId}
     </select>
