@@ -2,6 +2,7 @@ package littleprince.member.query.mapper;
 
 import littleprince.member.command.domain.aggregate.MemberDTO;
 import littleprince.member.query.dto.FindMemberDTO;
+import littleprince.member.query.dto.response.MemberInfoResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Optional;
@@ -9,6 +10,6 @@ import java.util.Optional;
 @Mapper
 public interface MemberQueryMapper {
     Optional<FindMemberDTO> findMemberByEmail(String email);
-
     Optional<MemberDTO> findById(Long memberId);
+    MemberInfoResponse findMemberByMemberId(Long memberId);
 }

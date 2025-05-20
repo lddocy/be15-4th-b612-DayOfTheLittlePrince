@@ -42,4 +42,8 @@ public class Task {
         this.isChecked = StatusType.N;
         this.createdAt = LocalDateTime.now();
     }
+
+    public void toggleCheck() {
+        this.isChecked = this.isChecked == StatusType.Y ? StatusType.N : StatusType.Y;
+    }
 }
