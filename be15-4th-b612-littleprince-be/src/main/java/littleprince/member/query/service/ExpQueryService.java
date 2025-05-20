@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ExpQueryService {
-
     private final MemberRepository memberRepository;
+
     public CurExpResponse getUserExp(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
@@ -26,5 +26,4 @@ public class ExpQueryService {
 
         return new CurExpResponse(currentExp, currentLevel, totalExpToNext);
     }
-
 }
