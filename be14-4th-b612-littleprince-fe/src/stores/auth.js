@@ -1,12 +1,22 @@
-import { ref, computed } from 'vue'
+// src/stores/auth.js
+
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
+export const useAuthStore = defineStore('auth', () => {
+  const accessToken = ref(null)
+
+  function setAccessToken(token) {
+    accessToken.value = token
   }
 
-  return { count, doubleCount, increment }
+  function clearAccessToken() {
+    accessToken.value = null
+  }
+
+  return {
+    accessToken,
+    setAccessToken,
+    clearAccessToken,
+  }
 })
