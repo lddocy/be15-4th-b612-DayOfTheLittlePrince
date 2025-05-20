@@ -29,3 +29,6 @@ coverage
 
 *.tsbuildinfo
 /public/models/space-background/*.exr
+
+# Environment variables
+.env
