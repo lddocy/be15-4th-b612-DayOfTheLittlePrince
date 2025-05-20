@@ -1,4 +1,4 @@
-package littleprince.plan.command.service;
+package littleprince.plan.command.application.service;
 
 import littleprince.common.exception.BusinessException;
 import littleprince.plan.command.application.dto.request.CreateShortTodoRequestDto;

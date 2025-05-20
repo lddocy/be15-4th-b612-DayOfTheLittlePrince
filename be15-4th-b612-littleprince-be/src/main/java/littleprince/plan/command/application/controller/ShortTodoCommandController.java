@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
 import littleprince.plan.command.application.dto.request.CreateShortTodoRequestDto;
-import littleprince.plan.command.service.ShortTodoCommandService;
+import littleprince.plan.command.application.service.ShortTodoCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
