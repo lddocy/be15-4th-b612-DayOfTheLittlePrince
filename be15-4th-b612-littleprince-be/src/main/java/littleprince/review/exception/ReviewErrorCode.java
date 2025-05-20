@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum ReviewErrorCode implements ErrorCode {
     // review 오류
     /* 각 도메인마다 ERROR CODE 작성 */
-    REVIEW_SUBMIT_FAILED("30001", "회고를 작성할 수 없습니다.", HttpStatus.BAD_REQUEST);
+    REVIEW_ALREADY_EXISTS("30001", "이미 작성하신 회고가 존재합니다.", HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;

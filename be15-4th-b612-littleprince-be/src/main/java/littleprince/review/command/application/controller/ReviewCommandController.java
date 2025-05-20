@@ -26,16 +26,16 @@ public class ReviewCommandController {
 
     private final ReviewCommandService reviewCommandService;
 
-    @Operation(summary = "회고 작성", description = "해당요일에 회고를 작성한다.")
+    @Operation(summary = "회고 작성 or 업데이트", description = "해당요일에 회고를 작성한다. 이미 작성된 회고가 있으면 업데이트")
     @PostMapping("/{date}")
-    public ResponseEntity<ApiResponse<Void>> createReview(
+    public ResponseEntity<ApiResponse<Void>> createOrUpdateReview(
             @AuthenticationPrincipal CustomUserDetail customUserDetail,
             @PathVariable Date date,
             @RequestBody @Valid CreateReviewRequest createReviewRequest
     )
     {
         Long memberId = customUserDetail.getMemberId();
-        reviewCommandService.createReview(memberId, date, createReviewRequest);
+        reviewCommandService.createOrUpdateReview(memberId, date, createReviewRequest);
 
         return ResponseEntity.ok(ApiResponse.success(null));
     }

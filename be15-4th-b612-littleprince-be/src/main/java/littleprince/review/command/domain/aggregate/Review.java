@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,4 +32,8 @@ public class Review {
 
     @CreatedDate
     private Timestamp createdAt;
+
+    public void updateReview(@NotNull(message = "내용을 채워주세요") String reviewContent) {
+        this.reviewContent = reviewContent;
+    }
 }
