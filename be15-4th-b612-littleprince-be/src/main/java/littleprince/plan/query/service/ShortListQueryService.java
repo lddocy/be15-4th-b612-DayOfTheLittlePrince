@@ -1,5 +1,6 @@
 package littleprince.plan.query.service;
 
+import littleprince.plan.query.dto.response.AiShortPlanDTO;
 import littleprince.plan.query.dto.response.ShortListDTO;
 import littleprince.plan.query.dto.response.ShortListResponse;
 import littleprince.plan.query.mapper.ShortListQueryMapper;
@@ -24,4 +25,8 @@ public class ShortListQueryService {
                 .build();
     }
 
+    /* Ai에서 사용할 사용자의 단기 리스트 전체 조회 */
+    public List<AiShortPlanDTO> getMemberShortPlan(Long memberId){
+        return shortListQueryMapper.getShortPlanByMemberId(memberId);
+    }
 }

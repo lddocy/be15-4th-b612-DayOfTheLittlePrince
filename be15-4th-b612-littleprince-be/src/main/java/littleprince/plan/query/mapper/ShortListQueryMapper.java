@@ -1,5 +1,6 @@
 package littleprince.plan.query.mapper;
 
+import littleprince.plan.query.dto.response.AiShortPlanDTO;
 import littleprince.plan.query.dto.response.ShortListDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,4 +12,6 @@ public interface ShortListQueryMapper {
 
     /* 단기 리스트 목록 조회 */
     List<ShortListDTO> getShortList(Long memberId, Date date);
+
+    List<AiShortPlanDTO> getShortPlanByMemberId(Long memberId);
 }

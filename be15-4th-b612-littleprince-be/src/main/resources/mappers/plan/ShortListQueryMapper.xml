@@ -17,4 +17,18 @@
           AND project_id IS NULL
         ORDER BY created_at
     </select>
+
+    <select id="getShortPlanByMemberId" resultType="littleprince.plan.query.dto.response.AiShortPlanDTO">
+        SELECT
+              content
+            , date
+        FROM
+            task
+        WHERE
+            member_id = #{ memberId }
+            AND project_id IS NULL
+            AND date >= CURDATE() - INTERVAL 10 DAY
+        ORDER BY date desc
+        LIMIT 50
+    </select>
 </mapper>
