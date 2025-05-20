@@ -5,7 +5,7 @@ import littleprince.common.exception.BusinessException;
 import littleprince.item.command.application.service.ItemCommandService;
 import littleprince.item.query.mapper.GetBadgeCommandMapper;
 import littleprince.item.query.mapper.GetBadgeQueryMapper;
-import littleprince.member.command.application.dto.request.ExpRequest;
+import littleprince.member.command.application.dto.constant.MemberLevel;
 import littleprince.member.command.application.dto.request.SignupRequest;
 import littleprince.member.command.application.dto.response.ExpResponse;
 import littleprince.member.command.application.respository.MemberRepository;
@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -77,14 +76,13 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         int currentExp = member.getExp() + amount;
         boolean levelUp = false;
 
-        // 경험치 기록 저장
         expHistoryCommandMapper.insertExpHistory(memberId, amount);
 
         int nextLevel = currentLevel + 1;
 
-        if (nextLevel < LEVEL_REQUIRED_EXP.size()) {
-            int requiredTotalExpForNextLevel = LEVEL_REQUIRED_EXP.get(nextLevel);
-            int requiredTotalExpForCurrent = LEVEL_REQUIRED_EXP.get(currentLevel);
+        if (MemberLevel.fromLevel(nextLevel).isPresent()) {
+            int requiredTotalExpForNextLevel = MemberLevel.getTotalExpByLevel(nextLevel);
+            int requiredTotalExpForCurrent = MemberLevel.getTotalExpByLevel(currentLevel);
             int requiredThisLevelExp = requiredTotalExpForNextLevel - requiredTotalExpForCurrent;
 
             if (currentExp >= requiredThisLevelExp) {
@@ -92,7 +90,6 @@ public class MemberCommandServiceImpl implements MemberCommandService {
                 currentLevel++;
                 levelUp = true;
 
-                // 칭호 지급
                 Long badgeId = getBadgeQueryMapper.findBadgeIdByLevel(currentLevel);
                 if (badgeId != null) {
                     getBadgeCommandMapper.insertGetBadge(memberId, badgeId);
@@ -111,11 +108,4 @@ public class MemberCommandServiceImpl implements MemberCommandService {
                 .levelUp(levelUp)
                 .build();
     }
-
-
-    /* 레벨들의 경험치 */
-    private static final List<Integer> LEVEL_REQUIRED_EXP = List.of(
-            0, 10, 30, 60, 100, 150, 210, 280, 360, 460, 600
-    );
-
 }

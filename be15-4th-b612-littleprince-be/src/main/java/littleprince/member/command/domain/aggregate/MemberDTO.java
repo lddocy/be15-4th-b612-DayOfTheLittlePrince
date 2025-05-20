@@ -18,5 +18,4 @@ public class MemberDTO {
     private Integer level;
     private String planetName;
     private String isNotificationEnabled;
-    private String isBgmEnabled;
 }
