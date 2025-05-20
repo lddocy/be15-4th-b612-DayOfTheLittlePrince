@@ -51,7 +51,9 @@ public class SecurityConfig {
                                         "/auth/login",
                                         "/member/signup"
                                 ).permitAll()
-
+                                .requestMatchers(HttpMethod.GET,
+                                        "/item/list"
+                                ).authenticated()
                                 /* 유저 권한 */
                                 .requestMatchers(HttpMethod.POST,
                                         "/auth/logout",

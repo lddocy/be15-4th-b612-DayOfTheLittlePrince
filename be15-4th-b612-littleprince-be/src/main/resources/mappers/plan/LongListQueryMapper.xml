@@ -10,6 +10,8 @@
               project_id
             , member_id
             , title
+            , start_date
+            , end_date
         FROM project
         WHERE member_id = #{ memberId }
         AND #{ date } BETWEEN start_date AND end_date

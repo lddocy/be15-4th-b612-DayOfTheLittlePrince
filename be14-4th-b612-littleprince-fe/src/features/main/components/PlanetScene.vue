@@ -1,83 +1,95 @@
 <script setup>
-import {onMounted, ref, watch} from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { useRoute } from 'vue-router';
 
 import { createCamera, createRenderer, addBasicLighting } from '@/utils/setupThreeScene.js';
 import { loadHDRI, loadGLTF } from '@/utils/loaders.js';
-import {useRoute} from "vue-router";
+import SceneItemManager from '@/features/main/components/SceneItemManager.vue';
 
 const emit = defineEmits(['loaded']);
-
 const container = ref(null);
-const princeRef = ref(null);
+const sceneRef = ref(null);
+const princeRef = ref([]);
 const route = useRoute();
+const isSceneReady = ref(false);
+
+function setupScene() {
+    const scene = new THREE.Scene();
+    loadHDRI('/models/space-background/NightSkyHDRI001_4K-HDR.exr', scene);
+    addBasicLighting(scene);
+    sceneRef.value = scene;
+    return scene;
+}
+
+function setupCameraRenderer(container, scene) {
+    const camera = createCamera(container);
+    const renderer = createRenderer(container);
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
+    const animate = () => {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    };
+    animate();
+}
+
+function loadMainPlanet(scene) {
+    loadGLTF('/models/planet-and-prince/scene.gltf', scene, (model) => {
+        model.name = 'planet-and-prince';
+        model.position.set(0, -15, 0);
+        model.scale.set(0.6, 0.6, 0.6);
+        model.visible = shouldShowItems(route.path);
+        scene.add(model);
+        princeRef.value.push(model);
+        isSceneReady.value = true;
+        emit('loaded');
+    });
+}
+
+function shouldShowItems(path) {
+    return path === '/';
+}
+
+function updatePrinceVisibility(show) {
+    princeRef.value.forEach((model) => (model.visible = show));
+}
 
 onMounted(() => {
-  const scene = new THREE.Scene()
-  loadHDRI('/models/space-background/NightSkyHDRI001_4K-HDR.exr', scene);
-  addBasicLighting(scene);
-
-  const camera = createCamera(container.value);
-  const renderer = createRenderer(container.value);
-  container.value.appendChild(renderer.domElement);
-
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-
-
-  window.addEventListener('resize', () => {
-    camera.aspect = container.value.clientWidth / container.value.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.value.clientWidth, container.value.clientHeight);
-  });
-
-  loadGLTF('/models/planet-and-prince/scene.gltf', scene, (model) => {
-    model.position.set(0, -10, 0);
-    model.scale.set(0.5, 0.5, 0.5);
-    model.visible = shouldShowPrince(route.path);
-    scene.add(model);
-    princeRef.value = model;
-    emit('loaded');
-  });
-
-  const animate = () => {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  };
-  animate();
+    const scene = setupScene();
+    setupCameraRenderer(container.value, scene);
+    loadMainPlanet(scene);
 });
-
-const showPrince = () => {
-  if (princeRef.value) princeRef.value.visible = true;
-};
-const hidePrince = () => {
-  if (princeRef.value) princeRef.value.visible = false;
-};
-
-function shouldShowPrince(path) {
-  return path === '/';
-}
 
 watch(
     () => route.path,
     (newPath) => {
-      if (shouldShowPrince(newPath)) {
-        showPrince();
-      } else {
-        hidePrince();
-      }
+        updatePrinceVisibility(shouldShowItems(newPath));
     }
 );
-
 </script>
 
 <template>
-  <div class="scene-wrapper relative w-full h-full">
-    <div ref="container" class="scene-container"></div>
-  </div>
+    <div class="scene-wrapper relative w-full h-full">
+        <div ref="container" class="scene-container"></div>
+        <SceneItemManager
+            v-if="sceneRef && isSceneReady"
+            :scene="sceneRef"
+            :route-path="route.path"
+        />
+    </div>
 </template>
 
 <style scoped>
