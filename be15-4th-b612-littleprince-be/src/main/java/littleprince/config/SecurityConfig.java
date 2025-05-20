@@ -57,17 +57,15 @@ public class SecurityConfig {
                                 /* 유저 권한 */
                                 .requestMatchers(HttpMethod.POST,
                                         "/auth/logout",
-                                        "/exp"
-
+                                        "/plans/short-todos"
                                 ).authenticated()
                                 .requestMatchers(HttpMethod.GET,
                                         "/plan/short/{date}/todo",
                                         "/plan/long/{date}",
-                                        "/plan/long/{date}/{projectId}",
-                                        "/badges/{userId}"
+                                        "/plan/long/{date}/{projectId}"
                                 ).authenticated()
-                                .requestMatchers(HttpMethod.PATCH,
-                                        "/badges/select"
+                                .requestMatchers(HttpMethod.GET,
+                                        "/badges/{userId}"
                                 ).authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
