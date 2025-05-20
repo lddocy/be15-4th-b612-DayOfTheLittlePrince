@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ExpQueryService {
-
     private final MemberRepository memberRepository;
+
     public CurExpResponse getUserExp(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
@@ -28,5 +28,4 @@ public class ExpQueryService {
 
         return new CurExpResponse(currentExp, currentLevel, totalExpToNext);
     }
-
 }
