@@ -2,6 +2,8 @@ package littleprince.plan.query.service;
 
 import littleprince.plan.query.dto.response.ShortListDTO;
 import littleprince.plan.query.dto.response.ShortListResponse;
+import littleprince.plan.query.dto.response.ShortPlanDateDTO;
+import littleprince.plan.query.dto.response.ShortPlanDateResponse;
 import littleprince.plan.query.mapper.ShortListQueryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,4 +26,12 @@ public class ShortListQueryService {
                 .build();
     }
 
+    /* 단기플랜 여부 조회 */
+    public ShortPlanDateResponse getShortDates(Long memberId) {
+        List<ShortPlanDateDTO> planDateDTO = shortListQueryMapper.getShortDates(memberId);
+
+        return ShortPlanDateResponse.builder()
+                .planDateDTO(planDateDTO)
+                .build();
+    }
 }

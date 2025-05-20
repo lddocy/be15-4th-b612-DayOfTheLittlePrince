@@ -12,6 +12,7 @@ public enum MemberErrorCode implements ErrorCode {
     // member 오류
     /* 각 도메인마다 ERROR CODE 작성 */
     INVALID_LOGIN_REQUEST("10001", "아이디 또는 비밀번호가 잘못되었습니다.", HttpStatus.UNAUTHORIZED),
+    USER_NOT_FOUND("10002", "존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST),
     DUPLICATE_EMAIL_EXISTS("10005", "이미 가입된 이메일입니다.", HttpStatus.BAD_REQUEST),
     PASSWORD_MISMATCH("10013","비밀번호가 동일하지 않습니다", HttpStatus.BAD_REQUEST);
 
