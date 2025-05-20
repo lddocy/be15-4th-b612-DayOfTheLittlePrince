@@ -67,7 +67,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET,
                                         "/plan/short/{date}/todo",
                                         "/plan/long/{date}",
-                                        "/plan/long/{date}/{projectId}"
+                                        "/plan/long/{date}/{projectId}",
+                                        "/curexp"
                                 ).authenticated()
                                 .requestMatchers(HttpMethod.GET,
                                         "/badges/{userId}"

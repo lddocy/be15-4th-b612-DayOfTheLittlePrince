@@ -45,4 +45,7 @@
             AND is_deleted = 'N'
             AND gb.is_selected = 'Y'
     </select>
+    <select id="findAll" resultType="littleprince.member.command.domain.aggregate.Member">
+        SELECT * FROM member WHERE is_deleted = 'N'
+    </select>
 </mapper>
