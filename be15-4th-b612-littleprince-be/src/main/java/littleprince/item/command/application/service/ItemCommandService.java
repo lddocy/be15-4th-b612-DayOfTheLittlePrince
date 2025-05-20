@@ -7,9 +7,7 @@ import littleprince.item.command.domain.aggregate.HiddenItem;
 import littleprince.item.command.domain.aggregate.Item;
 import littleprince.item.command.domain.repository.GetItemRepository;
 import littleprince.item.command.domain.repository.ItemRepository;
-import littleprince.item.query.mapper.ItemMapper;
-import littleprince.member.command.application.repository.MemberRepository;
-import littleprince.member.command.domain.aggregate.Member;
+import littleprince.member.command.domain.aggregate.MemberDTO;
 import littleprince.member.exception.MemberErrorCode;
 import littleprince.member.query.mapper.MemberQueryMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ItemCommandService {
     private final ItemRepository jpaItemRepository;
-    private final MemberRepository memberRepository;
+    private final MemberQueryMapper memberQueryMapper;
     private final GetItemRepository getItemRepository;
 
     // 사용자 아이템 추가
     public void addItem(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+        MemberDTO member = memberQueryMapper.findById(memberId)
                 .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
 
         int level = member.getLevel();
@@ -52,7 +50,7 @@ public class ItemCommandService {
     // 아이템 숨김 처리
     @Transactional
     public void toggleItemHidden(Long memberId, Long itemId) {
-        memberRepository.findById(memberId)
+        memberQueryMapper.findById(memberId)
                 .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
 
         GetItem getItem = getItemRepository.findByMemberIdAndItemId(memberId, itemId)
