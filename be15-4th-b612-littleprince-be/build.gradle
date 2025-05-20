@@ -4,6 +4,10 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
+ext {
+	springAiVersion = "1.0.0-RC1"
+}
+
 group = 'com.b612'
 version = '0.0.1-SNAPSHOT'
 
@@ -27,6 +31,9 @@ dependencies {
 
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// OpenAI
+	implementation 'org.springframework.ai:spring-ai-starter-model-openai'
 
 	// JWT
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson
@@ -53,6 +60,12 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.ai:spring-ai-bom:$springAiVersion"
+	}
 }
 
 tasks.named('test') {
