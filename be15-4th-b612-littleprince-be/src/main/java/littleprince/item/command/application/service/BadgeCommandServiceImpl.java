@@ -1,6 +1,8 @@
 package littleprince.item.command.application.service;
 
 import jakarta.transaction.Transactional;
+import littleprince.common.exception.BusinessException;
+import littleprince.item.Exception.ItemErrorCode;
 import littleprince.item.query.mapper.GetBadgeCommandMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ public class BadgeCommandServiceImpl implements BadgeCommandService {
         // 1. 보유 여부 확인
         boolean hasBadge = getBadgeCommandMapper.hasBadge(memberId, badgeId);
         if (!hasBadge) {
-            throw new IllegalArgumentException("해당 칭호를 보유하고 있지 않습니다.");
+            throw new BusinessException(ItemErrorCode.ITEM_BADGE_NOT_OWNED);
         }
 
         // 2. 전체 선택 해제
