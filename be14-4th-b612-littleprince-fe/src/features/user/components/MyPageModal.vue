@@ -183,7 +183,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watchEffect } from 'vue'
+import { ref, computed, watchEffect, onMounted } from 'vue'
 import DeleteAccountModal from "@/features/user/components/DeleteAccountModal.vue";
 import { fetchMyBadges } from '@/features/user/api'
 
