@@ -1,5 +1,6 @@
 package littleprince.ai.query.controller;
 
+import littleprince.ai.query.dto.response.GeneratePlaneResponse;
 import littleprince.ai.query.service.AiQueryService;
 import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
@@ -19,10 +20,10 @@ public class AiQueryController {
     private final AiQueryService aiQueryService;
 
     @GetMapping("/plan")
-    public ResponseEntity<ApiResponse<ShortListResponse>> generateAiPlan(
+    public ResponseEntity<ApiResponse<GeneratePlaneResponse>> generateAiPlan(
             @AuthenticationPrincipal CustomUserDetail userDetail
             ){
-        ShortListResponse response = aiQueryService.generateAiPlan(userDetail);
+        GeneratePlaneResponse response = aiQueryService.generateAiPlan(userDetail);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
