@@ -42,6 +42,11 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler))
                 .authorizeHttpRequests(auth ->
                         auth
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html")
+                                .permitAll()
                                 /* 일반 권한 */
                                 /* TODO : 필요 할 때 주석 풀고 작성 해 주세요!*/
 //                                .requestMatchers(HttpMethod.GET,
@@ -62,8 +67,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET,
                                         "/plan/short/{date}/todo",
                                         "/plan/long/{date}",
-                                        "/plan/long/{date}/{projectId}",
-                                        "/curexp"
+                                        "/plan/long/{date}/{projectId}"
                                 ).authenticated()
                                 .requestMatchers(HttpMethod.GET,
                                         "/badges/{userId}"
