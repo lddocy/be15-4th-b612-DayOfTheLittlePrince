@@ -27,7 +27,7 @@ public class ExpQueryController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    @Operation(summary = "획득 경험치 조회",description = "사용자는 자신의 경험치를 조회할 수 있다.")
-    @GetMapping("/get")
-    public ResponseEntity<ApiResponse<>>
+//    @Operation(summary = "획득 경험치 조회",description = "사용자는 자신의 경험치를 조회할 수 있다.")
+//    @GetMapping("/get")
+//    public ResponseEntity<ApiResponse<>>
 }
