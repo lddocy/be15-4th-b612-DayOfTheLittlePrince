@@ -22,7 +22,7 @@ public class MemberQueryServiceImpl implements MemberQueryService{
         Long memberId = userDetail.getMemberId();
 
         MemberInfoResponse memberInfo = memberQueryMapper.findMemberByMemberId(memberId)
-                .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(MemberErrorCode.BADGE_NOT_FOUND));
 
         return memberInfo;
     }

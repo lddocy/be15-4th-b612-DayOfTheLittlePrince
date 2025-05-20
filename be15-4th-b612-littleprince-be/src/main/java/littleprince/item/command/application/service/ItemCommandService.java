@@ -1,9 +1,9 @@
 package littleprince.item.command.application.service;
 
+import littleprince.common.domain.StatusType;
 import littleprince.common.exception.BusinessException;
 import littleprince.item.Exception.ItemErrorCode;
 import littleprince.item.command.domain.aggregate.entity.GetItem;
-import littleprince.item.command.domain.aggregate.entity.HiddenItem;
 import littleprince.item.command.domain.aggregate.entity.Item;
 import littleprince.item.command.domain.repository.GetItemRepository;
 import littleprince.item.command.domain.repository.ItemRepository;
@@ -40,7 +40,7 @@ public class ItemCommandService {
         GetItem getItem = GetItem.builder()
                 .memberId(member.getMemberId())
                 .itemId(newItem.getItemId())
-                .isHidden(HiddenItem.N)
+                .isHidden(StatusType.N)
                 .build();
 
         getItemRepository.save(getItem);
@@ -57,7 +57,7 @@ public class ItemCommandService {
                 .orElseThrow(() -> new BusinessException(ItemErrorCode.ITEM_NOT_FOUND));
 
         getItem.setIsHidden(
-                getItem.getIsHidden() == HiddenItem.Y ? HiddenItem.N : HiddenItem.Y
+                getItem.getIsHidden() == StatusType.Y ? StatusType.N : StatusType.Y
         );
     }
 
