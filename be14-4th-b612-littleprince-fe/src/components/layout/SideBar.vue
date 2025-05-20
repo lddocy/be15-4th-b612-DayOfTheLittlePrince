@@ -1,14 +1,18 @@
 <script setup>
-import {useRouter} from "vue-router";
+import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import MyPageModal from '@/features/user/components/MyPageModal.vue'
+import MyPageModal from '@/features/user/components/MyPageModal.vue';
+import { useAuthStore } from '/src/stores/auth.js';
+import { useToast } from 'vue-toastification';
+import { logout } from '@/features/user/api.js';
 
 const router = useRouter();
-const isMyPageOpen = ref(false)
+const toast = useToast();
+const authStore = useAuthStore();
+const isMyPageOpen = ref(false);
 const openMyPage = () => {
-  isMyPageOpen.value = true
-}
-
+    isMyPageOpen.value = true;
+};
 
 // const handleLogout = async () => {
 //   try {
@@ -21,65 +25,81 @@ const openMyPage = () => {
 //     console.log('로그아웃 실패 : ', e);
 //   }
 // };
-function handleLogout() {
-  console.log("로그아웃 완료");
-}
+const handleLogout = async () => {
+    try {
+        const accessToken = authStore.accessToken;
+        await logout(accessToken);
+        authStore.clearAccessToken();
+        toast.success('로그아웃이 완료되었습니다.');
+        router.replace('/login');
+    } catch (e) {
+        toast.error(e.response.data.message);
+    }
+};
 
 function navigate(target) {
-  switch (target) {
-    case 'main':
-      router.push('/');
-      console.log('메인화면으로~');
-      break;
-    case 'calendar':
-      router.push('/calendar');
-      break;
-  }
+    switch (target) {
+        case 'main':
+            router.push('/');
+            console.log('메인화면으로~');
+            break;
+        case 'calendar':
+            router.push('/calendar');
+            break;
+    }
 }
-
 </script>
 
 <template>
-  <div class="sidebar-overlay flex flex-col justify-between items-center h-screen bg-white/20 py-10 w-[140px] lg:w-[100px] md:w-[70px]">
-      <div class="flex flex-col items-center space-y-10">
-        <!-- 로고 -->
-        <div
-            class="flex flex-col items-center"
-            @click="navigate('main')"
-        >
-          <img src="@/assets/icons/mini-logo.png" class="w-20 h-20 md:w-24 md:h-24 lg:w-32 lg:h-32"/>
+    <div
+        class="sidebar-overlay flex flex-col justify-between items-center h-screen bg-white/20 py-10 w-[140px] lg:w-[100px] md:w-[70px]">
+        <div class="flex flex-col items-center space-y-10">
+            <!-- 로고 -->
+            <div class="flex flex-col items-center cursor-pointer" @click="navigate('main')">
+                <img
+                    src="@/assets/icons/mini-logo.png"
+                    class="w-20 h-20 md:w-24 md:h-24 lg:w-32 lg:h-32" />
+            </div>
+            <div class="flex flex-col items-center space-y-12">
+                <!-- 마이페이지 -->
+                <div
+                    @click="openMyPage"
+                    class="bg-white/20 p-1 rounded-2xl hover:bg-purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 cursor-pointer">
+                    <img
+                        src="@/assets/icons/mypage.png"
+                        alt="mypage"
+                        class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" />
+                </div>
+                <!-- 캘린더 -->
+                <div
+                    class="bg-white/20 p-1 rounded-2xl hover:bg-dlp_purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 cursor-pointer"
+                    @click="navigate('calendar')">
+                    <img
+                        src="@/assets/icons/calendar.png"
+                        alt="calendar"
+                        class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" />
+                </div>
+                <!-- 캡처모드 -->
+                <div
+                    class="bg-white/20 p-1 rounded-2xl hover:bg-dlp_purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 cursor-pointer">
+                    <img
+                        src="@/assets/icons/capture.png"
+                        alt="capture"
+                        class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" />
+                </div>
+                <!-- 로그아웃 -->
+                <div
+                    class="bg-white/20 p-1 rounded-2xl hover:bg-dlp_pinkPurple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 cursor-pointer"
+                    @click="handleLogout">
+                    <img
+                        src="@/assets/icons/logout.png"
+                        alt="logout"
+                        class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" />
+                </div>
+            </div>
         </div>
-      <div class="flex flex-col items-center space-y-12">
-        <!-- 마이페이지 -->
-        <div
-            @click="openMyPage"
-            class="bg-white/20 p-1 rounded-2xl hover:bg-purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20"
-        >
-          <img src="@/assets/icons/mypage.png" alt="mypage" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" />
-        </div>
-        <!-- 캘린더 -->
-        <div
-            class="bg-white/20 p-1 rounded-2xl hover:bg-dlp_purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20"
-            @click="navigate('calendar')"
-        >
-          <img src="@/assets/icons/calendar.png" alt="calendar" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" />
-        </div>
-        <!-- 캡처모드 -->
-        <div class="bg-white/20 p-1 rounded-2xl hover:bg-dlp_purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20">
-          <img src="@/assets/icons/capture.png" alt="capture" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" />
-        </div>
-        <!-- 로그아웃 -->
-        <div
-            class="bg-white/20 p-1 rounded-2xl hover:bg-dlp_pinkPurple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20"
-            @click="handleLogout"
-        >
-
-          <img src="@/assets/icons/logout.png" alt="logout" class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20" />
-        </div>
-      </div>
+        <MyPageModal :isOpen="isMyPageOpen" @close="isMyPageOpen = false" />
     </div>
-    <MyPageModal :isOpen="isMyPageOpen" @close="isMyPageOpen = false" />
-  </div>
 </template>
 
 <style scoped>
@@ -95,16 +115,15 @@ function navigate(target) {
 
 /* 브라우저 너비 1024px 이하일 때 */
 @media (max-width: 1024px) {
-  .sidebar-overlay {
-    width: 100px;
-  }
+    .sidebar-overlay {
+        width: 100px;
+    }
 }
 
 /* 브라우저 너비 768px 이하일 때 */
 @media (max-width: 768px) {
-  .sidebar-overlay {
-    width: 70px;
-  }
+    .sidebar-overlay {
+        width: 70px;
+    }
 }
 </style>
-
