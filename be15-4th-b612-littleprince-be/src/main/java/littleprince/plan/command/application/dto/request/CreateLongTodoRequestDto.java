@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-@Schema(description = "장기 투두 리스트 생성 요청 DTO")
+@Schema(description = "장기 투두 프로젝트 생성 요청 DTO")
 public class CreateLongTodoRequestDto {
 
     @Schema(description = "프로젝트 제목", example = "프론트엔드 세팅 완료하기")
