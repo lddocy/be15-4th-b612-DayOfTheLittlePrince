@@ -1,8 +1,11 @@
 package littleprince.member.command.application.dto.constant;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.Optional;
 
+@Getter
 public enum MemberLevel {
 
     LEVEL_1(1, 10),

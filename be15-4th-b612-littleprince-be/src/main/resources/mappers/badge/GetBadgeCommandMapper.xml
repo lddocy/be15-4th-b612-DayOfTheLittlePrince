@@ -7,8 +7,33 @@
 
     <!-- 칭호 삽입 -->
     <insert id="insertGetBadge">
-        INSERT INTO get_badge (member_id, badge_id, is_selected)
-        VALUES (#{memberId}, #{badgeId}, 'N')
+        INSERT INTO get_badge
+        (
+              member_id
+            , badge_id
+            , is_selected
+        )
+        VALUES
+        (
+              #{memberId}
+            , (SELECT badge_id FROM badge WHERE level = #{ level })
+            , 'N'
+        );
+    </insert>
+
+    <insert id="insertDefaultGetBadge">
+        INSERT INTO get_badge
+        (
+        member_id
+        , badge_id
+        , is_selected
+        )
+        VALUES
+        (
+        #{memberId}
+        , (SELECT badge_id FROM badge WHERE level = #{ level })
+        , 'Y'
+        );
     </insert>
 
     <!-- 기존 선택 해제 -->

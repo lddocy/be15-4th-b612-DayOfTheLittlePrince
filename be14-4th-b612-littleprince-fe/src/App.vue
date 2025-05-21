@@ -3,7 +3,7 @@ import { useRoute } from 'vue-router';
 import { computed, ref } from 'vue';
 
 import SideBar from '@/components/layout/SideBar.vue';
-import PlanetScene from "@/features/main/components/PlanetScene.vue";
+import PlanetScene from "@/components/common/PlanetScene.vue";
 import BgmPlayer from './components/common/BgmPlayer.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 

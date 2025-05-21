@@ -6,7 +6,8 @@ import { useRoute } from 'vue-router';
 
 import { createCamera, createRenderer, addBasicLighting } from '@/utils/setupThreeScene.js';
 import { loadHDRI, loadGLTF } from '@/utils/loaders.js';
-import SceneItemManager from '@/features/main/components/SceneItemManager.vue';
+import SceneItemManager from '@/components/common/SceneItemManager.vue';
+import MainIconItem from '@/features/main/components/MainIconItem.vue';
 
 const emit = defineEmits(['loaded']);
 const container = ref(null);
@@ -85,6 +86,11 @@ watch(
     <div class="scene-wrapper relative w-full h-full">
         <div ref="container" class="scene-container"></div>
         <SceneItemManager
+            v-if="sceneRef && isSceneReady"
+            :scene="sceneRef"
+            :route-path="route.path"
+        />
+        <MainIconItem
             v-if="sceneRef && isSceneReady"
             :scene="sceneRef"
             :route-path="route.path"
