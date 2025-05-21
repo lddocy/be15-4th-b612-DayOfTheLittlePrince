@@ -15,7 +15,6 @@
         JOIN item i ON i.item_id = gi.item_id
         WHERE m.member_id = #{ member_id }
             AND i.level <= m.level
-            AND gi.is_hidden = 'N'
         ]]>
     </select>
 
