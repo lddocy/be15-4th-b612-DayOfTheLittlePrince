@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ShortTermList from '@/features/calendar/components/ShortTermList.vue'
 import NotificationModal from '@/features/main/components/NotificationModal.vue';
@@ -105,6 +105,7 @@ const isMainOrCalendar = computed(() =>
         <div class="today-container">
             <img
                 src="@/assets/icons/notification.png"
+                alt="today-list"
                 class="icon-img cursor-pointer"
                 @click="toggleNotificationModal"
             />
@@ -120,6 +121,7 @@ const isMainOrCalendar = computed(() =>
         <div class="today-container">
             <img
                 src="@/assets/icons/today.png"
+                alt="noti-list"
                 class="icon-img cursor-pointer"
                 @click="toggleTodayModal"
             />
