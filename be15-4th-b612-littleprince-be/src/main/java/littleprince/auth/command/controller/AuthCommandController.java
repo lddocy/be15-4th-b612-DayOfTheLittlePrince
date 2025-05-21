@@ -1,5 +1,6 @@
 package littleprince.auth.command.controller;
 
+import jakarta.validation.Valid;
 import littleprince.auth.command.dto.request.ChangePasswordRequest;
 import littleprince.auth.command.service.AuthCommandService;
 import littleprince.common.dto.ApiResponse;
@@ -37,7 +38,7 @@ public class AuthCommandController {
 
     @PostMapping("/change/password")
     public ResponseEntity<ApiResponse<Void>> changePassword(
-            @RequestBody ChangePasswordRequest request
+            @RequestBody @Valid ChangePasswordRequest request
     ){
         authCommandService.changePassword(request);
 
