@@ -55,7 +55,12 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST,
                                         "/auth/login",
                                         "/member/signup",
-                                        "/auth/reissue"
+                                        "/auth/reissue",
+                                        "auth/change/password"
+                                ).permitAll()
+
+                                .requestMatchers(HttpMethod.GET,
+                                        "/auth/find/password"
                                 ).permitAll()
                                 /* 유저 권한 */
                                 .requestMatchers(HttpMethod.POST,

@@ -5,6 +5,7 @@ import littleprince.auth.command.dto.response.TokenResponse;
 import littleprince.auth.query.dto.request.LoginRequest;
 import littleprince.auth.query.service.AuthQueryService;
 import littleprince.common.dto.ApiResponse;
+import littleprince.member.annotation.ValidEmail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -35,6 +36,15 @@ public class AuthQueryController {
         TokenResponse tokenResponse = authQueryService.reissue(refreshToken);
 
         return buildTokenResponse(tokenResponse);
+    }
+
+    @GetMapping("/find/password")
+    public ResponseEntity<ApiResponse<Void>> findPassword(
+            @RequestParam @ValidEmail String email
+    ){
+        authQueryService.findPassword(email);
+
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
 
