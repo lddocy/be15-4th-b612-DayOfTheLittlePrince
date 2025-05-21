@@ -1,5 +1,6 @@
 package littleprince.auth.command.controller;
 
+import littleprince.auth.command.dto.request.ChangePasswordRequest;
 import littleprince.auth.command.service.AuthCommandService;
 import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
@@ -9,10 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -35,6 +33,15 @@ public class AuthCommandController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, deleteCookie.toString())
                 .body(ApiResponse.success(null));
+    }
+
+    @PostMapping("/change/password")
+    public ResponseEntity<ApiResponse<Void>> changePassword(
+            @RequestBody ChangePasswordRequest request
+    ){
+        authCommandService.changePassword(request);
+
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     /* 쿠키 삭제용*/
