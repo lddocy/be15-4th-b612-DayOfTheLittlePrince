@@ -1,9 +1,11 @@
 package littleprince.plan.command.application.service;
 
+import littleprince.common.exception.BusinessException;
 import littleprince.plan.command.application.dto.request.CreateProjectTaskRequestDto;
 import littleprince.plan.command.domain.aggregate.Task;
 import littleprince.plan.command.repository.ProjectRepository;
 import littleprince.plan.command.repository.TaskRepository;
+import littleprince.plan.exception.PlanErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,5 +38,23 @@ public class ProjectTaskCommandService {
 
         // 3. 저장
         taskRepository.saveAll(tasks);
+    }
+
+    @Transactional
+    public void toggleProjectTaskCheck(Long memberId, Long taskId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new BusinessException(PlanErrorCode.NOT_FOUND_TASK));
+
+        // 본인 투두인지 확인
+        if(!task.getMemberId().equals(memberId)) {
+            throw new BusinessException(PlanErrorCode.ACCESS_DENIED);
+        }
+
+        // 장기 프로젝트인지 확인
+        if(task.getProjectId() == null) {
+            throw new BusinessException(PlanErrorCode.INVALID_PROJECT_TASK);
+        }
+
+        task.toggleCheck();
     }
 }
