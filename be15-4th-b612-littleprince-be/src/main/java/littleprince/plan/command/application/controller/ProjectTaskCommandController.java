@@ -38,4 +38,14 @@ public class ProjectTaskCommandController {
         projectTaskCommandService.toggleProjectTaskCheck(userDetail.getMemberId(), taskId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
+
+    @DeleteMapping("/{taskId}")
+    @Operation(summary = "장기 투두 체크리스트 항목 삭제", description = "장기 프로젝트에 속한 체크리스트 항목(task)를 삭제합니다.")
+    public ResponseEntity<ApiResponse<Void>> deleteProjectTask(
+            @AuthenticationPrincipal CustomUserDetail userDetail,
+            @PathVariable Long taskId
+    ) {
+        projectTaskCommandService.deleteProjectTask(userDetail.getMemberId(), taskId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
 }
