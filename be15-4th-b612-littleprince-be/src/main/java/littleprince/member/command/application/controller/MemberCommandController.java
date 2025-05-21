@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberCommandController {
     private final MemberCommandService memberCommandService;
 
-    @Operation(summary = "회원 가입", description = "회원 가입을 위한 정보를 입력")
+    @Operation(summary = "회원 가입", description = "이메일과 비밀번호로 회원으로 가입할 수 있다.")
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<Void>> signup(
             @RequestBody @Valid SignupRequest request

@@ -24,10 +24,10 @@ public class MemberQueryController {
 
     @GetMapping("/info")
     @Operation(summary = "사용자 정보 조회", description = "사용자의 정보를 조회합니다.")
-    public ResponseEntity<ApiResponse<MemberInfoResponse>> getItemList(
+    public ResponseEntity<ApiResponse<MemberInfoResponse>> getMemberInfo(
             @AuthenticationPrincipal CustomUserDetail customUserDetail
     ) {
-        MemberInfoResponse response = memberQueryService.getMemberInfo(customUserDetail);
+        MemberInfoResponse response = memberQueryService.getMemberInfo(customUserDetail.getMemberId());
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 

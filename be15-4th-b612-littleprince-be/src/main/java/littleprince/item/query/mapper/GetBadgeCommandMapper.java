@@ -6,7 +6,9 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface GetBadgeCommandMapper {
 
-    void insertGetBadge(@Param("memberId") Long memberId, @Param("badgeId") Long badgeId);
+    void insertGetBadge(@Param("memberId") Long memberId, @Param("level") int level);
+
+    void insertDefaultGetBadge(@Param("memberId") Long memberId, @Param("level") int level);
 
     void clearSelectedBadge(@Param("memberId") Long memberId);
 
