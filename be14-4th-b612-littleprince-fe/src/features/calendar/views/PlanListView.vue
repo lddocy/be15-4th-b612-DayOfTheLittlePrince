@@ -1,7 +1,8 @@
 <script setup>
-import {ref, computed, watch} from 'vue'
+import {ref, computed, watch, onMounted} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Calendar from '@/features/calendar/components/Calendar.vue'
+import {getShortDates} from "@/features/calendar/api.js";
 
 const route = useRoute()
 const router = useRouter()
@@ -61,6 +62,21 @@ const deleteTodo = () => {
   alert('삭제')
 }
 
+const dotDates = ref([]) // 단기 일정 날짜 리스트
+
+onMounted(async () => {
+  try {
+    const res = await getShortDates(authStore.accessToken)
+    dotDates.value = res.data.data.planDateDTO.map(d => d.date)
+  } catch (err) {
+    console.error('단기 일정 불러오기 실패:', err)
+  }
+})
+
+const isDotDate = computed(() =>
+    dotDates.value.includes(selectedDate.value)
+)
+
 watch(() => route.params.date, (newDate) => {
   selectedDate.value = newDate
 })
@@ -111,6 +127,7 @@ watch(() => route.params.date, (newDate) => {
 
         <!-- 하루 일정 -->
         <button
+            v-if="isDotDate"
             @click="goToDailyTodos"
             class="rounded-xl px-4 py-3 text-left text-black transition bg-dlp_card/40 hover:bg-dlp_card_hover/80"
         >
@@ -126,17 +143,17 @@ watch(() => route.params.date, (newDate) => {
         >
           {{ item.title }}
 
-          <!-- 삭제 버튼 -->
-          <button
+          <!-- 수정된 삭제 버튼 -->
+          <span
               @click.stop="deleteTodo(item.id)"
-              class="hidden group-hover:block absolute top-3 right-4 transition bg-transparent p-0 border-none shadow-none"
+              class="hidden group-hover:block absolute top-3 right-4 cursor-pointer transition bg-transparent p-0 border-none shadow-none"
           >
             <img
                 src="@/assets/icons/trash.png"
                 alt="삭제"
                 class="w-6 h-6 object-contain"
             />
-          </button>
+          </span>
         </button>
 
 
