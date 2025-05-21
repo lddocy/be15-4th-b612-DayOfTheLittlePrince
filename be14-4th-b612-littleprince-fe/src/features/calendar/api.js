@@ -114,7 +114,7 @@ export function getLongDetail(accessToken, date, projectId){
 
 /* 단기 리스트 조회 */
 export function getShortList(accessToken, date){
-    return api.get(`/plan/short/${date}/todo`, {
+    return api.get(`/plan/short/${date}/todo` , {
         params: {},
         headers: {
             Authorization: `Bearer ${accessToken}`,
