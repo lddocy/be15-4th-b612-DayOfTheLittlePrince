@@ -157,7 +157,7 @@ export function reviewCreateOrUpdate(accessToken, date, reviewContent) {
 
 /* ai 조회 */
 export function getAiList(accessToken){
-    return api.get(`/ai/plan`, {
+    return api.get(`/ai/plan`,  {
         params: {},
         headers: {
             Authorization: `Bearer ${accessToken}`,
