@@ -35,4 +35,8 @@ public class Member {
     private StatusType isDeleted;
 
     private LocalDate createdAt;
+
+    public void changePassword(String encryptPassword){
+        this.password = encryptPassword;
+    }
 }

@@ -31,8 +31,8 @@ public class SwaggerConfig {
 
     private Info swaggerInfo() {
         return new Info()
-                .title("걸한 API 테스트")
-                .description("걸한 Swagger 테스트")
+                .title("어린왕자 API 테스트")
+                .description("어린왕자 Swagger 테스트")
                 .version("1.0.0");
     }
 }

@@ -52,6 +52,18 @@ export function logout(accessToken) {
     );
 }
 
+export function findPassword(email) {
+    return api.get('auth/find/password', {
+        params: {
+            email: email,
+        },
+    });
+}
+
+export function changePassword(data) {
+    return api.post('/auth/change/password', data);
+}
+
 export function refreshMemberToken() {
     return api.post('/auth/reissue');
 }

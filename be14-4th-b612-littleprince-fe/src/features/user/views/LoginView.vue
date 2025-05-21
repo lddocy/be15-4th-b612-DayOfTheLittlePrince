@@ -6,9 +6,11 @@ import MainLogo from '@/features/user/components/MainLogo.vue';
 import '@/assets/styles/auth-container.css';
 import { useToast } from 'vue-toastification';
 import { login } from '../api.js';
+import { useUserStore } from '@/stores/user.js';
 
 const router = useRouter();
 const authStore = useAuthStore();
+const userStore = useUserStore();
 const toast = useToast();
 
 const email = ref('');
@@ -30,6 +32,7 @@ const handleLogin = async () => {
         const at = resp.data.data.accessToken;
         authStore.setAccessToken(at);
         console.log(email.value + ' ' + password.value);
+        await userStore.loadMemberInfo(at);
         await router.replace('/');
     } catch (e) {
         toast.error(e.response.data.message);

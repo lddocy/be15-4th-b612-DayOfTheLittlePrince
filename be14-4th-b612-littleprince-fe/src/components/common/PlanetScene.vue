@@ -1,19 +1,56 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { useRoute } from 'vue-router';
 
 import { createCamera, createRenderer, addBasicLighting } from '@/utils/setupThreeScene.js';
 import { loadHDRI, loadGLTF } from '@/utils/loaders.js';
-import SceneItemManager from '@/features/main/components/SceneItemManager.vue';
+import SceneItemManager from '@/components/common/SceneItemManager.vue';
+import MainIconItem from '@/features/main/components/MainIconItem.vue';
+import MemberInfoItem from '@/features/main/components/MemberInfoItem.vue';
+import { useAuthStore } from '@/stores/auth.js';
+import { useUserStore } from '@/stores/user.js';
+import { fetchExpInfo } from '@/features/main/api.js';
+import { useToast } from 'vue-toastification';
 
 const emit = defineEmits(['loaded']);
 const container = ref(null);
 const sceneRef = ref(null);
 const princeRef = ref([]);
-const route = useRoute();
 const isSceneReady = ref(false);
+
+const route = useRoute();
+const toast = useToast();
+
+const authStore = useAuthStore();
+const userStore = useUserStore();
+
+watch(() =>
+    authStore.accessToken,
+    token => {
+        if (token) userStore.loadMemberInfo(token);
+    }, { immediate: true }
+);
+
+const memberInfo = computed(() => userStore.memberInfo || {});
+const totalExp = ref(0);
+
+const fetchExp = async () => {
+    try {
+        const token = authStore.accessToken;
+        if (!token) return;
+        const { data: wrapper } = await fetchExpInfo(token);
+        totalExp.value = wrapper?.data?.totalExpToNextLevel || 100;
+    } catch (e) {
+        console.error('경험치 조회 실패', e.message);
+        toast.error('경험치를 불러오지 못했습니다.');
+    }
+}
+
+onMounted(() => {
+    fetchExp()
+});
 
 function setupScene() {
     const scene = new THREE.Scene();
@@ -89,6 +126,14 @@ watch(
             :scene="sceneRef"
             :route-path="route.path"
         />
+        <MainIconItem />
+        <div class="fixed bottom-6 right-6 z-10">
+            <MemberInfoItem
+                :memberInfo="memberInfo"
+                :current="exp"
+                :max="totalExp"
+            />
+        </div>
     </div>
 </template>
 
