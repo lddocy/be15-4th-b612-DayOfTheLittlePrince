@@ -56,7 +56,7 @@ public class BadgeCommandServiceImpl implements BadgeCommandService {
         log.info("뱃지 지급을 위한 유저 찾음!");
 
         /* 2. DB에 벳지 추가해주기! */
-        getBadgeCommandMapper.insertDefaultGetBadge(member.getMemberId(), level);
+        getBadgeCommandMapper.insertGetBadge(member.getMemberId(), level);
     }
 
     @Async
