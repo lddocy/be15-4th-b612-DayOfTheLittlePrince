@@ -22,7 +22,7 @@
             , a.exp_point
           FROM exp_history a
           LEFT JOIN project b ON a.project_id = b.project_id
-        WHERE member_id = #{ memberId }
+        WHERE a.member_id = #{ memberId }
     </select>
 
 </mapper>
