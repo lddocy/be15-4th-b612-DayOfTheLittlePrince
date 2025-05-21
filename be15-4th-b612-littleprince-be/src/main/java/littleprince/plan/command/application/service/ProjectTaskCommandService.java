@@ -57,4 +57,11 @@ public class ProjectTaskCommandService {
 
         task.toggleCheck();
     }
+
+    @Transactional
+    public void deleteProjectTask(Long memberId, Long taskId) {
+        Task task = taskRepository.findByTaskIdAndMemberId(taskId, memberId)
+                .orElseThrow(() -> new BusinessException(PlanErrorCode.ACCESS_DENIED));
+        taskRepository.delete(task);
+    }
 }
