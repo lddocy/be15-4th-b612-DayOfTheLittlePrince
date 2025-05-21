@@ -8,7 +8,7 @@ import java.util.Random;
 @Component
 public class RandomStringUtils {
     public String getRandomString(int size){
-        String possible = "abcdefghijklmnoqprstyvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%";
+        String possible = "abcdefghijklmnoqprstyvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
 
