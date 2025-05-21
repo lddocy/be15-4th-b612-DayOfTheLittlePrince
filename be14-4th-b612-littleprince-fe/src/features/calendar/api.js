@@ -131,3 +131,26 @@ export function getShortDates(accessToken){
         },
     });
 }
+
+/* 회고 조회 */
+export function getReviewDates(accessToken, date){
+    return api.get(`/review/${date}`, {
+        params: {},
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+}
+
+/* 회고 작성 및 수정 */
+export function reviewCreateOrUpdate(accessToken, date, reviewContent) {
+    return api.post(
+        `/plan/review/${date}`,
+        { reviewContent },
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }
+    )
+}
