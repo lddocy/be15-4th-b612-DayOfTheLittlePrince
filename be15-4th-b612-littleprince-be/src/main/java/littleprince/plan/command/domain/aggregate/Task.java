@@ -26,7 +26,9 @@ public class Task {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private StatusType checked;
+    @Column(name = "is_checked")
+    @Builder.Default
+    private StatusType checked = StatusType.N;
 
     private LocalDate date;
 
