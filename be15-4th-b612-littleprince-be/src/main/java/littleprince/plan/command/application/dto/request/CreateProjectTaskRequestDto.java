@@ -13,16 +13,21 @@ import java.util.List;
 @NoArgsConstructor
 @Schema(description = "장기 프로젝트 하위 체크리스트 생성 요청 DTO")
 public class CreateProjectTaskRequestDto {
+
     @NotNull
+    @Schema(description = "체크리스트 항목 목록", example = "[{\"content\": \"요구사항 정리\", \"date\": \"2025-05-21\"}]")
     private List<ProjectTaskDto> tasks;
 
     @Getter
     @NoArgsConstructor
+    @Schema(description = "개별 체크리스트 항목 DTO")
     public static class ProjectTaskDto {
         @NotBlank
+        @Schema(description = "할 일 내용", example = "요구사항 명세서 작성")
         private String content;
 
         @NotNull
+        @Schema(description = "일정 날짜", example = "2025-05-21")
         private LocalDate date;
     }
 }
