@@ -1,13 +1,17 @@
 <script setup>
+import { ref, computed } from 'vue'
 import AISuggestionModal from '@/features/calendar/components/AISuggestionModal.vue'
-import { computed } from 'vue'
+import { getAiList } from '@/features/calendar/api.js'
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from 'vue-toastification'
+
+const authStore = useAuthStore()
+const toast = useToast()
 
 const props = defineProps({
   selectedDate: String,
   todos: Array,
-  editable: Object,
-  isModalOpen: Boolean,
-  aiSuggestions: Array
+  editable: Object
 })
 
 const emit = defineEmits([
@@ -17,9 +21,12 @@ const emit = defineEmits([
   'add-todo',
   'add-suggested-todo',
   'confirm',
-  'cancel',
-  'update:isModalOpen'
+  'cancel'
 ])
+
+const isModalOpen = ref(false)
+const aiSuggestions = ref([])
+const isLoadingAi = ref(false)
 
 const formattedDate = computed(() =>
     new Date(props.selectedDate).toLocaleDateString('ko-KR', {
@@ -34,6 +41,19 @@ const handleAdd = () => emit('add-todo')
 const handleSuggestAdd = (content) => emit('add-suggested-todo', content)
 const handleConfirm = () => emit('confirm')
 const handleCancel = () => emit('cancel')
+
+const fetchAiSuggestions = async () => {
+  isLoadingAi.value = true
+  try {
+    const res = await getAiList(authStore.accessToken)
+    aiSuggestions.value = res.data.data.generatePlanList.map(content => ({ content }))
+    isModalOpen.value = true
+  } catch (err) {
+    toast.error('10일 이내에 5개 이상을 작성하셔야합니다.')
+  } finally {
+    isLoadingAi.value = false
+  }
+}
 </script>
 
 <template>
@@ -59,16 +79,16 @@ const handleCancel = () => emit('cancel')
               :checked="todo.is_checked === 'Y'"
               @change="handleChecked(todo.task_id, $event.target.checked)"
               class="w-4 h-4 rounded bg-white/20 border-white/30
-              checked:bg-[#60A5FA] checked:border-[#60A5FA]
-              appearance-none relative cursor-pointer"
+                   checked:bg-[#60A5FA] checked:border-[#60A5FA]
+                   appearance-none relative cursor-pointer"
           >
           <input
               :value="todo.content"
               @input="handleContentChange(todo.task_id, $event.target.value)"
-              :readonly="!editable[todo.task_id]"
+              :readonly="!props.editable[todo.task_id]"
               :class="[ 'bg-transparent text-sm text-[#161717] outline-none w-full',
                       todo.is_checked === 'Y' ? 'line-through opacity-60' : '',
-                      !editable[todo.task_id] ? 'cursor-default' : '' ]"
+                      !props.editable[todo.task_id] ? 'cursor-default' : '' ]"
               placeholder="할 일을 입력하세요"
           />
         </div>
@@ -89,9 +109,10 @@ const handleCancel = () => emit('cancel')
                      text-black rounded-full border border-white/10 transition">
         +
       </button>
-      <button @click="emit('update:isModalOpen', true)"
+      <button @click="fetchAiSuggestions"
               class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
-        AI 생성하기
+        <span v-if="isLoadingAi">생성 중...</span>
+        <span v-else>AI 생성하기</span>
       </button>
     </div>
 
@@ -109,10 +130,10 @@ const handleCancel = () => emit('cancel')
 
     <!-- AI 모달 -->
     <AISuggestionModal
-        :visible="props.isModalOpen"
+        :visible="isModalOpen"
         :date="props.selectedDate"
-        :suggestion-list="props.aiSuggestions"
-        @close="emit('update:isModalOpen', false)"
+        :suggestion-list="aiSuggestions"
+        @close="isModalOpen = false"
         @addTodo="handleSuggestAdd"
     />
   </div>
