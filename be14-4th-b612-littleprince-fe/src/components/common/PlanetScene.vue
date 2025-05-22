@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router';
 
 import { createCamera, createRenderer, addBasicLighting } from '@/utils/setupThreeScene.js';
 import { loadHDRI, loadGLTF } from '@/utils/loaders.js';
-import SceneItemManager from '@/features/main/components/SceneItemManager.vue';
+import SceneItemManager from '@/components/common/SceneItemManager.vue';
 import MainIconItem from '@/features/main/components/MainIconItem.vue';
 import MemberInfoItem from '@/features/main/components/MemberInfoItem.vue';
 import { useAuthStore } from '@/stores/auth.js';
