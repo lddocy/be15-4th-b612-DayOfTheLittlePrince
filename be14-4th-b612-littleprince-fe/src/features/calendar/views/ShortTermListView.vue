@@ -87,7 +87,7 @@ const goBack = () => {
                 @add-suggested-todo="addSuggestedTodo"
                 @confirm="handleConfirm"
                 @cancel="goBack"
-                @update:isModalOpen="val => isModalOpen.value = val"
+                @update:isModalOpen="val => isModalOpen = val"
             />
         </div>
     </div>
