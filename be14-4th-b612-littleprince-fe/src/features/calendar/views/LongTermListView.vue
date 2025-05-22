@@ -1,9 +1,17 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Calendar from '@/features/calendar/components/Calendar.vue'
 import AISuggestionModal from '@/features/calendar/components/AISuggestionModal.vue'
+import {
+  createProjectTasks,
+  deleteProjectTask,
+  toggleProjectTaskCheck,
+  getLongDetail
+} from '@/features/calendar/api.js'
+import { useAuthStore } from '@/stores/auth.js'
 
+const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 
@@ -11,16 +19,8 @@ const selectedDate = ref(route.params.date)
 const projectId = route.params.projectId
 const projectTitle = ref('바디 프로필') // TODO: 실제 API로 제목 가져오기
 
-const todos = ref([
-  { task_id: 1, content: '공복 유산소 30분', is_checked: 'N' },
-  { task_id: 2, content: '물 2L 이상 마시기', is_checked: 'N' },
-  { task_id: 3, content: '오후 웨이트 트레이닝 (하체)', is_checked: 'N' },
-  { task_id: 4, content: '인바디 측정', is_checked: 'N' },
-  { task_id: 5, content: '정보처리기사 chap01 끝내기', is_checked: 'Y' },
-])
-
+const todos = ref([])
 const editable = ref({})
-
 const isModalOpen = ref(false)
 const aiSuggestions = ref([
   { content: '유산소 후 스트레칭 하기' },
@@ -30,10 +30,41 @@ const aiSuggestions = ref([
   { content: '식단하기' }
 ])
 
-const deleteTodo = (taskId) => {
-  if (editable.value[taskId]) {
+onMounted(async () => {
+  const accessToken = authStore.accessToken
+  try {
+    const res = await getLongDetail(accessToken, selectedDate.value, projectId)
+    todos.value = res.data.data.detailDTOS.map(item => ({
+      task_id: item.taskId,
+      content: item.content,
+      is_checked: item.isChecked
+    }))
+  } catch (e) {
+    console.error('장기 체크리스트 조회 실패:', e)
+    alert('장기 프로젝트 할 일을 불러오지 못했습니다.')
+  }
+})
+
+const deleteTodo = async (taskId) => {
+  const accessToken = authStore.accessToken
+  try {
+    await deleteProjectTask(accessToken, taskId)
     todos.value = todos.value.filter(todo => todo.task_id !== taskId)
-    delete editable.value[taskId]
+  } catch (e) {
+    console.error('삭제 실패:', e)
+    alert('삭제 실패')
+  }
+}
+
+const toggleCheck = async (taskId, checked) => {
+  const accessToken = authStore.accessToken
+  try {
+    await toggleProjectTaskCheck(accessToken, taskId)
+    const target = todos.value.find(todo => todo.task_id === taskId)
+    if (target) target.is_checked = checked ? 'Y' : 'N'
+  } catch (e) {
+    console.error('체크 실패:', e)
+    alert('체크 상태 변경 실패')
   }
 }
 
@@ -46,15 +77,36 @@ const addTodo = () => {
 const addSuggestedTodo = (content) => {
   const newId = Date.now()
   todos.value.push({ task_id: newId, content, is_checked: 'N' })
+  editable.value[newId] = true
+}
+
+const handleConfirm = async () => {
+  const accessToken = authStore.accessToken
+  const newTodos = todos.value.filter(todo => editable.value[todo.task_id])
+
+  if (newTodos.length === 0) {
+    alert('저장할 새로운 할 일이 없습니다.')
+    return
+  }
+
+  try {
+    const payload = {
+      tasks: newTodos.map(todo => ({
+        content: todo.content,
+        date: selectedDate.value
+      }))
+    }
+    await createProjectTasks(accessToken, projectId, payload)
+    editable.value = {}
+    alert('저장 성공!')
+  } catch (e) {
+    console.error('저장 실패:', e)
+    alert('저장에 실패했습니다.')
+  }
 }
 
 const goBack = () => {
   router.push(`/calendar/${selectedDate.value}`)
-}
-
-const handleConfirm = () => {
-  todos.value = todos.value.filter(todo => todo.content.trim() !== '')
-  editable.value = {}
 }
 </script>
 
@@ -93,7 +145,7 @@ const handleConfirm = () => {
               <input
                   type="checkbox"
                   :checked="todo.is_checked === 'Y'"
-                  @change="todo.is_checked = $event.target.checked ? 'Y' : 'N'"
+                  @change="toggleCheck(todo.task_id, $event.target.checked)"
                   class="w-4 h-4 rounded bg-white/20 border-white/30
                          checked:bg-[#60A5FA] checked:border-[#60A5FA]
                          appearance-none relative cursor-pointer"
