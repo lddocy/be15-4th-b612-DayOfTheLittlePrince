@@ -15,3 +15,13 @@ export function fetchExpInfo(accessToken) {
         },
     });
 }
+
+export function updatePlanetName(accessToken, planetName) {
+    return api.patch('member/planet/edit', {
+        planetName: planetName
+    }, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+}
