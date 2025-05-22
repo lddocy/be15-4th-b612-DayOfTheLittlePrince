@@ -9,5 +9,4 @@ import java.util.List;
 @Mapper
 public interface ItemMapper {
     List<ItemDTO> findItemListByLevel(Long memberId);
-    GetItem findGetItemByMemberId(Long memberId, Long itemId);
 }
