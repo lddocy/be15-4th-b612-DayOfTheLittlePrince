@@ -2,8 +2,6 @@ package littleprince.member.command.domain.aggregate;
 
 import jakarta.persistence.*;
 import littleprince.common.domain.StatusType;
-import littleprince.common.exception.BusinessException;
-import littleprince.member.exception.MemberErrorCode;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
