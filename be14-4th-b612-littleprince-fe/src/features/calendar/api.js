@@ -1,10 +1,10 @@
 import api from "@/plugins/axios.js";
 
 /* 장기 투두 생성 */
-export function createLongTodo(accessToken) {
+export function createLongTodo(accessToken,body) {
     return api.post(
         '/plans/long-todos',
-        {},
+        body,
         {
             headers: { Authorization: `Bearer ${accessToken}` },
         }
@@ -21,10 +21,10 @@ export function deleteLongTodo(accessToken, projectId) {
 }
 
 /* 장기 프로젝트 하위 체크리스트 생성 */
-export function createProjectTasks(accessToken, projectId) {
+export function createProjectTasks(accessToken, projectId, tasks) {
     return api.post(
         `/plans/project-tasks/${projectId}/tasks`,
-        {},
+        tasks,
         {
             headers: { Authorization: `Bearer ${accessToken}` },
         }
@@ -130,4 +130,27 @@ export function getShortDates(accessToken){
             Authorization: `Bearer ${accessToken}`,
         },
     });
+}
+
+/* 회고 조회 */
+export function getReviewDates(accessToken, date){
+    return api.get(`/review/${date}`, {
+        params: {},
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+}
+
+/* 회고 작성 및 수정 */
+export function reviewCreateOrUpdate(accessToken, date, reviewContent) {
+    return api.post(
+        `/plan/review/${date}`,
+        { reviewContent },
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }
+    )
 }
