@@ -28,4 +28,13 @@ public class BadgeQueryController {
         MyBadgeResponse response = badgeQueryService.getObtainedBadges(memberId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
+    @GetMapping("/selected")
+    public ResponseEntity<ApiResponse<String>> getSelectedBadge(
+            @AuthenticationPrincipal CustomUserDetail user
+    ) {
+        Long memberId = user.getMemberId();
+        String selectedBadge = badgeQueryService.getSelectedBadge(memberId);
+        return ResponseEntity.ok(ApiResponse.success(selectedBadge));
+    }
 }
