@@ -7,7 +7,8 @@ import {
   createProjectTasks,
   deleteProjectTask,
   toggleProjectTaskCheck,
-  getLongDetail
+  getLongDetail,
+  getLongList
 } from '@/features/calendar/api.js'
 import { useAuthStore } from '@/stores/auth.js'
 
@@ -17,7 +18,7 @@ const router = useRouter()
 
 const selectedDate = ref(route.params.date)
 const projectId = route.params.projectId
-const projectTitle = ref('바디 프로필') // TODO: 실제 API로 제목 가져오기
+const projectTitle = ref('')
 
 const todos = ref([])
 const editable = ref({})
@@ -33,15 +34,21 @@ const aiSuggestions = ref([
 onMounted(async () => {
   const accessToken = authStore.accessToken
   try {
-    const res = await getLongDetail(accessToken, selectedDate.value, projectId)
-    todos.value = res.data.data.detailDTOS.map(item => ({
+    // 1. 장기 프로젝트 상세 조회
+    const detailRes = await getLongDetail(accessToken, selectedDate.value, projectId)
+    todos.value = detailRes.data.data.detailDTOS.map(item => ({
       task_id: item.taskId,
       content: item.content,
       is_checked: item.isChecked
     }))
+
+    // 2. 프로젝트 제목 불러오기
+    const listRes = await getLongList(accessToken, selectedDate.value)
+    const project = listRes.data.data.longListDTOS.find(p => String(p.projectId) === projectId)
+    if (project) projectTitle.value = project.title
   } catch (e) {
-    console.error('장기 체크리스트 조회 실패:', e)
-    alert('장기 프로젝트 할 일을 불러오지 못했습니다.')
+    console.error('장기 체크리스트 또는 제목 조회 실패:', e)
+    alert('장기 프로젝트 정보를 불러오지 못했습니다.')
   }
 })
 
