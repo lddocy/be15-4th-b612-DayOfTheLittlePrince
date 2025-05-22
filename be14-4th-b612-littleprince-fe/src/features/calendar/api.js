@@ -1,10 +1,10 @@
 import api from "@/plugins/axios.js";
 
 /* 장기 투두 생성 */
-export function createLongTodo(accessToken) {
+export function createLongTodo(accessToken,body) {
     return api.post(
         '/plans/long-todos',
-        {},
+        body,
         {
             headers: { Authorization: `Bearer ${accessToken}` },
         }
