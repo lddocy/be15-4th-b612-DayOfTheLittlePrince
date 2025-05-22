@@ -45,11 +45,6 @@
     background-color: rgba(255, 255, 255, 0.2) !important;
 }
 
-.fc-event-dot {
-    top: -25px;
-    left: 4px;
-}
-
 .fc-daygrid-day {
     border: none !important;
 }

@@ -1,61 +1,137 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { getLongPlan, getShortDates } from "@/features/calendar/api.js"
+
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import MonthPicker from '@/features/calendar/components/MonthPicker.vue'
 import interactionPlugin from '@fullcalendar/interaction'
+import MonthPicker from '@/features/calendar/components/MonthPicker.vue'
 
 import '@/assets/styles/calendar.css'
 import '@/assets/styles/calendar-event.css'
-import {useRouter} from "vue-router";
 
 const calendarRef = ref(null)
 const selectedDate = ref(new Date())
+const calendarEvents = ref([])
 const router = useRouter()
+const authStore = useAuthStore()
 
-const calendarOptions = {
-  plugins: [dayGridPlugin,interactionPlugin],
+const calendarOptions = ref({
+  plugins: [dayGridPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
   height: '100%',
-  events: [
-    { title: '프론트 구현', start: '2025-05-08', end: '2025-05-10', className: 'fc-event-bar bg-event-1' },
-    { title: '백엔드 구현', start: '2025-05-09', end: '2025-05-13', className: 'fc-event-bar bg-event-2' },
-    { title: '데브옵스', start: '2025-05-14', end: '2025-05-16', className: 'fc-event-bar bg-event-3' },
-    { title: '제주도 여행', start: '2025-05-18', end: '2025-05-20', className: 'fc-event-bar bg-event-4' },
-    { title: '어린왕자 독서', start: '2025-05-22', end: '2025-05-25', className: 'fc-event-bar bg-event-5' },
-    { title: '명상', start: '2025-05-20', className: 'fc-event-dot' },
-    { title: '산책', start: '2025-05-21', className: 'fc-event-dot' },
-  ],
+  events: calendarEvents.value,
   headerToolbar: {
     left: '',
     center: '',
     right: 'today prev,next'
   },
   datesSet(info) {
-        selectedDate.value = new Date(info.view.currentStart)
+    selectedDate.value = new Date(info.view.currentStart)
   },
   dateClick(info) {
-    router.push({ path: `/calendar/${info.dateStr}`})
+    router.push({ path: `/calendar/${info.dateStr}` })
   },
+  dayCellDidMount(info) {
+    const currentDate = info.date.toISOString().split('T')[0];
+
+    // dot 타입의 이벤트만 필터링
+    const eventsOnThisDay = info.view.calendar
+        .getEvents()
+        .filter(event => {
+          const start = event.start.toISOString().split('T')[0];
+          return start === currentDate && event.classNames.includes('fc-event-dot');
+        });
+
+    const count = eventsOnThisDay.length;
+
+    if (count > 0) {
+      const dot = document.createElement('div');
+      dot.className = `w-[7px] h-[7px] rounded-full absolute top-[10px] left-[90%] bg-pink-400 ${getTopClass(count)}`;
+      info.el.classList.add('relative');
+      info.el.appendChild(dot);
+    }
+  }
+})
+
+function getTopClass(count) {
+  switch (count) {
+    case 1: return 'top-1';
+    case 2: return '-top-1';
+    case 3: return '-top-2';
+    case 4: return '-top-3';
+    default: return '-top-4'; // 5개 이상
+  }
 }
 
 function onDateSelected(date) {
   selectedDate.value = date
   calendarRef.value.getApi().gotoDate(date)
 }
+
+async function fetchAllPlans() {
+  try {
+    const [longRes, shortRes] = await Promise.all([
+      getLongPlan(authStore.accessToken),
+      getShortDates(authStore.accessToken)
+    ])
+
+    const longPlans = longRes.data.data.planDTOList
+    const shortDates = shortRes.data.data.planDateDTO
+
+    const longEvents = longPlans.map((plan, index) => {
+      const classIndex = (index % 5) + 1
+      return {
+        title: plan.title,
+        start: plan.startDate,
+        end: plan.endDate,
+        className: ['fc-event-bar', `bg-event-${classIndex}`],
+      }
+    })
+
+    const shortEvents = shortDates.map(d => ({
+      title: '',
+      start: d.date,
+      className: ['fc-event-dot']
+    }))
+
+    const allEvents = [...longEvents, ...shortEvents]
+
+    const calendarApi = calendarRef.value?.getApi()
+    if (calendarApi) {
+      calendarApi.removeAllEvents()
+      allEvents.forEach(event => calendarApi.addEvent(event))
+
+      calendarApi.rerenderDates()
+    }
+  } catch (err) {
+    console.error('플랜 조회 실패:', err)
+  }
+}
+
+onMounted(() => {
+  fetchAllPlans()
+})
 </script>
+
 
 <template>
   <div
       class="relative w-full max-w-[1000px] h-[90vh] p-8 bg-[rgba(232,208,255,0.3)] rounded-2xl box-border flex flex-col"
   >
     <div class="absolute top-[50px]">
-      <MonthPicker
-          v-model="selectedDate"
-          @change="onDateSelected"
-      />
+      <MonthPicker v-model="selectedDate" @change="onDateSelected" />
     </div>
 
     <FullCalendar ref="calendarRef" :options="calendarOptions" />
   </div>
 </template>
+
+<style>
+.fc .fc-daygrid-day-top {
+  display: flex;
+  flex-direction: row;
+}
+</style>
