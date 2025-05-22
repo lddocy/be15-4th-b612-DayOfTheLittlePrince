@@ -194,7 +194,7 @@
                           class="w-20 h-20 rounded-2xl flex items-center justify-center transition"
                       >
                   <template v-if="item.imagePath">
-                      <img :src="item.imagePath" alt="item" class="w-12 h-12 object-contain" />
+                      <img :src="item.imagePath" alt="item" class="w-[95%] h-[95%] object-contain" />
                     </template>
                     <template v-else>
                       <div class="text-sm text-gray-400">아이템 없음</div>
