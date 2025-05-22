@@ -2,14 +2,17 @@ package littleprince.member.command.application.service;
 
 
 import littleprince.common.exception.BusinessException;
+import littleprince.item.Exception.ItemErrorCode;
 import littleprince.item.command.application.service.BadgeCommandService;
 import littleprince.item.command.application.service.ItemCommandService;
 import littleprince.item.query.mapper.GetBadgeCommandMapper;
 import littleprince.item.query.mapper.GetBadgeQueryMapper;
 import littleprince.member.command.application.dto.constant.MemberLevel;
+import littleprince.member.command.application.dto.request.PlanetNameRequest;
 import littleprince.member.command.application.dto.request.SignupRequest;
 import littleprince.member.command.application.dto.response.ExpResponse;
 import littleprince.member.command.application.repository.MemberRepository;
+import littleprince.member.command.domain.aggregate.Member;
 import littleprince.member.command.domain.aggregate.MemberDTO;
 import littleprince.member.command.mapper.ExpHistoryCommandMapper;
 import littleprince.member.command.mapper.MemberCommandMapper;
@@ -115,4 +118,19 @@ public class MemberCommandServiceImpl implements MemberCommandService {
                 .levelUp(levelUp)
                 .build();
     }
+
+    @Transactional
+    public void changePlanetName(Long memberId, PlanetNameRequest request) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ItemErrorCode.ITEM_NOT_FOUND));
+
+        String newPlanetName = request.getPlanetName();
+
+        if (newPlanetName == null || newPlanetName.trim().isEmpty()) {
+            throw new BusinessException(MemberErrorCode.PLANET_NAME_REQUIRED);
+        }
+
+        member.changePlanetName(newPlanetName);
+    }
+
 }

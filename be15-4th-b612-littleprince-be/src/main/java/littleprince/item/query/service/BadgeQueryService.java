@@ -1,8 +1,11 @@
 package littleprince.item.query.service;
 
-import littleprince.item.query.dto.response.BadgeDto;
+import littleprince.common.exception.BusinessException;
+import littleprince.item.query.dto.BadgeDTO;
 import littleprince.item.query.dto.response.MyBadgeResponse;
 import littleprince.item.query.mapper.GetBadgeQueryMapper;
+import littleprince.member.exception.MemberErrorCode;
+import littleprince.member.query.mapper.MemberQueryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +17,15 @@ import java.util.stream.Collectors;
 public class BadgeQueryService {
 
     private final GetBadgeQueryMapper getBadgeQueryMapper;
+    private final MemberQueryMapper memberQueryMapper;
 
     public MyBadgeResponse getObtainedBadges(Long memberId) {
         // 1. get_badge 기준 badge 목록 조회
-        List<BadgeDto> obtainedBadges = getBadgeQueryMapper.findBadgesByMemberId(memberId);
+        List<BadgeDTO> obtainedBadges = getBadgeQueryMapper.findBadgesByMemberId(memberId);
 
         // 2. 변환
-        List<BadgeDto> badgeDtos = obtainedBadges.stream()
-                .map(b -> BadgeDto.builder()
+        List<BadgeDTO> badgeDTOS = obtainedBadges.stream()
+                .map(b -> BadgeDTO.builder()
                         .badgeId((long) b.getBadgeId())
                         .badgeName(b.getBadgeName())
                         .badgeMean(b.getBadgeMean())
@@ -31,7 +35,14 @@ public class BadgeQueryService {
 
         // 3. 응답
         return MyBadgeResponse.builder()
-                .badges(badgeDtos)
+                .badges(badgeDTOS)
                 .build();
     }
+
+    public String getSelectedBadge(Long memberId) {
+        memberQueryMapper.findById(memberId)
+                .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
+        return getBadgeQueryMapper.findSelectedBadgeByMemberId(memberId);
+    }
+
 }

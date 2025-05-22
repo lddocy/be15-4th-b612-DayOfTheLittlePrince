@@ -6,7 +6,7 @@
 <mapper namespace="littleprince.item.query.mapper.GetBadgeQueryMapper">
 
     <!--내가 얻은 칭호들 조회-->
-    <select id="findBadgesByMemberId" resultType="littleprince.item.query.dto.response.BadgeDto">
+    <select id="findBadgesByMemberId" resultType="littleprince.item.query.dto.BadgeDTO">
         SELECT
         b.badge_id AS badgeId,
         b.badge_name AS badgeName,
@@ -22,5 +22,15 @@
         SELECT badge_id FROM badge WHERE level = #{level}
     </select>
 
+    <!-- 내가 선택한 칭호 조회 -->
+    <select id="findSelectedBadgeByMemberId" resultType="String">
+        SELECT
+            b.badge_name
+        FROM badge b
+        JOIN get_badge gb ON gb.badge_id = b.badge_id
+        JOIN member m ON m.member_id = gb.member_id
+        WHERE gb.is_selected = 'Y'
+        AND m.member_id = #{ member_id }
+    </select>
 
 </mapper>

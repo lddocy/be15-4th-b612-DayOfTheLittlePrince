@@ -1,11 +1,11 @@
-package littleprince.item.query.dto.response;
+package littleprince.item.query.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class BadgeDto {
+public class BadgeDTO {
     private Long badgeId;
     private String badgeName;
     private String badgeMean;
