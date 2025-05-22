@@ -40,15 +40,14 @@
                       @click="selectTitle(idx)"
                       class="px-4 py-2 text-sm transition cursor-pointer rounded-[20px] text-[#5B5B5B]"
                       :style="
-          title.selected
-            ? 'background-color: rgba(143,135,241,0.4); box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);'
-            : 'background-color: rgba(255,252,203,0.4); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);'
-        "
+                           title.isSelected === 'Y'
+                          ? 'background-color: rgba(143,135,241,0.4); box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);'
+                          : 'background-color: rgba(255,252,203,0.4); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);'
+                          "
                   >
                     {{ title.label }}
                   </button>
 
-                  <!-- 툴팁 -->
                   <!-- 툴팁 -->
                   <div
                       class="absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+12px)]
@@ -74,10 +73,10 @@
                       @click="selectTitle(idx + 5)"
                       class="px-4 py-2 text-sm transition cursor-pointer rounded-[20px] text-[#5B5B5B]"
                       :style="
-          title.selected
-            ? 'background-color: rgba(143,135,241,0.4); box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);'
-            : 'background-color: rgba(255,252,203,0.4); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);'
-        "
+                        title.isSelected === 'Y'
+                        ? 'background-color: rgba(143,135,241,0.4); box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);'
+                        : 'background-color: rgba(255,252,203,0.4); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);'
+                      "
                   >
                     {{ title.label }}
                   </button>
@@ -240,7 +239,6 @@
   import { fetchMyBadges, fetchMyExp, fetchMyItems } from '@/features/user/api';
   import { selectBadge } from '@/features/user/api';
   const authStore = useAuthStore();
-  const selectedTitleIndex = ref(-1);
   import { toggleItemHidden } from '@/features/user/api';
   import { fetchTaskCompletionRate } from '@/features/user/api';
 
@@ -254,7 +252,9 @@
         badgeId: badge.badgeId,
         label: badge.badgeName,
         description: badge.badgeMean,
+        isSelected: badge.isSelected,
       }));
+
 
       badgeRes.badges.forEach((badge, index) => {
         if (badge.isSelected === 'Y') {
@@ -302,8 +302,9 @@
       const rateRes = await fetchTaskCompletionRate();
       console.log('fetchTaskCompletionRate 응답:', rateRes);
 
-      totalRate.value = rateRes.totalRate;
-      monthlyRate.value = rateRes.monthlyRate;
+      totalRate.value = rateRes.data.totalRate;
+      monthlyRate.value = rateRes.data.monthlyRate;
+
 
     } catch (e) {
       console.error('데이터 조회 실패:', e);
@@ -315,13 +316,15 @@
 
   const tabs = ['칭호', '달성률', '경험치'];
   const activeTab = ref(null);
+  const selectedTitleIndex = ref(-1);
+
 
   // 칭호
   const titles = ref([]);
 
   // 달성률
-  const totalRate = ref(75);
-  const monthlyRate = ref(87);
+  const totalRate = ref(0);
+  const monthlyRate = ref(0);
   const animatedTotalRate = ref(0);
   const animatedMonthlyRate = ref(0);
 
@@ -383,17 +386,21 @@
   // 사용자 아이템
   const items = ref([]);
 
-  /* 칭호 선택 */
+  /* 칭호 선택 함수 */
   async function selectTitle(selectedIdx) {
     const selectedBadge = titles.value[selectedIdx];
 
     try {
       await selectBadge(selectedBadge.badgeId);
-      selectedTitleIndex.value = selectedIdx; // 인덱스 갱신
 
-      titles.value.forEach((t, idx) => {
-        t.selected = idx === selectedIdx;
+      // 모든 칭호의 isSelected를 'N'으로 초기화
+      titles.value.forEach((t) => {
+        t.isSelected = 'N';
       });
+
+      // 선택된 것만 'Y'로 설정
+      titles.value[selectedIdx].isSelected = 'Y';
+
     } catch (e) {
       console.error('칭호 선택 실패:', e);
     }

@@ -22,10 +22,11 @@ public class BadgeQueryService {
         // 2. 변환
         List<BadgeDto> badgeDtos = obtainedBadges.stream()
                 .map(b -> BadgeDto.builder()
-                        .badgeId((long) b.getBadgeId())
+                        .badgeId(b.getBadgeId())
                         .badgeName(b.getBadgeName())
                         .badgeMean(b.getBadgeMean())
                         .level(b.getLevel())
+                        .isSelected(b.getIsSelected())
                         .build())
                 .collect(Collectors.toList());
 
