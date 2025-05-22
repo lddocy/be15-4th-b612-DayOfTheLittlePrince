@@ -47,7 +47,7 @@ const handleConfirm = async () => {
     try {
       // 1. 프로젝트 생성
       const res = await createLongTodo(authStore.accessToken, {
-        title: title.value.trim(),
+        title: title.value.trim() ,
         startDate: startDate.value,
         endDate: endDate.value,
       })
