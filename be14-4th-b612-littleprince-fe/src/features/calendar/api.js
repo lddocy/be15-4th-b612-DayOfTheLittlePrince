@@ -21,10 +21,10 @@ export function deleteLongTodo(accessToken, projectId) {
 }
 
 /* 장기 프로젝트 하위 체크리스트 생성 */
-export function createProjectTasks(accessToken, projectId) {
+export function createProjectTasks(accessToken, projectId, tasks) {
     return api.post(
         `/plans/project-tasks/${projectId}/tasks`,
-        {},
+        tasks,
         {
             headers: { Authorization: `Bearer ${accessToken}` },
         }
