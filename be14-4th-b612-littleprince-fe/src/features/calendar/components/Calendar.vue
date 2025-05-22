@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { getLongPlan, getShortDates } from "@/features/calendar/api.js"
@@ -12,49 +12,12 @@ import MonthPicker from '@/features/calendar/components/MonthPicker.vue'
 import '@/assets/styles/calendar.css'
 import '@/assets/styles/calendar-event.css'
 
+const calendarKey = ref(0)
 const calendarRef = ref(null)
 const selectedDate = ref(new Date())
 const calendarEvents = ref([])
 const router = useRouter()
 const authStore = useAuthStore()
-
-const calendarOptions = ref({
-  plugins: [dayGridPlugin, interactionPlugin],
-  initialView: 'dayGridMonth',
-  height: '100%',
-  events: calendarEvents.value,
-  headerToolbar: {
-    left: '',
-    center: '',
-    right: 'today prev,next'
-  },
-  datesSet(info) {
-    selectedDate.value = new Date(info.view.currentStart)
-  },
-  dateClick(info) {
-    router.push({ path: `/calendar/${info.dateStr}` })
-  },
-  dayCellDidMount(info) {
-    const currentDate = info.date.toISOString().split('T')[0];
-
-    // dot 타입의 이벤트만 필터링
-    const eventsOnThisDay = info.view.calendar
-        .getEvents()
-        .filter(event => {
-          const start = event.start.toISOString().split('T')[0];
-          return start === currentDate && event.classNames.includes('fc-event-dot');
-        });
-
-    const count = eventsOnThisDay.length;
-
-    if (count > 0) {
-      const dot = document.createElement('div');
-      dot.className = `w-[7px] h-[7px] rounded-full absolute top-[10px] left-[90%] bg-pink-400 ${getTopClass(count)}`;
-      info.el.classList.add('relative');
-      info.el.appendChild(dot);
-    }
-  }
-})
 
 function getTopClass(count) {
   switch (count) {
@@ -65,6 +28,63 @@ function getTopClass(count) {
     default: return '-top-4'; // 5개 이상
   }
 }
+
+function updateStarIcons() {
+  const calendarApi = calendarRef.value?.getApi()
+  if (!calendarApi) return
+
+  const dayEls = calendarRef.value.$el.querySelectorAll('.fc-daygrid-day')
+
+  dayEls.forEach((el) => {
+    const dateStr = el.getAttribute('data-date')
+    const eventsOnThisDay = calendarApi.getEvents().filter(event => {
+      const start = event.start.toLocaleDateString('sv-SE')
+      return start === dateStr && event.classNames.includes('fc-event-dot')
+    })
+
+    const count = eventsOnThisDay.length
+
+    // 중복 방지: 기존 별 삭제
+    const oldStars = el.querySelectorAll('.custom-star')
+    oldStars.forEach(star => star.remove())
+
+    if (count > 0) {
+      const star = document.createElement('div');
+      star.className = `absolute left-[88%] text-dlp_yellow text-[13px] font-bold ${getTopClass(count)}`;
+      star.textContent = '★'; // 여기!
+      el.classList.add('relative')
+      el.appendChild(star)
+    }
+  })
+}
+
+const calendarOptions = ref({
+  plugins: [dayGridPlugin, interactionPlugin],
+  initialView: 'dayGridMonth',
+  height: '100%',
+  events(fetchInfo, successCallback, failureCallback) {
+    successCallback(calendarEvents.value)
+  },
+  headerToolbar: {
+    left: '',
+    center: '',
+    right: 'today prev,next'
+  },
+  datesSet(info) {
+    selectedDate.value = new Date(info.view.currentStart)
+    nextTick(() => {
+      updateStarIcons()
+    })
+  },
+  dayCellDidMount(info) {
+    nextTick(() => {
+      updateStarIcons()
+    })
+  },
+  dateClick(info) {
+    router.push({ path: `/calendar/${info.dateStr}` })
+  },
+})
 
 function onDateSelected(date) {
   selectedDate.value = date
@@ -97,15 +117,9 @@ async function fetchAllPlans() {
       className: ['fc-event-dot']
     }))
 
-    const allEvents = [...longEvents, ...shortEvents]
+    calendarEvents.value = [...longEvents, ...shortEvents]
 
-    const calendarApi = calendarRef.value?.getApi()
-    if (calendarApi) {
-      calendarApi.removeAllEvents()
-      allEvents.forEach(event => calendarApi.addEvent(event))
-
-      calendarApi.rerenderDates()
-    }
+    calendarKey.value++ // 리렌더 트리거
   } catch (err) {
     console.error('플랜 조회 실패:', err)
   }
@@ -116,7 +130,6 @@ onMounted(() => {
 })
 </script>
 
-
 <template>
   <div
       class="relative w-full max-w-[1000px] h-[90vh] p-8 bg-[rgba(232,208,255,0.3)] rounded-2xl box-border flex flex-col"
@@ -124,8 +137,7 @@ onMounted(() => {
     <div class="absolute top-[50px]">
       <MonthPicker v-model="selectedDate" @change="onDateSelected" />
     </div>
-
-    <FullCalendar ref="calendarRef" :options="calendarOptions" />
+    <FullCalendar :key="calendarKey" ref="calendarRef" :options="calendarOptions" />
   </div>
 </template>
 
@@ -133,5 +145,8 @@ onMounted(() => {
 .fc .fc-daygrid-day-top {
   display: flex;
   flex-direction: row;
+}
+.custom-star {
+  z-index: 10;
 }
 </style>
