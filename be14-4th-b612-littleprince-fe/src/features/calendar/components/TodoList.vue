@@ -43,7 +43,7 @@ const deleteTodo = (taskId) => {
       delete props.editableMap[taskId]
     }
   } else {
-    alert(`ID ${taskId} 삭제`)
+    toast.error(`등록 후 삭제 가능합니다.`)
   }
 }
 

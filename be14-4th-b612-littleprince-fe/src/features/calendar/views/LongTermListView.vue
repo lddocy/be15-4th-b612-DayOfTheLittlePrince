@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import {ref, onMounted} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Calendar from '@/features/calendar/components/Calendar.vue'
 import AISuggestionModal from '@/features/calendar/components/AISuggestionModal.vue'
@@ -8,9 +8,16 @@ import {
   deleteProjectTask,
   toggleProjectTaskCheck,
   getLongDetail,
-  getLongList
+  getLongList,
+  getAiList
 } from '@/features/calendar/api.js'
 import { useAuthStore } from '@/stores/auth.js'
+import {useToast} from "vue-toastification";
+
+const props = defineProps({
+  todos: Array,
+  editableMap: Object
+})
 
 const authStore = useAuthStore()
 const route = useRoute()
@@ -20,16 +27,33 @@ const selectedDate = ref(route.params.date)
 const projectId = route.params.projectId
 const projectTitle = ref('')
 
+const toast = useToast()
+
+const isModalOpen = ref(false)
+const aiSuggestions = ref([])
+const isLoadingAi = ref(false)
+
+const handleSuggestAdd = (content) => {
+  const newId = Date.now()
+  todos.value.push({ task_id: newId, content, is_checked: 'N' })
+  editable.value[newId] = true
+}
+
 const todos = ref([])
 const editable = ref({})
-const isModalOpen = ref(false)
-const aiSuggestions = ref([
-  { content: '유산소 후 스트레칭 하기' },
-  { content: '단백질 보충제 챙기기' },
-  { content: '운동 전 근비대 영상 시청' },
-  { content: '폼롤러 마사지' },
-  { content: '식단하기' }
-])
+
+const fetchAiSuggestions = async () => {
+  isLoadingAi.value = true
+  try {
+    const res = await getAiList(authStore.accessToken)
+    aiSuggestions.value = res.data.data.generatePlanList.map(content => ({ content }))
+    isModalOpen.value = true
+  } catch (err) {
+    toast.error('10일 이내에 플랜 5개 이상을 작성하셔야합니다.')
+  } finally {
+    isLoadingAi.value = false
+  }
+}
 
 onMounted(async () => {
   const accessToken = authStore.accessToken
@@ -48,7 +72,7 @@ onMounted(async () => {
     if (project) projectTitle.value = project.title
   } catch (e) {
     console.error('장기 체크리스트 또는 제목 조회 실패:', e)
-    alert('장기 프로젝트 정보를 불러오지 못했습니다.')
+    toast.error('장기 프로젝트 정보를 불러오지 못했습니다.')
   }
 })
 
@@ -59,7 +83,7 @@ const deleteTodo = async (taskId) => {
     todos.value = todos.value.filter(todo => todo.task_id !== taskId)
   } catch (e) {
     console.error('삭제 실패:', e)
-    alert('삭제 실패')
+    toast.error('삭제 실패')
   }
 }
 
@@ -71,20 +95,20 @@ const toggleCheck = async (taskId, checked) => {
     if (target) target.is_checked = checked ? 'Y' : 'N'
   } catch (e) {
     console.error('체크 실패:', e)
-    alert('체크 상태 변경 실패')
+    toast.error('체크 상태 변경 실패')
   }
 }
 
 const addTodo = () => {
   const newId = Date.now()
-  todos.value.push({ task_id: newId, content: '', is_checked: 'N' })
-  editable.value[newId] = true
-}
+  props.todos.push({
+    task_id: newId,
+    content: '',
+    is_checked: 'N',
+    project_id: null
+  })
+  props.editableMap[newId] = true
 
-const addSuggestedTodo = (content) => {
-  const newId = Date.now()
-  todos.value.push({ task_id: newId, content, is_checked: 'N' })
-  editable.value[newId] = true
 }
 
 const handleConfirm = async () => {
@@ -92,7 +116,7 @@ const handleConfirm = async () => {
   const newTodos = todos.value.filter(todo => editable.value[todo.task_id])
 
   if (newTodos.length === 0) {
-    alert('저장할 새로운 할 일이 없습니다.')
+    toast.error('저장할 새로운 할 일이 없습니다.')
     return
   }
 
@@ -105,10 +129,9 @@ const handleConfirm = async () => {
     }
     await createProjectTasks(accessToken, projectId, payload)
     editable.value = {}
-    alert('저장 성공!')
+    toast.success('저장 성공')
   } catch (e) {
-    console.error('저장 실패:', e)
-    alert('저장에 실패했습니다.')
+    toast.error('저장에 실패했습니다.')
   }
 }
 
@@ -183,8 +206,11 @@ const goBack = () => {
                  text-black rounded-full border border-white/10 transition">
             +
           </button>
-          <button @click="isModalOpen = true"
-                  class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">AI 생성하기</button>
+          <button @click="fetchAiSuggestions"
+                  class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
+            <span v-if="isLoadingAi">생성 중...</span>
+            <span v-else>AI 생성하기</span>
+          </button>
         </div>
 
         <div class="flex justify-end mt-auto gap-2">
@@ -198,10 +224,10 @@ const goBack = () => {
     <!-- AI 추천 모달 -->
     <AISuggestionModal
         :visible="isModalOpen"
-        :date="selectedDate"
+        :date="props.selectedDate"
         :suggestion-list="aiSuggestions"
         @close="isModalOpen = false"
-        @addTodo="addSuggestedTodo"
+        @addTodo="handleSuggestAdd"
     />
   </div>
 </template>
