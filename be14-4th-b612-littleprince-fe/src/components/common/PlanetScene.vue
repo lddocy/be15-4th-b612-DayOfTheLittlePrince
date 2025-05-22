@@ -11,7 +11,7 @@ import MainIconItem from '@/features/main/components/MainIconItem.vue';
 import MemberInfoItem from '@/features/main/components/MemberInfoItem.vue';
 import { useAuthStore } from '@/stores/auth.js';
 import { useUserStore } from '@/stores/user.js';
-import { fetchExpInfo } from '@/features/main/api.js';
+import { fetchExpInfo, updatePlanetName } from '@/features/main/api.js';
 import { useToast } from 'vue-toastification';
 
 const emit = defineEmits(['loaded']);
@@ -47,6 +47,21 @@ const fetchExp = async () => {
         toast.error('경험치를 불러오지 못했습니다.');
     }
 }
+
+const editPlanetName = async ({ planetName }) => {
+    try {
+        const token = authStore.accessToken;
+        if (!token) return;
+
+        const { data: wrapper } = await updatePlanetName(token, planetName);
+        toast.success('행성 이름이 수정되었습니다.');
+        await userStore.loadMemberInfo(token);
+    } catch (e) {
+        console.error('행성 이름 수정 실패', e.message);
+        toast.error('행성 이름 수정에 실패했습니다.');
+    }
+};
+
 
 onMounted(() => {
     fetchExp()
@@ -130,8 +145,8 @@ watch(
         <div class="fixed bottom-6 right-6 z-10">
             <MemberInfoItem
                 :memberInfo="memberInfo"
-                :current="exp"
                 :max="totalExp"
+                @edit-planet-name="editPlanetName"
             />
         </div>
     </div>
