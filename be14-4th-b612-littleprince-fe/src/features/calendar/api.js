@@ -1,10 +1,10 @@
 import api from "@/plugins/axios.js";
 
 /* 장기 투두 생성 */
-export function createLongTodo(accessToken) {
+export function createLongTodo(accessToken,body) {
     return api.post(
         '/plans/long-todos',
-        {},
+        body,
         {
             headers: { Authorization: `Bearer ${accessToken}` },
         }
@@ -21,10 +21,10 @@ export function deleteLongTodo(accessToken, projectId) {
 }
 
 /* 장기 프로젝트 하위 체크리스트 생성 */
-export function createProjectTasks(accessToken, projectId) {
+export function createProjectTasks(accessToken, projectId, tasks) {
     return api.post(
         `/plans/project-tasks/${projectId}/tasks`,
-        {},
+        tasks,
         {
             headers: { Authorization: `Bearer ${accessToken}` },
         }
@@ -52,10 +52,10 @@ export function deleteProjectTask(accessToken, taskId) {
 }
 
 /* 단기 투두 생성 */
-export function createShortTodo(accessToken) {
+export function createShortTodo(accessToken, body) {
     return api.post(
-        `/plans/short-todo`,
-        {},
+        `/plans/short-todos`,
+        body,
         {
             headers: { Authorization: `Bearer ${accessToken}` },
         }

@@ -2,18 +2,28 @@
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ShortTermList from '@/features/calendar/components/ShortTermList.vue'
+import MyPageModal from '@/features/user/components/MyPageModal.vue'
 import NotificationModal from '@/features/main/components/NotificationModal.vue';
+import { getNotifications } from '@/features/main/api';
+import { onMounted } from 'vue'
+
+
 
 const router = useRouter();
 const route = useRoute();
 
 const showTodayModal = ref(false);
 const showNotificationModal = ref(false);
+const showMyPageModal = ref(false)
 
 const closeModals = () => {
     showTodayModal.value = false;
     showNotificationModal.value = false;
 };
+
+const handleLevelUp = () => {
+  showMyPageModal.value = true
+}
 
 const todayDate = new Date().toISOString().slice(0, 10);
 
@@ -36,11 +46,30 @@ const aiSuggestions = ref([
     { content: '프론트엔드 초기 세팅 끝내기' }
 ]);
 
-const notifications = ref([
-    { noti_id: 1, content: '경험치가 +10 증가하였습니다!' },
-    { noti_id: 2, content: '오늘의 할 일을 확인해보세요!' },
-    { noti_id: 3, content: '아직 남은 할 일이 있어요! 확인해보세요!' },
-]);
+const notifications = ref([])
+const fetchNotifications = async () => {
+  try {
+    const res = await getNotifications()  // ApiResponse 형태로 옴
+    const notiList = res?.data?.notifications ?? []
+
+    notifications.value = notiList.map((n, idx) => ({
+      noti_id: n.notificationId, // ← 여기 중요!
+      template: n.template,
+      isRead: n.isRead,
+      createdAt: n.createdAt,
+      categoryId: n.categoryId
+    }))
+
+
+  } catch (err) {
+    console.error('알림 불러오기 실패:', err)
+  }
+}
+
+
+onMounted(() => {
+  fetchNotifications()
+})
 
 const addTodo = () => {
     const newId = Date.now()
@@ -94,7 +123,7 @@ const toggleNotificationModal = () => {
 };
 
 const isMainOrCalendar = computed(() =>
-    route.path === '/' || route.path.startsWith('/calendar')
+    route.path === '/' || route.path === '/calendar'
 );
 
 </script>
@@ -113,6 +142,7 @@ const isMainOrCalendar = computed(() =>
                     <NotificationModal
                         :selected-date="todayDate"
                         @cancel="closeModals"
+                        @level-up="handleLevelUp"
                         :notifications="notifications"
                     />
             </div>
@@ -139,11 +169,12 @@ const isMainOrCalendar = computed(() =>
                     @add-suggested-todo="addSuggestedTodo"
                     @confirm="handleConfirm"
                     @cancel="goBack"
-                    @update:isModalOpen="val => isModalOpen.value = val"
+                    @update:isModalOpen="val => isModalOpen = val"
                 />
             </div>
         </div>
     </div>
+  <MyPageModal v-if="showMyPageModal" :isOpen="true" @close="showMyPageModal = false" />
 </template>
 
 <style scoped>

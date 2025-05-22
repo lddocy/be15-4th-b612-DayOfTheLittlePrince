@@ -12,6 +12,6 @@
         @apply text-white border-none px-0.5 py-0.5 leading-tight mb-0.5;
     }
     .fc-event-dot {
-        @apply w-[7px] h-[7px] rounded-full absolute;
+        @apply invisible
     }
 }

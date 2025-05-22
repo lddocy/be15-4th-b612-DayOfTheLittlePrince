@@ -11,7 +11,7 @@ import MainIconItem from '@/features/main/components/MainIconItem.vue';
 import MemberInfoItem from '@/features/main/components/MemberInfoItem.vue';
 import { useAuthStore } from '@/stores/auth.js';
 import { useUserStore } from '@/stores/user.js';
-import { fetchExpInfo } from '@/features/main/api.js';
+import { fetchExpInfo, getSelectedBadge, updatePlanetName } from '@/features/main/api.js';
 import { useToast } from 'vue-toastification';
 
 const emit = defineEmits(['loaded']);
@@ -35,6 +35,7 @@ watch(() =>
 
 const memberInfo = computed(() => userStore.memberInfo || {});
 const totalExp = ref(0);
+const badge = ref('');
 
 const fetchExp = async () => {
     try {
@@ -48,8 +49,36 @@ const fetchExp = async () => {
     }
 }
 
+const fetchBadge = async () => {
+    try {
+        const token = authStore.accessToken;
+        if (!token) return;
+        const { data: wrapper } = await getSelectedBadge(token);
+        badge.value = wrapper?.data || '';
+    } catch (e) {
+        console.error('칭호 조회 실패', e.message);
+        toast.error('칭호를 불러오지 못했습니다.');
+    }
+}
+
+const editPlanetName = async ({ planetName }) => {
+    try {
+        const token = authStore.accessToken;
+        if (!token) return;
+
+        const { data: wrapper } = await updatePlanetName(token, planetName);
+        toast.success('행성 이름이 수정되었습니다.');
+        await userStore.loadMemberInfo(token);
+    } catch (e) {
+        console.error('행성 이름 수정 실패', e.message);
+        toast.error('행성 이름 수정에 실패했습니다.');
+    }
+};
+
+
 onMounted(() => {
     fetchExp()
+    fetchBadge()
 });
 
 function setupScene() {
@@ -130,8 +159,9 @@ watch(
         <div class="fixed bottom-6 right-6 z-10">
             <MemberInfoItem
                 :memberInfo="memberInfo"
-                :current="exp"
                 :max="totalExp"
+                :badge="badge"
+                @edit-planet-name="editPlanetName"
             />
         </div>
     </div>
