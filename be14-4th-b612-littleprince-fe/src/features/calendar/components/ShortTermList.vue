@@ -1,18 +1,13 @@
-shortTermList
 <script setup>
-import { ref, computed } from 'vue'
 import AISuggestionModal from '@/features/calendar/components/AISuggestionModal.vue'
-import { getAiList } from '@/features/calendar/api.js'
-import { useAuthStore } from '@/stores/auth'
-import { useToast } from 'vue-toastification'
-
-const authStore = useAuthStore()
-const toast = useToast()
+import { computed } from 'vue'
 
 const props = defineProps({
   selectedDate: String,
   todos: Array,
-  editable: Object
+  editable: Object,
+  isModalOpen: Boolean,
+  aiSuggestions: Array
 })
 
 const emit = defineEmits([
@@ -22,12 +17,9 @@ const emit = defineEmits([
   'add-todo',
   'add-suggested-todo',
   'confirm',
-  'cancel'
+  'cancel',
+  'update:isModalOpen'
 ])
-
-const isModalOpen = ref(false)
-const aiSuggestions = ref([])
-const isLoadingAi = ref(false)
 
 const formattedDate = computed(() =>
     new Date(props.selectedDate).toLocaleDateString('ko-KR', {
@@ -42,19 +34,6 @@ const handleAdd = () => emit('add-todo')
 const handleSuggestAdd = (content) => emit('add-suggested-todo', content)
 const handleConfirm = () => emit('confirm')
 const handleCancel = () => emit('cancel')
-
-const fetchAiSuggestions = async () => {
-  isLoadingAi.value = true
-  try {
-    const res = await getAiList(authStore.accessToken)
-    aiSuggestions.value = res.data.data.generatePlanList.map(content => ({ content }))
-    isModalOpen.value = true
-  } catch (err) {
-    toast.error('AI 추천을 불러오는 데 실패했습니다.')
-  } finally {
-    isLoadingAi.value = false
-  }
-}
 </script>
 
 <template>
@@ -80,16 +59,16 @@ const fetchAiSuggestions = async () => {
               :checked="todo.is_checked === 'Y'"
               @change="handleChecked(todo.task_id, $event.target.checked)"
               class="w-4 h-4 rounded bg-white/20 border-white/30
-                   checked:bg-[#60A5FA] checked:border-[#60A5FA]
-                   appearance-none relative cursor-pointer"
+              checked:bg-[#60A5FA] checked:border-[#60A5FA]
+              appearance-none relative cursor-pointer"
           >
           <input
               :value="todo.content"
               @input="handleContentChange(todo.task_id, $event.target.value)"
-              :readonly="!props.editable[todo.task_id]"
+              :readonly="!editable[todo.task_id]"
               :class="[ 'bg-transparent text-sm text-[#161717] outline-none w-full',
                       todo.is_checked === 'Y' ? 'line-through opacity-60' : '',
-                      !props.editable[todo.task_id] ? 'cursor-default' : '' ]"
+                      !editable[todo.task_id] ? 'cursor-default' : '' ]"
               placeholder="할 일을 입력하세요"
           />
         </div>
@@ -110,10 +89,9 @@ const fetchAiSuggestions = async () => {
                      text-black rounded-full border border-white/10 transition">
         +
       </button>
-      <button @click="fetchAiSuggestions"
+      <button @click="emit('update:isModalOpen', true)"
               class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
-        <span v-if="isLoadingAi">생성 중...</span>
-        <span v-else>AI 생성하기</span>
+        AI 생성하기
       </button>
     </div>
 
@@ -131,10 +109,10 @@ const fetchAiSuggestions = async () => {
 
     <!-- AI 모달 -->
     <AISuggestionModal
-        :visible="isModalOpen"
+        :visible="props.isModalOpen"
         :date="props.selectedDate"
-        :suggestion-list="aiSuggestions"
-        @close="isModalOpen = false"
+        :suggestion-list="props.aiSuggestions"
+        @close="emit('update:isModalOpen', false)"
         @addTodo="handleSuggestAdd"
     />
   </div>
