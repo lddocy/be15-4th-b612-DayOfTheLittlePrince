@@ -1,34 +1,28 @@
+LongTermListView
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Calendar from '@/features/calendar/components/Calendar.vue'
 import AISuggestionModal from '@/features/calendar/components/AISuggestionModal.vue'
+import { getAiList } from '@/features/calendar/api.js'
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from 'vue-toastification'
 
 const route = useRoute()
 const router = useRouter()
+const toast = useToast()
+const authStore = useAuthStore()
 
 const selectedDate = ref(route.params.date)
 const projectId = route.params.projectId
-const projectTitle = ref('바디 프로필') // TODO: 실제 API로 제목 가져오기
+const projectTitle = ref('')
 
-const todos = ref([
-  { task_id: 1, content: '공복 유산소 30분', is_checked: 'N' },
-  { task_id: 2, content: '물 2L 이상 마시기', is_checked: 'N' },
-  { task_id: 3, content: '오후 웨이트 트레이닝 (하체)', is_checked: 'N' },
-  { task_id: 4, content: '인바디 측정', is_checked: 'N' },
-  { task_id: 5, content: '정보처리기사 chap01 끝내기', is_checked: 'Y' },
-])
-
+const todos = ref([])
 const editable = ref({})
 
 const isModalOpen = ref(false)
-const aiSuggestions = ref([
-  { content: '유산소 후 스트레칭 하기' },
-  { content: '단백질 보충제 챙기기' },
-  { content: '운동 전 근비대 영상 시청' },
-  { content: '폼롤러 마사지' },
-  { content: '식단하기' }
-])
+const aiSuggestions = ref([])
+const isLoadingAi = ref(false)
 
 const deleteTodo = (taskId) => {
   if (editable.value[taskId]) {
@@ -46,6 +40,7 @@ const addTodo = () => {
 const addSuggestedTodo = (content) => {
   const newId = Date.now()
   todos.value.push({ task_id: newId, content, is_checked: 'N' })
+  editable.value[newId] = true
 }
 
 const goBack = () => {
@@ -55,6 +50,19 @@ const goBack = () => {
 const handleConfirm = () => {
   todos.value = todos.value.filter(todo => todo.content.trim() !== '')
   editable.value = {}
+}
+
+const fetchAiSuggestions = async () => {
+  isLoadingAi.value = true
+  try {
+    const res = await getAiList(authStore.accessToken)
+    aiSuggestions.value = res.data.data.generatePlanList.map(content => ({ content }))
+    isModalOpen.value = true
+  } catch (err) {
+    toast.error('AI 추천을 불러오는 데 실패했습니다.')
+  } finally {
+    isLoadingAi.value = false
+  }
 }
 </script>
 
@@ -72,8 +80,6 @@ const handleConfirm = () => {
 
         <!-- 목표 제목 -->
         <h2 class="text-xl font-bold mb-4">{{ projectTitle }}</h2>
-
-
 
         <div class="w-full h-[1px] bg-white/20 mb-4" />
 
@@ -124,15 +130,17 @@ const handleConfirm = () => {
                  text-black rounded-full border border-white/10 transition">
             +
           </button>
-          <button @click="isModalOpen = true"
-              class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">AI 생성하기</button>
+          <button @click="fetchAiSuggestions"
+                  class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
+            <span v-if="isLoadingAi">생성 중...</span>
+            <span v-else>AI 생성하기</span>
+          </button>
         </div>
 
         <div class="flex justify-end mt-auto gap-2">
           <button @click="goBack" class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-4 py-1 rounded-xl text-sm border border-white/10 transition">취소</button>
           <button @click="handleConfirm" class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-4 py-1 rounded-xl text-sm border border-white/10 transition">확인</button>
         </div>
-
       </div>
     </div>
 
