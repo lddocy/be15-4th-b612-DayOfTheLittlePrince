@@ -40,7 +40,12 @@ export default {
         {
             pattern: /bg-dlp_card_hover\/80/,
             variants: ['hover']
-        }
+        },
+        'bg-event-1',
+        'bg-event-2',
+        'bg-event-3',
+        'bg-event-4',
+        'bg-event-5',
     ],
     plugins: [],
 }
