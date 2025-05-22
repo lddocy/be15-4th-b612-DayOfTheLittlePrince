@@ -34,7 +34,43 @@ const calendarOptions = ref({
   dateClick(info) {
     router.push({ path: `/calendar/${info.dateStr}` })
   },
+  dayCellDidMount(info) {
+    const currentDate = info.date.toISOString().split('T')[0];
+
+    // dot 타입의 이벤트만 대상으로 필터링
+    const eventsOnThisDay = info.view.calendar
+        .getEvents()
+        .filter(event => {
+          const start = event.start.toISOString().split('T')[0];
+          return start === currentDate && event.classNames.includes('fc-event-dot');
+        });
+
+    const count = eventsOnThisDay.length;
+
+    if (count > 0) {
+      const dot = document.createElement('div');
+      dot.className = `w-[7px] h-[7px] rounded-full absolute top-[10px] left-[90%] rounded-full bg-pink-400 ${getTopClass(count)}`;
+
+      info.el.classList.add('relative');
+      info.el.appendChild(dot);
+    }
+  }
 })
+
+function getTopClass(count) {
+  switch (count) {
+    case 1:
+      return 'top-1';
+    case 2:
+      return '-top-1';
+    case 3:
+      return '-top-2';
+    case 4:
+      return '-top-3';
+    default:
+      return '-top-4'; // 5개 이상
+  }
+}
 
 function onDateSelected(date) {
   selectedDate.value = date
@@ -56,12 +92,12 @@ async function fetchLongPlans() {
         start: plan.startDate,
         end: plan.endDate,
         className: ['fc-event-bar', `bg-event-${classIndex}`],
-        backgroundColor: [`bg-event-${classIndex}`],
-        borderColor: [`bg-event-${classIndex}`]
+        backgroundColor: `bg-event-${classIndex}`,
+        borderColor: `bg-event-${classIndex}`
       }
     });
 
-    // 캘린더에 이벤트 반영
+    // 캘린더
     const calendarApi = calendarRef.value?.getApi()
     if (calendarApi) {
       calendarApi.removeAllEvents()
@@ -112,3 +148,10 @@ onMounted(() => {
     <FullCalendar ref="calendarRef" :options="calendarOptions" />
   </div>
 </template>
+
+<style>
+.fc .fc-daygrid-day-top {
+  display: flex;
+  flex-direction: row;
+}
+</style>
