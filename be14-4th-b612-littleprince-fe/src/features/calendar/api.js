@@ -1,17 +1,17 @@
 import api from "@/plugins/axios.js";
 
-/* 장기 투두 생성 - 유경 */
-export function createLongTodo(accessToken) {
+/* 장기 투두 생성 */
+export function createLongTodo(accessToken,body) {
     return api.post(
         '/plans/long-todos',
-        {},
+        body,
         {
             headers: { Authorization: `Bearer ${accessToken}` },
         }
     );
 }
 
-/* 장기 프로젝트 삭제 - 승재 */
+/* 장기 투두 삭제 */
 export function deleteLongTodo(accessToken, projectId) {
     return api.delete(`/plans/projects/${projectId}`, {
         headers: {
@@ -20,18 +20,18 @@ export function deleteLongTodo(accessToken, projectId) {
     });
 }
 
-/* 장기 프로젝트 하위 체크리스트 생성 - 유경 */
-export function createProjectTasks(accessToken, projectId, body) {
+/* 장기 프로젝트 하위 체크리스트 생성 */
+export function createProjectTasks(accessToken, projectId, tasks) {
     return api.post(
         `/plans/project-tasks/${projectId}/tasks`,
-        body,
+        tasks,
         {
             headers: { Authorization: `Bearer ${accessToken}` },
         }
     );
 }
 
-/* 장기 투두 체크 상태 토글 - 유경 */
+/* 장기 투두 체크 상태 토글 */
 export function toggleProjectTaskCheck(accessToken, taskId) {
     return api.patch(
         `/plans/project-tasks/${taskId}/check`,
@@ -42,7 +42,7 @@ export function toggleProjectTaskCheck(accessToken, taskId) {
     );
 }
 
-/* 장기 프로젝트 하위 체크리스트 항목 삭제 - 유경 */
+/* 장기 투두 체크리스트 항목 삭제 */
 export function deleteProjectTask(accessToken, taskId) {
     return api.delete(`/plans/project-tasks/${taskId}`, {
         headers: {
@@ -51,7 +51,7 @@ export function deleteProjectTask(accessToken, taskId) {
     });
 }
 
-/* 단기 투두 생성 - 유경 */
+/* 단기 투두 생성 */
 export function createShortTodo(accessToken, body) {
     return api.post(
         `/plans/short-todos`,
@@ -62,7 +62,7 @@ export function createShortTodo(accessToken, body) {
     );
 }
 
-/* 단기 투두 삭제 - 유경 */
+/* 단기 투두 삭제 */
 export function deleteShortTodo(accessToken, taskId) {
     return api.delete(`/plans/short-todos/${taskId}`, {
         headers: {
@@ -71,7 +71,7 @@ export function deleteShortTodo(accessToken, taskId) {
     });
 }
 
-/* 단기 투두 체크 상태 토글 - 유경 */
+/* 단기 투두 체크 상태 토글 */
 export function toggleCheck(accessToken, taskId) {
     return api.patch(
         `/plans/short-todos/${taskId}/check`,
@@ -82,7 +82,7 @@ export function toggleCheck(accessToken, taskId) {
     );
 }
 
-/* 장기 플랜 전체 조회 - 승재 */
+/* 장기 플랜 전체 조회 */
 export function getLongPlan(accessToken){
     return api.get('/plan/long', {
         params: {},
@@ -92,7 +92,7 @@ export function getLongPlan(accessToken){
     });
 }
 
-/* 장기 플랜 목록 조회 - 승재 */
+/* 장기 플랜 목록 조회 */
 export function getLongList(accessToken, date){
     return api.get(`/plan/long/${date}`, {
         params: {},
@@ -102,7 +102,7 @@ export function getLongList(accessToken, date){
     });
 }
 
-/* 장기 플랜 상세 조회 - 장기 하위 투두리스트 조회 - 유경 */
+/* 장기 플랜 상세 조회 */
 export function getLongDetail(accessToken, date, projectId){
     return api.get(`/plan/long/${date}/${projectId}`, {
         params: {},
@@ -112,7 +112,7 @@ export function getLongDetail(accessToken, date, projectId){
     });
 }
 
-/* 단기 리스트 조회 - 유경 */
+/* 단기 리스트 조회 */
 export function getShortList(accessToken, date){
     return api.get(`/plan/short/${date}/todo` , {
         params: {},
@@ -122,7 +122,7 @@ export function getShortList(accessToken, date){
     });
 }
 
-/* 단기 플랜 날짜 여부 조회 - 승재 */
+/* 단기 플랜 날짜 여부 조회 */
 export function getShortDates(accessToken){
     return api.get(`/plan/short`, {
         params: {},
@@ -130,4 +130,27 @@ export function getShortDates(accessToken){
             Authorization: `Bearer ${accessToken}`,
         },
     });
+}
+
+/* 회고 조회 */
+export function getReviewDates(accessToken, date){
+    return api.get(`/review/${date}`, {
+        params: {},
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+}
+
+/* 회고 작성 및 수정 */
+export function reviewCreateOrUpdate(accessToken, date, reviewContent) {
+    return api.post(
+        `/plan/review/${date}`,
+        { reviewContent },
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }
+    )
 }
