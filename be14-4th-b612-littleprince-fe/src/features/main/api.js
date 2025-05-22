@@ -16,6 +16,15 @@ export function fetchExpInfo(accessToken) {
     });
 }
 
+export function updatePlanetName(accessToken, planetName) {
+    return api.patch('member/planet/edit', {
+        planetName: planetName
+    }, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+}
 /* 알림 조회 */
 export const getNotifications = async () => {
     const response = await api.get('/notifications');
@@ -26,5 +35,4 @@ export const getNotifications = async () => {
 export const markNotificationAsRead = (notificationId) => {
     return api.patch(`/notifications/${notificationId}/read`)
 }
-
 
