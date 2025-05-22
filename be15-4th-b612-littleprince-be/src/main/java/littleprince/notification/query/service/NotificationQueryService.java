@@ -23,7 +23,7 @@ public class NotificationQueryService {
                 notificationQueryMapper.findByMemberIdWithPaging(memberId, offset, size);
 
         List<NotificationResponse> notifications = dtos.stream()
-                .map(dto -> new NotificationResponse(dto.getTemplate(), dto.getCreatedAt()))
+                .map(dto -> new NotificationResponse(dto.getNotificationId(),dto.getTemplate(), dto.getCreatedAt(), dto.getIsRead(), dto.getCategoryId()))
                 .collect(Collectors.toList());
 
         long unreadCount = notificationQueryMapper.countUnreadByMemberId(memberId);

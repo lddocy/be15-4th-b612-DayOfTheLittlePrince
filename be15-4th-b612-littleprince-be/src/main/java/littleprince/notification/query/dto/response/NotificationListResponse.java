@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class NotificationListResponse {
-    private List<NotificationResponse> notifications; // ✅ 여기
+    private List<NotificationResponse> notifications;
     private long unreadCount;
     private long totalCount;
 }
