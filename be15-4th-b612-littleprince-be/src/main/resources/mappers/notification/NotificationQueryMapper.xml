@@ -29,7 +29,7 @@
         SELECT COUNT(*)
         FROM notification
         WHERE member_id = #{memberId}
-          AND is_read = FALSE
+          AND is_read = 'N'
     </select>
 
 </mapper>

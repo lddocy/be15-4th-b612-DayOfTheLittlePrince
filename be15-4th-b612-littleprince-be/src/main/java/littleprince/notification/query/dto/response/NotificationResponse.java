@@ -8,7 +8,10 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class NotificationResponse {
+    private Long notificationId;
     private String template;
     private LocalDateTime createdAt;
+    private String isRead;
+    private Long categoryId;
 }
 

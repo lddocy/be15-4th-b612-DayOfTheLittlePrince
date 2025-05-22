@@ -1,7 +1,7 @@
 package littleprince.notification.query.controller;
 
+import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
-import littleprince.notification.query.dto.NotificationDto;
 import littleprince.notification.query.dto.response.NotificationListResponse;
 import littleprince.notification.query.service.NotificationQueryService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/notifications")
 @RequiredArgsConstructor
@@ -21,7 +20,7 @@ public class NotificationQueryController {
     private final NotificationQueryService notificationQueryService;
 
     @GetMapping
-    public ResponseEntity<NotificationListResponse> getMyNotifications(
+    public ResponseEntity<ApiResponse<NotificationListResponse>> getMyNotifications(
             @AuthenticationPrincipal CustomUserDetail user,
             @RequestParam(defaultValue = "0") int page
     ) {
@@ -31,7 +30,6 @@ public class NotificationQueryController {
         NotificationListResponse response =
                 notificationQueryService.getByMemberId(memberId, page, size);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
-
