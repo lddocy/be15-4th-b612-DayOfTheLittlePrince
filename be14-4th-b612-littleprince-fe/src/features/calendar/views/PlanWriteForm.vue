@@ -25,13 +25,7 @@ const todos = ref([])
 
 const editable = ref({})
 const isModalOpen = ref(false)
-const aiSuggestions = ref([
-  { content: 'GitHub README 작성하기' },
-  { content: 'API 명세 정리하기' },
-  { content: 'AI 회의록 작성' },
-  { content: '추천4' },
-  { content: '추천5' }
-])
+const aiSuggestions = ref([])
 
 const handleConfirm = async () => {
   todos.value = todos.value.filter(todo => todo.content.trim() !== '')
@@ -40,7 +34,7 @@ const handleConfirm = async () => {
   if (toggle.value) {
     // 장기 플랜
     if (!startDate.value || !endDate.value || !title.value.trim()) {
-      alert('제목, 시작일, 종료일을 모두 입력해주세요.')
+      toast.error('제목, 시작일, 종료일을 모두 입력해주세요.')
       return
     }
 
@@ -71,7 +65,7 @@ const handleConfirm = async () => {
 
     } catch (err) {
       console.error(err)
-      alert('장기 플랜 등록 중 오류가 발생했습니다.')
+      toast.error('장기 플랜 등록 중 오류가 발생했습니다.')
     }
 
   } else {
@@ -108,6 +102,11 @@ const addSuggestedTodo = (content) => {
     project_id: null
   })
 }
+
+const backRouter = () => {
+  router.push(`/calendar/${route.query.date}`)
+}
+
 </script>
 
 <template>
@@ -153,7 +152,7 @@ const addSuggestedTodo = (content) => {
         <div class="flex justify-between mt-auto">
           <div class="flex gap-2 ml-auto">
             <button
-                @click="router.push('../../calendar')"
+                @click="backRouter"
                 class="bg-[#C9C3E3]/30 hover:bg-[#A49CAC]/60 text-black px-3 py-1 rounded-xl text-sm border border-white/10 transition">취소</button>
             <button
                 @click="handleConfirm"
