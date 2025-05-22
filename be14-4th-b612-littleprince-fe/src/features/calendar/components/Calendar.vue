@@ -47,7 +47,7 @@ async function fetchLongPlans() {
     const res = await getLongPlan(authStore.accessToken)
     const plans = res.data.data.planDTOList
 
-    // FullCalendar 이벤트 형식으로 변환
+    // FullCalendar
     calendarEvents.value = plans.map((plan, index) => {
       const classIndex = (index % 5) + 1;
 
@@ -55,9 +55,9 @@ async function fetchLongPlans() {
         title: plan.title,
         start: plan.startDate,
         end: plan.endDate,
-        className: ['fc-event-bar', `bg-event-${classIndex}`], // 이 클래스는 여전히 추가 가능
-        backgroundColor: `bg-event-${classIndex}`,
-        borderColor: `bg-event-${classIndex}`
+        className: ['fc-event-bar', `bg-event-${classIndex}`],
+        backgroundColor: [`bg-event-${classIndex}`],
+        borderColor: [`bg-event-${classIndex}`]
       }
     });
 
