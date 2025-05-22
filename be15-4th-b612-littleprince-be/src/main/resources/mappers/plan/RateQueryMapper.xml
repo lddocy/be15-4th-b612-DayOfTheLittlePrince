@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="littleprince.plan.query.mapper.RateQueryMapper">
 
@@ -25,16 +25,15 @@
         SELECT COUNT(*)
         FROM task
         WHERE member_id = #{memberId}
-          AND created_at BETWEEN #{startOfMonth} AND #{endOfMonth}
+          AND date BETWEEN #{startOfMonth} AND #{endOfMonth}
     </select>
 
-    <!-- 이번 달 완료된 task 개수 -->
     <select id="countMonthlyCompleted" resultType="int">
         SELECT COUNT(*)
         FROM task
         WHERE member_id = #{memberId}
           AND is_checked = 'Y'
-          AND created_at BETWEEN #{startOfMonth} AND #{endOfMonth}
+          AND date BETWEEN #{startOfMonth} AND #{endOfMonth}
     </select>
 
 </mapper>
