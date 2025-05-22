@@ -44,6 +44,7 @@
             AND is_deleted = 'N'
             AND gb.is_selected = 'Y'
     </select>
+
     <select id="findAllExpInfo" resultType="littleprince.member.query.dto.MemberExpDTO">
         SELECT
         member_id AS memberId,

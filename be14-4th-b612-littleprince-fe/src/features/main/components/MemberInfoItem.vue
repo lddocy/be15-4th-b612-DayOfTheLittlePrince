@@ -5,6 +5,7 @@ const props = defineProps({
     memberInfo: Object,
     current: { type: Number, default: 0 },
     max: { type: Number, default: 0 },
+    badge: { type: String, default: '이름 없음' },
 });
 
 const emit = defineEmits(['edit-planet-name']);
@@ -46,29 +47,30 @@ const barWidth = (current, max) => {
 </script>
 
 <template>
-    <div v-if="$route.path === '/'" class="w-[300px] text-white">
+    <div
+        v-if="$route.path === '/'"
+        class="w-[350px] text-white text-right mb-1 group"
+    >
         <!-- 칭호 -->
-        <div style="font-size: var(--dlp-font-size-text-sm)" class="text-right mb-1">
-            {{ memberInfo.badge }}
+        <div style="font-size: var(--dlp-font-size-text-sm)">
+            {{ badge }}
         </div>
 
-        <!-- 레벨 -->
-        <div style="font-size: var(--dlp-font-size-text-lg)" class="text-right mb-1 text-lg">
-            Lv. {{ memberInfo.level }}
-        </div>
-
-        <!-- 행성 이름 -->
-        <div class="text-right mb-1 flex items-center justify-end gap-2" style="font-size: var(--dlp-font-size-text-lg)">
+        <!-- 레벨 + 행성 이름 -->
+        <div
+            class="flex items-center justify-end gap-2 mb-2"
+            style="font-size: var(--dlp-font-size-text-lg)"
+        >
             <template v-if="isEditing">
                 <input
                     v-model="planetNameInput"
                     @keydown="handleKey"
                     maxlength="20"
-                    class="border rounded px-2 py-1 text-black w-[200px] h-[32px] mb-2"
+                    class="rounded px-2 py-1 text-black w-[240px] h-[32px] mb-1 bg-white/20"
                 />
                 <button
                     @click="submitEdit"
-                    class="rounded p-1 mb-2"
+                    class="rounded p-1"
                     style="background-color: var(--dlp-color-bg-button-primary); font-size: var(--dlp-font-size-text-sm);"
                 >
                     완료
@@ -79,14 +81,15 @@ const barWidth = (current, max) => {
                     @click="isEditing = true"
                     src="@/assets/icons/edit.png"
                     alt="edit"
-                    class="w-10 h-10 cursor-pointer"
+                    class="w-9 h-9 cursor-pointer hidden group-hover:block"
                 />
+                <span>Lv. {{ memberInfo.level }}</span>
                 <span>{{ memberInfo.planetName }}</span>
             </template>
         </div>
 
         <!-- 경험치 바 -->
-        <div class="w-full h-[30px] rounded-md bg-white/30 mb-1 overflow-hidden relative">
+        <div class="w-full h-[30px] rounded-md bg-white/20 overflow-hidden relative">
             <div
                 class="h-full"
                 style="background-color: var(--dlp-purple-100)"
@@ -95,7 +98,7 @@ const barWidth = (current, max) => {
         </div>
 
         <!-- 경험치 수치 -->
-        <div class="text-right" style="font-size: var(--dlp-font-size-text-sm)">
+        <div style="font-size: var(--dlp-font-size-text-sm)">
             {{ memberInfo.exp }} / {{ max }}
         </div>
     </div>
