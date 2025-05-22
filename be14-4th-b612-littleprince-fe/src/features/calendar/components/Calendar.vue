@@ -78,9 +78,8 @@ async function fetchShortPlans() {
     const res = await getShortDates(authStore.accessToken)
     const dates = res.data.data.planDateDTO
 
-    // 각 날짜에 dot 이벤트 추가
     const shortEvents = dates.map(d => ({
-      title: '', // 제목 없음
+      title: '',
       start: d.date,
       className: ['fc-event-dot']
     }))
