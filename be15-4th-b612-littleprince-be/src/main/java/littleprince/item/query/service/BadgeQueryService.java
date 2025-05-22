@@ -2,6 +2,7 @@ package littleprince.item.query.service;
 
 import littleprince.common.exception.BusinessException;
 import littleprince.item.query.dto.BadgeDTO;
+import littleprince.item.query.dto.response.*;
 import littleprince.item.query.dto.response.MyBadgeResponse;
 import littleprince.item.query.mapper.GetBadgeQueryMapper;
 import littleprince.member.exception.MemberErrorCode;
@@ -18,24 +19,24 @@ public class BadgeQueryService {
 
     private final GetBadgeQueryMapper getBadgeQueryMapper;
     private final MemberQueryMapper memberQueryMapper;
-
     public MyBadgeResponse getObtainedBadges(Long memberId) {
         // 1. get_badge 기준 badge 목록 조회
         List<BadgeDTO> obtainedBadges = getBadgeQueryMapper.findBadgesByMemberId(memberId);
 
         // 2. 변환
-        List<BadgeDTO> badgeDTOS = obtainedBadges.stream()
+        List<BadgeDTO> badgeDtos = obtainedBadges.stream()
                 .map(b -> BadgeDTO.builder()
-                        .badgeId((long) b.getBadgeId())
+                        .badgeId(b.getBadgeId())
                         .badgeName(b.getBadgeName())
                         .badgeMean(b.getBadgeMean())
                         .level(b.getLevel())
+                        .isSelected(b.getIsSelected())
                         .build())
                 .collect(Collectors.toList());
 
         // 3. 응답
         return MyBadgeResponse.builder()
-                .badges(badgeDTOS)
+                .badges(badgeDtos)
                 .build();
     }
 
