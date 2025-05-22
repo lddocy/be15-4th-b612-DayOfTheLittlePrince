@@ -57,3 +57,10 @@ springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
 
+webpush:
+  vapid:
+    public-key: "BGfptzSmyf-nxOKz29Hyp9MVAtA8kLcyDiJ70bfuBfxymahMPFHKDMuTe-9bREr-iIeEvP1Mx2rPQ6Sq-beWUH0"
+    private-key: "eh4cCkJR5rDqWjfYSUvSkoIgnrUH8uQ1ApsqJo_TMzw"
+    subject: "mailto:sdwang15@naver.com"
+
+

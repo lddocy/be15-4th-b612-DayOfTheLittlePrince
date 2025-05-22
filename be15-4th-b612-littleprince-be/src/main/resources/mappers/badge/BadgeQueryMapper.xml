@@ -11,7 +11,8 @@
         b.badge_id AS badgeId,
         b.badge_name AS badgeName,
         b.badge_mean AS badgeMean,
-        b.level AS level
+        b.level AS level,
+        gb.is_selected AS isSelected
         FROM get_badge gb
         JOIN badge b ON gb.badge_id = b.badge_id
         WHERE gb.member_id = #{memberId}
