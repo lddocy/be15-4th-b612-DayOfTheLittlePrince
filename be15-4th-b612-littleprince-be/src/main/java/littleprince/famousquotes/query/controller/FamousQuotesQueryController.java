@@ -18,7 +18,7 @@ public class FamousQuotesQueryController {
     private final FamousQuotesQueryService famousQuotesQueryService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<String>> generateAiPlan(
+    public ResponseEntity<ApiResponse<String>> getRandomFamousQuotes(
             @AuthenticationPrincipal CustomUserDetail userDetail
     ) {
         String response = famousQuotesQueryService.getFamousQuotes();
