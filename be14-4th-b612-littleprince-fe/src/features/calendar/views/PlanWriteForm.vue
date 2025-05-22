@@ -54,8 +54,8 @@ const handleConfirm = async () => {
 
       const projectId = res.data.data
 
-      if (projectId) {
-        toast.success("장기 플랜이 등록되었습니다.")
+      if (!projectId) {
+        toast.error("장기 플랜이 등록 실패")
       }
 
       // 2. 프로젝트에 연결된 체크리스트 생성
