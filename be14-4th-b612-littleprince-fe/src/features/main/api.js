@@ -25,3 +25,14 @@ export function updatePlanetName(accessToken, planetName) {
         },
     });
 }
+/* 알림 조회 */
+export const getNotifications = async () => {
+    const response = await api.get('/notifications');
+    return response.data;
+};
+
+/* 읽음 처리*/
+export const markNotificationAsRead = (notificationId) => {
+    return api.patch(`/notifications/${notificationId}/read`)
+}
+
