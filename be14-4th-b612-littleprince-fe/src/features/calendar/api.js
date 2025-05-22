@@ -52,10 +52,10 @@ export function deleteProjectTask(accessToken, taskId) {
 }
 
 /* 단기 투두 생성 */
-export function createShortTodo(accessToken) {
+export function createShortTodo(accessToken, body) {
     return api.post(
-        `/plans/short-todo`,
-        {},
+        `/plans/short-todos`,
+        body,
         {
             headers: { Authorization: `Bearer ${accessToken}` },
         }
