@@ -41,4 +41,13 @@
         ORDER BY date desc
         LIMIT 50
     </select>
+
+    <select id="countUncheckedTasks" resultType="long">
+        SELECT COUNT(*)
+        FROM task
+        WHERE member_id = #{memberId}
+        AND date = #{date}
+        AND is_checked = 'N'
+    </select>
+
 </mapper>

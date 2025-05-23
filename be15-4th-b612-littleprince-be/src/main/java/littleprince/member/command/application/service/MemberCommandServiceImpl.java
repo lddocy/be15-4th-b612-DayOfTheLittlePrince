@@ -20,12 +20,17 @@ import littleprince.member.exception.MemberErrorCode;
 import littleprince.member.query.dto.FindMemberDTO;
 import littleprince.member.query.mapper.MemberQueryMapper;
 
+import littleprince.notification.command.application.service.NotificationTypeService;
+import littleprince.notification.command.application.service.PushNotificationService;
+import littleprince.notification.command.application.service.WebPushSubscriptionService;
+import littleprince.notification.command.domain.aggregate.WebPushSubscription;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -43,6 +48,9 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     private final ItemCommandService itemCommandService;
     private final BadgeCommandService badgeCommandService;
     private final MemberRepository memberRepository;
+    private final NotificationTypeService notificationTypeService;
+    private final WebPushSubscriptionService subscriptionService;
+    private final PushNotificationService pushNotificationService;
 
     @Override
     @Transactional
@@ -79,7 +87,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Transactional
     public ExpResponse addExp(Long memberId, int amount) {
         MemberDTO member = memberQueryMapper.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
         int beforeLevel = member.getLevel();
         int currentLevel = member.getLevel();
         int currentExp = member.getExp() + amount;
@@ -87,22 +95,31 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         expHistoryCommandMapper.insertExpHistory(memberId, amount);
 
-
-        /* 2. 추가 이후에도 레벨업이 남아있다면? 남은 만큼 추가 */
         log.info("시작 전 경험치 : {}, 시작 전 레벨 : {}", member.getExp(), member.getLevel());
-        log.info("currentExp: {}, 레벨업 요구 레벨: {}", member.getExp(), MemberLevel.getTotalExpByLevel(currentLevel + 1));
-        while(currentLevel < MAX_LEVEL && currentExp > MemberLevel.getTotalExpByLevel(currentLevel + 1)){
-            // 2.1. currentExp 획득량 만큼 감소 시켜주기!
+        log.info("currentExp: {}, 레벨업 요구 레벨: {}", currentExp, MemberLevel.getTotalExpByLevel(currentLevel + 1));
+
+        while (currentLevel < MAX_LEVEL &&
+                currentExp >= MemberLevel.getTotalExpByLevel(currentLevel + 1)) {
             currentExp -= MemberLevel.getTotalExpByLevel(currentLevel + 1);
-            // 2.2. currentLevel 1 올려주기
             currentLevel += 1;
-            /* 2.3. 레벨업 했으면 아이템, 칭호 지급해주기!*/
+
             itemCommandService.addItem(memberId, currentLevel);
             badgeCommandService.addBadge(memberId, currentLevel);
         }
 
-        if(currentLevel != beforeLevel){
+        if (currentLevel != beforeLevel) {
             levelUp = true;
+
+            // ✅ 알림 메시지 생성
+            String content = notificationTypeService.getFormattedTemplate(1,
+                    Map.of("level", String.valueOf(currentLevel)));
+
+            // ✅ 웹 푸시 구독 정보 조회
+            Optional<WebPushSubscription> optionalSub = subscriptionService.findByMemberId(memberId);
+            optionalSub.ifPresent(sub -> {
+                // ✅ 웹 푸시 전송 + DB 저장
+                pushNotificationService.sendPush(sub, content, 1L);
+            });
         }
 
         log.info("현재 레벨 : {}, 현재 경험치 : {}", currentLevel, currentExp);
