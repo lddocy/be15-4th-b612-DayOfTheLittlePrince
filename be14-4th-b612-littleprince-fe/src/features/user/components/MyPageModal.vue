@@ -2,7 +2,7 @@
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import DeleteAccountModal from '@/features/user/components/DeleteAccountModal.vue';
 import { useAuthStore } from '@/stores/auth';
-import { deleteMember, fetchMyBadges, fetchMyExp, fetchMyItems, fetchExpHistory } from '@/features/user/api';
+import { fetchMyBadges, fetchMyExp, fetchMyItems, fetchExpHistory } from '@/features/user/api';
 
 import { selectBadge } from '@/features/user/api';
 import { toggleItemHidden } from '@/features/user/api';
@@ -14,8 +14,7 @@ import {useRouter} from "vue-router";
 const authStore = useAuthStore();
 const router = useRouter();
 const toast = useToast();
-
-defineProps({ isOpen: Boolean });
+const {isOpen, handleDeleteUser} = defineProps({ isOpen: Boolean, handleDeleteUser: Function });
 const emit = defineEmits(['close', 'refresh-item-map']);
 
 onMounted(async () => {
@@ -112,9 +111,6 @@ onMounted(async () => {
   }
 });
 
-
-const {isOpen, handleDeleteUser} = defineProps({ isOpen: Boolean, handleDeleteUser: Function });
-defineEmits(['close']);
 
 const tabs = ['칭호', '달성률', '경험치'];
 const activeTab = ref(null);
