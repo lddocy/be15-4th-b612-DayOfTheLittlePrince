@@ -51,6 +51,9 @@
 
     /* 공통 토스트 스타일 */
     .custom-toast {
+        display: flex;
+        align-items: center;
+        gap: 8px;
         border-radius: 12px;
         font-family: 'Cafe24Oneprettynight', sans-serif;
         font-size: var(--dlp-font-size-text-sm);
@@ -66,15 +69,15 @@
         letter-spacing: 0.5px;
     }
 
-    /* 성공 메세지 : 연보라 */
+    /* 성공 메세지 : 연핑크 */
     .success-toast {
-        background-color: var(--dlp-lilacpink-100);
+        background-color: var(--dlp-babypink-100);
         border-color: var(--dlp-lilacpink-50);
     }
 
     /* 에러 메세지 : 연핑크 */
     .error-toast {
-        background-color: var(--dlp-babypink-100);
+        background-color: #B000B9;
         border-color: var(--dlp-lilacpink-50);
     }
 
