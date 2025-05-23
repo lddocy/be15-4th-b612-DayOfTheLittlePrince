@@ -9,7 +9,7 @@
         SELECT
             n.notification_id,
             n.category_id,
-            t.template,
+            n.content AS content,
             n.is_read,
             n.created_at
         FROM notification n

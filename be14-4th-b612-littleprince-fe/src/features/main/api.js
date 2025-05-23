@@ -38,11 +38,29 @@ export function getSelectedBadge(accessToken) {
     });
 }
 
+/* 행성 아이템 조회 */
+export function getItems(accessToken) {
+    return api.get('/item/list', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+}
+
+/* 아이템 숨김 처리 */
+export function toggleItemHidden(accessToken, itemId) {
+    return api.patch(`/item/${itemId}/toggle`, {}, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+}
+
 /* 알림 조회 */
-export const getNotifications = async () => {
-    const response = await api.get('/notifications');
-    return response.data;
-};
+export const getNotifications = ({ limit = 30, offset = 0 }) =>
+    api.get('/notifications', {
+        params: { limit, offset }
+    });
 
 /* 읽음 처리*/
 export const markNotificationAsRead = (notificationId) => {

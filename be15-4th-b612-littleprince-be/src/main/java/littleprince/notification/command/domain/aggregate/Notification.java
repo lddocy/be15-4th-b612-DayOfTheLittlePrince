@@ -1,9 +1,15 @@
 package littleprince.notification.command.domain.aggregate;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "notification")
 public class Notification {
@@ -16,5 +22,11 @@ public class Notification {
 
     private LocalDateTime createdAt;
 
-    private Boolean isRead = false;
+    @Column(name = "is_read")
+    private String isRead = "N";
+
+    @Column(nullable = false)
+    private String content;
+
+
 }

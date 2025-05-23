@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class NotificationResponse {
     private Long notificationId;
-    private String template;
+    private String content;
     private LocalDateTime createdAt;
     private String isRead;
     private Long categoryId;

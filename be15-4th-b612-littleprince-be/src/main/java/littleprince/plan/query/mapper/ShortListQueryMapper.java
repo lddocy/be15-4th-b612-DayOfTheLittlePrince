@@ -19,4 +19,6 @@ public interface ShortListQueryMapper {
     List<ShortPlanDateDTO> getShortDates(Long memberId);
 
     List<AiShortPlanDTO> getShortPlanByMemberId(Long memberId);
+
+    long countUncheckedTasks(Long memberId, Date date);
 }
