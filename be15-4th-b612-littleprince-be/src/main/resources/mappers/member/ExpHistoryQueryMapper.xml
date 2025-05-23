@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="littleprince.member.query.mapper.ExpHistoryQueryMapper">
 
@@ -12,5 +12,34 @@
               AND DATE(created_at) = CURRENT_DATE
         )
     </select>
+
+    <select id="getExpHistory" resultType="littleprince.member.query.dto.GetExpHistoryDTO">
+        SELECT
+        a.history_id AS historyId,
+        a.project_id AS projectId,
+        p.title AS title,
+        p.end_date AS endDate,
+        a.exp_point AS expPoint
+        FROM exp_history a
+        JOIN project p ON a.project_id = p.project_id
+        WHERE a.member_id = #{memberId}
+
+        UNION ALL
+
+        SELECT
+        a.history_id AS historyId,
+        a.project_id AS projectId,
+        NULL AS title,
+        t.date AS endDate,
+        a.exp_point AS expPoint
+        FROM exp_history a
+        JOIN task t ON a.member_id = t.member_id
+        WHERE a.project_id IS NULL
+        AND a.member_id = #{memberId}
+
+        ORDER BY endDate DESC
+        LIMIT 3;
+    </select>
+
 
 </mapper>

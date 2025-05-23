@@ -2,7 +2,7 @@
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import DeleteAccountModal from '@/features/user/components/DeleteAccountModal.vue';
 import { useAuthStore } from '@/stores/auth';
-import { fetchMyBadges, fetchMyExp, fetchMyItems } from '@/features/user/api';
+import { fetchMyBadges, fetchMyExp, fetchMyItems, fetchExpHistory } from '@/features/user/api';
 import { selectBadge } from '@/features/user/api';
 const authStore = useAuthStore();
 import { toggleItemHidden } from '@/features/user/api';
@@ -41,6 +41,30 @@ onMounted(async () => {
     maxExp.value = expRes.totalExpToNextLevel;
     currentLevel.value = expRes.currentLevel;
     nextLevel.value = expRes.currentLevel + 1;
+
+    /* 경험치 이력 조회 */
+    const historyRes = await fetchExpHistory(authStore.accessToken);
+    console.log('fetchExpHistory 응답:', historyRes);
+
+// 응답 구조: { data: { data: { expHistoryDTO: [...] } } }
+    const historyList = Array.isArray(historyRes.data?.data?.expHistoryDTO)
+        ? historyRes.data.data.expHistoryDTO
+        : [];
+
+    expLogs.value = historyList.map(entry => {
+      const point = entry.expPoint ?? 0;
+
+      // 날짜는 endDate → createdAt 순으로 우선 사용
+      const rawDate = entry.endDate || entry.createdAt || '';
+      const date = rawDate
+          ? new Date(rawDate).toISOString().slice(0, 10).replace(/-/g, '.')
+          : '날짜 없음';
+
+      // title이 존재하고, projectId가 null이 아닐 경우에만 표시
+      const title = entry.projectId !== null && entry.title ? ` ${entry.title}` : '';
+
+      return `+${point} exp · ${date}${title}`;
+    });
 
     /* 아이템 */
     const itemRes = await fetchMyItems();
@@ -144,11 +168,8 @@ const expPercent = computed(() =>
     Math.min((currentExp.value / maxExp.value) * 100, 100).toFixed(1)
 );
 
-const expLogs = [
-  '5 exp · 2025.05.20 일기 완료',
-  '10 exp · 2025.05.21 10개 완료',
-  '30 exp · 2025.05.22 마이페이지 진입',
-];
+/* 경험치 이력 조회 */
+const expLogs = ref([]);
 
 // 사용자 아이템
 const items = ref([]);
