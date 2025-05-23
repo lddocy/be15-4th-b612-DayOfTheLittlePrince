@@ -32,6 +32,19 @@ public class Task {
 
     private LocalDate date;
 
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskId=" + taskId +
+                ", memberId=" + memberId +
+                ", projectId=" + projectId +
+                ", content='" + content + '\'' +
+                ", checked=" + checked +
+                ", date=" + date +
+                ", createdAt=" + createdAt +
+                '}';
+    }
+
     private LocalDateTime createdAt;
 
     @Builder

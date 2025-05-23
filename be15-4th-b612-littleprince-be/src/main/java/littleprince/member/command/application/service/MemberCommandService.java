@@ -11,5 +11,8 @@ public interface MemberCommandService {
 
     ExpResponse addExp(Long memberId, int expPoint);
 
+    ExpResponse addExp(Long memberId, int expPoint, Long projectId);
+
+
     void changePlanetName(Long memberId, PlanetNameRequest request);
 }
