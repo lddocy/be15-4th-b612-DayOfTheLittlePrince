@@ -12,6 +12,7 @@
             member m
         WHERE
             m.email = #{ email }
+            AND m.is_deleted = 'N'
     </select>
 
     <select id="findById" resultType="littleprince.member.command.domain.aggregate.MemberDTO">

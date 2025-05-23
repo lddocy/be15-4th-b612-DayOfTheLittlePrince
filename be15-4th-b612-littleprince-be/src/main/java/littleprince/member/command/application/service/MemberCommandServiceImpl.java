@@ -1,12 +1,11 @@
 package littleprince.member.command.application.service;
 
-
 import littleprince.common.exception.BusinessException;
+import littleprince.config.security.model.CustomUserDetail;
+import littleprince.infra.redis.RefreshTokenRepository;
 import littleprince.item.Exception.ItemErrorCode;
 import littleprince.item.command.application.service.BadgeCommandService;
 import littleprince.item.command.application.service.ItemCommandService;
-import littleprince.item.query.mapper.GetBadgeCommandMapper;
-import littleprince.item.query.mapper.GetBadgeQueryMapper;
 import littleprince.member.command.application.dto.constant.MemberLevel;
 import littleprince.member.command.application.dto.request.PlanetNameRequest;
 import littleprince.member.command.application.dto.request.SignupRequest;
@@ -42,15 +41,14 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberQueryMapper memberQueryMapper;
     private final MemberCommandMapper memberCommandMapper;
     private final PasswordEncoder passwordEncoder;
-    private final GetBadgeCommandMapper getBadgeCommandMapper;
     private final ExpHistoryCommandMapper expHistoryCommandMapper;
-    private final GetBadgeQueryMapper getBadgeQueryMapper;
     private final ItemCommandService itemCommandService;
     private final BadgeCommandService badgeCommandService;
     private final MemberRepository memberRepository;
     private final NotificationTypeService notificationTypeService;
     private final WebPushSubscriptionService subscriptionService;
     private final PushNotificationService pushNotificationService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
     @Transactional
@@ -81,6 +79,24 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         /* 3. 기본 아이템, 칭호 지급 */
         itemCommandService.addItem(member.getMemberId(), 0);
         badgeCommandService.addDefaultBadge(member.getMemberId());
+    }
+
+    @Override
+    @Transactional
+    public void delete(CustomUserDetail userDetail, String refreshToken){
+        MemberDTO member = memberQueryMapper.findById(userDetail.getMemberId())
+                .orElseThrow(() -> new BusinessException(MemberErrorCode.USER_NOT_FOUND));
+
+        // Redis에 저장된 Refresh Token 제거
+        refreshTokenRepository.delete(userDetail.getMemberId());
+
+        // User Soft-Delete
+        Member foundMember = memberRepository.findById(userDetail.getMemberId()).orElseThrow(
+                () -> new BusinessException(MemberErrorCode.USER_NOT_FOUND)
+        );
+
+        foundMember.delete();
+        memberRepository.save(foundMember);
     }
 
     @Override
@@ -149,5 +165,4 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         member.changePlanetName(newPlanetName);
     }
-
 }
