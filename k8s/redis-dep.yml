@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: b612-redis-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: b612-redis
+  template:
+    metadata:
+      labels:
+        app: b612-redis
+    spec:
+      containers:
+        - name: redis
+          image: toki0327/b612-redis
+          ports:
+            - containerPort: 6379
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: host
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: port
+            - name: REDIS_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: timeout
+            - name: REDIS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: username
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: password

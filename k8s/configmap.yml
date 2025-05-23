@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: db-config
 data:
-  database_url: "mariadb:3306/little_prince?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+  database_url: "mariadb:3307/little_prince?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
   database_name: "little_prince"
   charset: "utf8mb4"
   collation: "utf8mb4_unicode_ci"
@@ -15,7 +15,7 @@ kind: ConfigMap
 metadata:
   name: redis-config
 data:
-  host: "b612_redis"
+  host: "b612-redis"
   port: "6379"
   timeout: "30"
 
