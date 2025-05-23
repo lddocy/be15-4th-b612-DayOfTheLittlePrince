@@ -11,7 +11,7 @@ import MainIconItem from '@/features/main/components/MainIconItem.vue';
 import MemberInfoItem from '@/features/main/components/MemberInfoItem.vue';
 import { useAuthStore } from '@/stores/auth.js';
 import { useUserStore } from '@/stores/user.js';
-import { fetchExpInfo, getItems, getSelectedBadge, toggleItemHidden, updatePlanetName } from '@/features/main/api.js';
+import { fetchExpInfo, getSelectedBadge, updatePlanetName } from '@/features/main/api.js';
 import { useToast } from 'vue-toastification';
 import { fetchMyItems } from '@/features/user/api.js';
 

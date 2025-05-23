@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import DeleteAccountModal from '@/features/user/components/DeleteAccountModal.vue';
-import { useAuthStore } from '@/stores/auth';
 import { fetchMyBadges, fetchMyExp, fetchMyItems } from '@/features/user/api';
 import { selectBadge } from '@/features/user/api';
 import { toggleItemHidden } from '@/features/user/api';
