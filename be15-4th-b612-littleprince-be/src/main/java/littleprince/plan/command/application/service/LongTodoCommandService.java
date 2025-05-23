@@ -16,7 +16,7 @@ public class LongTodoCommandService {
     private final TaskRepository taskRepository;
 
     @Transactional
-    public void createProjectWithTasks(Long memberId, CreateLongTodoRequestDto dto) {
+    public Long createProjectWithTasks(Long memberId, CreateLongTodoRequestDto dto) {
         // 프로젝트 생성 및 저장
         Project project = Project.builder()
                 .memberId(memberId)
@@ -26,6 +26,6 @@ public class LongTodoCommandService {
                 .build();
 
         projectRepository.save(project);
-
+        return project.getProjectId();
     }
 }
