@@ -5,7 +5,9 @@ import Calendar from '@/features/calendar/components/Calendar.vue'
 import ShortTermList from '@/features/calendar/components/ShortTermList.vue'
 import {createShortTodo, deleteShortTodo, getShortList, toggleCheck} from "@/features/calendar/api.js"
 import {useAuthStore} from "@/stores/auth.js";
+import { useToast } from 'vue-toastification';
 
+const toast = useToast();
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
@@ -15,13 +17,7 @@ const todos = ref([])
 const editable = ref({})
 const isModalOpen = ref(false)
 
-const aiSuggestions = ref([
-    { content: '어린왕자랑 놀아주기' },
-    { content: '바오밥 나무' },
-    { content: '푸바오밥주기' },
-    { content: '얼른 쉬기' },
-    { content: '프론트엔드 초기 세팅 끝내기' }
-])
+const aiSuggestions = ref([])
 
 // 단기 투두 리스트 조회 API 호출
 onMounted(async () => {
@@ -114,7 +110,7 @@ const handleConfirm = async () => {
     }))
 
     editable.value = {}
-    toast.error('할 일이 저장되었습니다.')
+    toast.success('할 일이 저장되었습니다.')
   } catch (e) {
     console.error('저장 실패:', e)
     toast.error('저장에 실패했습니다.')
