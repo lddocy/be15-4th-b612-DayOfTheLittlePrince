@@ -82,6 +82,7 @@ onMounted(async () => {
       9: 'royalty',
       10: 'crown'
     };
+
     items.value = itemRes
         .filter(item => item.level > 0)
         .map(item => ({
@@ -108,7 +109,6 @@ onMounted(async () => {
 const tabs = ['칭호', '달성률', '경험치'];
 const activeTab = ref(null);
 const selectedTitleIndex = ref(-1);
-
 
 // 칭호
 const titles = ref([]);
@@ -209,7 +209,6 @@ const nextLevelText = computed(() => {
 /* 아이템 토글 */
 async function toggleItemVisibility(idx) {
   const item = items.value[idx];
-
   try {
     await toggleItemHidden(item.itemId); // 서버에 PATCH 요청
     item.isHidden = item.isHidden === 'Y' ? 'N' : 'Y'; // 상태 반전
@@ -379,10 +378,15 @@ function onClickTitle(title) {
                               class="absolute w-6 h-6 transition-all duration-700"
                               :style="`left: calc(${expPercent}% - 12px); top: 50%; transform: translateY(-50%);`" />
 
-                          <div
-                              class="absolute inset-0 flex items-center justify-center text-sm font-bold text-[#C6A82F]">
-                              {{ currentExp }} / {{ maxExp }}
-                          </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center text-sm font-bold text-[#C6A82F]">
+                          <template v-if="currentLevel === MAX_LEVEL">
+                            max
+                          </template>
+                          <template v-else>
+                            {{ currentExp }} / {{ maxExp }}
+                          </template>
+                        </div>
                       </div>
 
                       <!-- 레벨 -->
