@@ -4,7 +4,7 @@ import { ref } from 'vue';
 import MyPageModal from '@/features/user/components/MyPageModal.vue';
 import { useAuthStore } from '/src/stores/auth.js';
 import { useToast } from 'vue-toastification';
-import { logout } from '@/features/user/api.js';
+import {deleteMember, logout} from '@/features/user/api.js';
 import { useUIStore } from '@/stores/ui'
 import { nextTick } from 'vue'
 
@@ -39,6 +39,17 @@ const handleLogout = async () => {
         toast.error(e.response.data.message);
     }
 };
+
+const handleDeleteUser = async() => {
+  try{
+    await deleteMember(authStore.accessToken);
+    toast.success("회원 탈퇴가 완료되었습니다.")
+    authStore.clearAccessToken();
+    await router.push("/login")
+  }catch(e){
+    toast.error(e.response.data.message);
+  }
+}
 
 function navigate(target) {
     switch (target) {
@@ -130,6 +141,7 @@ const handleCapture = async () => {
         </div>
         <MyPageModal
             :isOpen="isMyPageOpen"
+            :handleDeleteUser="handleDeleteUser"
             @close="isMyPageOpen = false"
             @refresh-item-map="$emit('refresh-item-map')"
         />

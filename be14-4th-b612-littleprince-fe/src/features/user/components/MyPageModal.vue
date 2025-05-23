@@ -2,12 +2,17 @@
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import DeleteAccountModal from '@/features/user/components/DeleteAccountModal.vue';
 import { useAuthStore } from '@/stores/auth';
-import { fetchMyBadges, fetchMyExp, fetchMyItems } from '@/features/user/api';
+import {deleteMember, fetchMyBadges, fetchMyExp, fetchMyItems} from '@/features/user/api';
 import { selectBadge } from '@/features/user/api';
-const authStore = useAuthStore();
 import { toggleItemHidden } from '@/features/user/api';
 import { fetchTaskCompletionRate } from '@/features/user/api';
 import { useUserStore } from '@/stores/user';
+import {useToast} from "vue-toastification";
+import {useRouter} from "vue-router";
+
+const authStore = useAuthStore();
+const router = useRouter();
+const toast = useToast();
 
 onMounted(async () => {
   try {
@@ -78,7 +83,7 @@ onMounted(async () => {
   }
 });
 
-defineProps({ isOpen: Boolean });
+const {isOpen, handleDeleteUser} = defineProps({ isOpen: Boolean, handleDeleteUser: Function });
 defineEmits(['close']);
 
 const tabs = ['칭호', '달성률', '경험치'];
@@ -433,6 +438,6 @@ function onClickTitle(title) {
           <DeleteAccountModal
               :isOpen="showDeleteModal"
               @close="showDeleteModal = false"
-              @confirm="handleAccountDeletion" />
+              @confirm="handleDeleteUser" />
       </div>
   </template>
