@@ -59,8 +59,7 @@ springdoc:
 
 webpush:
   vapid:
-    public-key: "BGfptzSmyf-nxOKz29Hyp9MVAtA8kLcyDiJ70bfuBfxymahMPFHKDMuTe-9bREr-iIeEvP1Mx2rPQ6Sq-beWUH0"
-    private-key: "eh4cCkJR5rDqWjfYSUvSkoIgnrUH8uQ1ApsqJo_TMzw"
-    subject: "mailto:sdwang15@naver.com"
-
+    public-key: ${PUBLIC_KEY}
+    private-key: ${PRIVATE_KEY}
+    subject: ${SUBJECT}
 

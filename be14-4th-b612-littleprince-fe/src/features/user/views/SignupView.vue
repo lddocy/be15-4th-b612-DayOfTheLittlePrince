@@ -4,7 +4,6 @@ import MainLogo from '@/features/user/components/MainLogo.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import { useAuthStore } from '/src/stores/auth.js';
 import { signup } from '../api.js';
 
 const router = useRouter();

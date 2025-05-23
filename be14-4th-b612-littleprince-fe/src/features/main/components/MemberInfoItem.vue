@@ -1,13 +1,16 @@
 <script setup>
 import { ref, watch } from 'vue';
+import { useUserStore } from '@/stores/user';
+const userStore = useUserStore();
+import { computed } from 'vue';
+
 
 const props = defineProps({
     memberInfo: Object,
     current: { type: Number, default: 0 },
     max: { type: Number, default: 0 },
-    badge: { type: String, default: '이름 없음' },
 });
-
+const badge = computed(() => userStore.memberInfo?.badgeName?.trim() || '우주 먼지');
 const emit = defineEmits(['edit-planet-name']);
 
 const isEditing = ref(false);
@@ -40,6 +43,7 @@ const handleKey = (e) => {
 };
 
 const barWidth = (current, max) => {
+    if (props.memberInfo.level === 10) return '100%';
     if (!max || max === 0) return '0%';
     const ratio = Math.min(current / max, 1);
     return `${(ratio * 100).toFixed(1)}%`;
@@ -99,7 +103,13 @@ const barWidth = (current, max) => {
 
         <!-- 경험치 수치 -->
         <div style="font-size: var(--dlp-font-size-text-sm)">
-            {{ memberInfo.exp }} / {{ max }}
+            <template v-if="memberInfo.level === 10">
+                max
+            </template>
+            <template v-else>
+                {{ memberInfo.exp }} / {{ max }}
+            </template>
         </div>
+
     </div>
 </template>

@@ -31,12 +31,30 @@ async function bootstrap() {
     app.use(router);
 
     const notificationOptions = {
+        position: 'top-right',
+        timeout: 2500,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: false,
+        icon: true,
+        transition: 'Vue-Toastification__bounce',
+        toastClassName: 'custom-toast',
+        bodyClassName: 'custom-toast-body',
         toastDefaults: {
             [TYPE.ERROR]: {
-                timeout: 2000,
+                timeout: 3000,
+                toastClassName: 'custom-toast error-toast',
             },
-        },
-    };
+            [TYPE.SUCCESS]: {
+                timeout: 2000,
+                toastClassName: 'custom-toast success-toast',
+            }
+        }
+    }
 
     app.use(Toast, notificationOptions);
 

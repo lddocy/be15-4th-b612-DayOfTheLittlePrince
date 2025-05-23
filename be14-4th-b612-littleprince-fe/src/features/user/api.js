@@ -34,6 +34,20 @@ export async function fetchTaskCompletionRate() {
     return res.data; // { totalRate, monthlyRate }
 }
 
+/* 푸시 알림용*/
+export function subscribePush(subscription) {
+    return api.post('/push/subscribe', subscription);
+}
+
+/* 최신날짜 3개씩 경험치 이력 조회 */
+export function fetchExpHistory(accessToken) {
+    return api.get('/curexp/get', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+}
+
 export function signup(data) {
     return api.post('/member/signup', data);
 }

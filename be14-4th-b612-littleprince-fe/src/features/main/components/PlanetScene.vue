@@ -6,15 +6,21 @@ import { useRoute } from 'vue-router';
 
 import { createCamera, createRenderer, addBasicLighting } from '@/utils/setupThreeScene.js';
 import { loadHDRI, loadGLTF } from '@/utils/loaders.js';
-import SceneItemManager from '@/components/common/SceneItemManager.vue';
+import SceneItemManager from '@/features/main/components/SceneItemManager.vue';
 import MainIconItem from '@/features/main/components/MainIconItem.vue';
 import MemberInfoItem from '@/features/main/components/MemberInfoItem.vue';
 import { useAuthStore } from '@/stores/auth.js';
 import { useUserStore } from '@/stores/user.js';
 import { fetchExpInfo, getSelectedBadge, updatePlanetName } from '@/features/main/api.js';
 import { useToast } from 'vue-toastification';
+import { fetchMyItems } from '@/features/user/api.js';
 
 const emit = defineEmits(['loaded']);
+
+const props = defineProps({
+    refreshFlag: Number,
+});
+
 const container = ref(null);
 const sceneRef = ref(null);
 const princeRef = ref([]);
@@ -26,6 +32,12 @@ const toast = useToast();
 const authStore = useAuthStore();
 const userStore = useUserStore();
 
+const memberInfo = computed(() => userStore.memberInfo || {});
+const memberLevel = computed(() => memberInfo.value.level || 0);
+const totalExp = ref(0);
+const badge = ref('');
+const itemVisibilityMap = ref({});
+
 watch(() =>
     authStore.accessToken,
     token => {
@@ -33,11 +45,25 @@ watch(() =>
     }, { immediate: true }
 );
 
-const memberInfo = computed(() => userStore.memberInfo || {});
-const totalExp = ref(0);
-const badge = ref('');
+onMounted(async () => {
+    const scene = setupScene();
+    setupCameraRenderer(container.value, scene);
+    sceneRef.value = scene;
 
-const fetchExp = async () => {
+    await fetchInitialData();
+
+    loadMainPlanet(scene);
+});
+
+async function fetchInitialData() {
+    await Promise.all([
+        fetchExp(),
+        fetchBadge(),
+        fetchItemMap()
+    ]);
+}
+
+async function fetchExp() {
     try {
         const token = authStore.accessToken;
         if (!token) return;
@@ -49,7 +75,7 @@ const fetchExp = async () => {
     }
 }
 
-const fetchBadge = async () => {
+async function fetchBadge() {
     try {
         const token = authStore.accessToken;
         if (!token) return;
@@ -60,6 +86,28 @@ const fetchBadge = async () => {
         toast.error('칭호를 불러오지 못했습니다.');
     }
 }
+
+async function fetchItemMap() {
+    try {
+        const itemList = await fetchMyItems();
+
+        const map = {};
+
+        for (const item of itemList) {
+            const key = item.itemName; // "여우", "우물", "바오밥나무" 등
+            map[key] = item.isHidden;  // "Y" or "N"
+        }
+
+        itemVisibilityMap.value = map;
+    } catch (e) {
+        console.error('아이템 목록 조회 실패:', e);
+        toast.error('아이템 정보를 불러오지 못했습니다.');
+    }
+}
+
+watch(() => props.refreshFlag, async () => {
+    await fetchItemMap();
+});
 
 const editPlanetName = async ({ planetName }) => {
     try {
@@ -74,12 +122,6 @@ const editPlanetName = async ({ planetName }) => {
         toast.error('행성 이름 수정에 실패했습니다.');
     }
 };
-
-
-onMounted(() => {
-    fetchExp()
-    fetchBadge()
-});
 
 function setupScene() {
     const scene = new THREE.Scene();
@@ -133,12 +175,6 @@ function updatePrinceVisibility(show) {
     princeRef.value.forEach((model) => (model.visible = show));
 }
 
-onMounted(() => {
-    const scene = setupScene();
-    setupCameraRenderer(container.value, scene);
-    loadMainPlanet(scene);
-});
-
 watch(
     () => route.path,
     (newPath) => {
@@ -151,12 +187,14 @@ watch(
     <div class="scene-wrapper relative w-full h-full">
         <div ref="container" class="scene-container"></div>
         <SceneItemManager
-            v-if="sceneRef && isSceneReady"
+            v-if="sceneRef && isSceneReady && Object.keys(itemVisibilityMap).length > 0"
             :scene="sceneRef"
             :route-path="route.path"
+            :memberLevel="memberLevel"
+            :itemVisibilityMap="itemVisibilityMap"
         />
         <MainIconItem />
-        <div class="fixed bottom-6 right-6 z-10">
+        <div class="fixed bottom-6 right-6 z-0">
             <MemberInfoItem
                 :memberInfo="memberInfo"
                 :max="totalExp"
