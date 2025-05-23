@@ -28,14 +28,14 @@ spec:
               name: db-secret
               key: password
       volumeMounts:
-        - name: mysql-storage
+        - name: mariadb-storage
           mountPath: /var/lib/mysql
         - name: init-script
           mountPath: /docker-entrypoint-initdb.d
   volumes:
-    - name: mysql-storage
+    - name: mariadb-storage
       persistentVolumeClaim:
-        claimName: pvc-mysql
+        claimName: mariadb-pvc
     - name: init-script
       configMap:
         name: db-init-script
