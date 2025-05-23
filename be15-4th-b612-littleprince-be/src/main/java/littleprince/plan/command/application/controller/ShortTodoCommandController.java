@@ -1,6 +1,7 @@
 package littleprince.plan.command.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/plans/short-todos")
+@Tag(name = "단기 투두 리스트")
 public class ShortTodoCommandController {
     private final ShortTodoCommandService shortTodoCommandService;
 
+    @Operation(summary = "단기 플랜 생성",description = "사용자는 하루치 플랜을 작성할 수 있습니다.")
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> createShortTodo(
             @AuthenticationPrincipal CustomUserDetail userDetail,
@@ -27,6 +30,7 @@ public class ShortTodoCommandController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(null));
     }
 
+    @Operation(summary = "단기 플랜 삭제",description = "사용자는 하루치 플랜을 삭제할 수 있습니다.")
     @DeleteMapping("/{taskId}")
     public ResponseEntity<ApiResponse<Void>> deleteShortTodo(
             @AuthenticationPrincipal CustomUserDetail userDetail,

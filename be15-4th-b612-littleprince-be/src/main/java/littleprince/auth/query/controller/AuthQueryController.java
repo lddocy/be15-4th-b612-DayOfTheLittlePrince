@@ -1,5 +1,7 @@
 package littleprince.auth.query.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import littleprince.auth.command.dto.response.TokenResponse;
 import littleprince.auth.query.dto.request.LoginRequest;
@@ -14,12 +16,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 
+@Tag(name = "회원")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthQueryController {
     private final AuthQueryService authQueryService;
 
+    @Operation(summary = "로그인" , description = "사용자는 가입한 이메일과 비밀번호로 로그인할 수 있다. ")
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<TokenResponse>> login(
             @RequestBody @Valid LoginRequest request
@@ -29,6 +33,7 @@ public class AuthQueryController {
         return buildTokenResponse(response);
     }
 
+    @Operation(summary = "자동 로그인", description = "사용자는 자동 로그인을 할 수 있다.")
     @PostMapping("/reissue")
     public ResponseEntity<ApiResponse<TokenResponse>> reissue(
             @CookieValue(name = "refreshToken", required = false) String refreshToken
@@ -38,6 +43,7 @@ public class AuthQueryController {
         return buildTokenResponse(tokenResponse);
     }
 
+    @Operation(summary = "비밀번호 찾기", description = "사용자는 자신의 비밀번호를 이메일을 통해 찾을 수 있다.")
     @GetMapping("/find/password")
     public ResponseEntity<ApiResponse<Void>> findPassword(
             @RequestParam @ValidEmail String email
