@@ -98,7 +98,11 @@ function navigate(target) {
                 </div>
             </div>
         </div>
-        <MyPageModal :isOpen="isMyPageOpen" @close="isMyPageOpen = false" />
+        <MyPageModal
+            :isOpen="isMyPageOpen"
+            @close="isMyPageOpen = false"
+            @refresh-item-map="$emit('refresh-item-map')"
+        />
     </div>
 </template>
 
