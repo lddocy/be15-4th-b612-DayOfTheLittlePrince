@@ -22,7 +22,7 @@
         a.exp_point AS expPoint
         FROM exp_history a
         JOIN project p ON a.project_id = p.project_id
-        WHERE a.member_id = 4
+        WHERE a.member_id = #{memberId}
 
         UNION ALL
 
@@ -35,7 +35,7 @@
         FROM exp_history a
         JOIN task t ON a.member_id = t.member_id
         WHERE a.project_id IS NULL
-        AND a.member_id = 4
+        AND a.member_id = #{memberId}
 
         ORDER BY endDate DESC
         LIMIT 3;
