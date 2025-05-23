@@ -2,7 +2,8 @@
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import DeleteAccountModal from '@/features/user/components/DeleteAccountModal.vue';
 import { useAuthStore } from '@/stores/auth';
-import {deleteMember, fetchMyBadges, fetchMyExp, fetchMyItems} from '@/features/user/api';
+import { deleteMember, fetchMyBadges, fetchMyExp, fetchMyItems, fetchExpHistory } from '@/features/user/api';
+
 import { selectBadge } from '@/features/user/api';
 import { toggleItemHidden } from '@/features/user/api';
 import { fetchTaskCompletionRate } from '@/features/user/api';
@@ -13,6 +14,9 @@ import {useRouter} from "vue-router";
 const authStore = useAuthStore();
 const router = useRouter();
 const toast = useToast();
+
+defineProps({ isOpen: Boolean });
+const emit = defineEmits(['close', 'refresh-item-map']);
 
 onMounted(async () => {
   try {
@@ -44,6 +48,30 @@ onMounted(async () => {
     currentLevel.value = expRes.currentLevel;
     nextLevel.value = expRes.currentLevel + 1;
 
+    /* 경험치 이력 조회 */
+    const historyRes = await fetchExpHistory(authStore.accessToken);
+    console.log('fetchExpHistory 응답:', historyRes);
+
+// 응답 구조: { data: { data: { expHistoryDTO: [...] } } }
+    const historyList = Array.isArray(historyRes.data?.data?.expHistoryDTO)
+        ? historyRes.data.data.expHistoryDTO
+        : [];
+
+    expLogs.value = historyList.map(entry => {
+      const point = entry.expPoint ?? 0;
+
+      // 날짜는 endDate → createdAt 순으로 우선 사용
+      const rawDate = entry.endDate || entry.createdAt || '';
+      const date = rawDate
+          ? new Date(rawDate).toISOString().slice(0, 10).replace(/-/g, '.')
+          : '날짜 없음';
+
+      // title이 존재하고, projectId가 null이 아닐 경우에만 표시
+      const title = entry.projectId !== null && entry.title ? ` ${entry.title}` : '';
+
+      return `+${point} exp · ${date}${title}`;
+    });
+
     /* 아이템 */
     const itemRes = await fetchMyItems();
     console.log('fetchMyItems 응답:', itemRes);
@@ -60,6 +88,7 @@ onMounted(async () => {
       9: 'royalty',
       10: 'crown'
     };
+
     items.value = itemRes
         .filter(item => item.level > 0)
         .map(item => ({
@@ -83,13 +112,13 @@ onMounted(async () => {
   }
 });
 
+
 const {isOpen, handleDeleteUser} = defineProps({ isOpen: Boolean, handleDeleteUser: Function });
 defineEmits(['close']);
 
 const tabs = ['칭호', '달성률', '경험치'];
 const activeTab = ref(null);
 const selectedTitleIndex = ref(-1);
-
 
 // 칭호
 const titles = ref([]);
@@ -149,11 +178,8 @@ const expPercent = computed(() =>
     Math.min((currentExp.value / maxExp.value) * 100, 100).toFixed(1)
 );
 
-const expLogs = [
-  '5 exp · 2025.05.20 일기 완료',
-  '10 exp · 2025.05.21 10개 완료',
-  '30 exp · 2025.05.22 마이페이지 진입',
-];
+/* 경험치 이력 조회 */
+const expLogs = ref([]);
 
 // 사용자 아이템
 const items = ref([]);
@@ -193,7 +219,6 @@ const nextLevelText = computed(() => {
 /* 아이템 토글 */
 async function toggleItemVisibility(idx) {
   const item = items.value[idx];
-
   try {
     await toggleItemHidden(item.itemId); // 서버에 PATCH 요청
     item.isHidden = item.isHidden === 'Y' ? 'N' : 'Y'; // 상태 반전
@@ -363,10 +388,15 @@ function onClickTitle(title) {
                               class="absolute w-6 h-6 transition-all duration-700"
                               :style="`left: calc(${expPercent}% - 12px); top: 50%; transform: translateY(-50%);`" />
 
-                          <div
-                              class="absolute inset-0 flex items-center justify-center text-sm font-bold text-[#C6A82F]">
-                              {{ currentExp }} / {{ maxExp }}
-                          </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center text-sm font-bold text-[#C6A82F]">
+                          <template v-if="currentLevel === MAX_LEVEL">
+                            max
+                          </template>
+                          <template v-else>
+                            {{ currentExp }} / {{ maxExp }}
+                          </template>
+                        </div>
                       </div>
 
                       <!-- 레벨 -->

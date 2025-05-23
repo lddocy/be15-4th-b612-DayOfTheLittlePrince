@@ -194,7 +194,7 @@ watch(
             :itemVisibilityMap="itemVisibilityMap"
         />
         <MainIconItem />
-        <div class="fixed bottom-6 right-6 z-10">
+        <div class="fixed bottom-6 right-6 z-0">
             <MemberInfoItem
                 :memberInfo="memberInfo"
                 :max="totalExp"

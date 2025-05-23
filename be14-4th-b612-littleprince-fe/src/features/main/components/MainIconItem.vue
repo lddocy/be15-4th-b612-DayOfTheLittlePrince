@@ -167,7 +167,7 @@ const isMainOrCalendar = computed(() =>
                 class="icon-img cursor-pointer"
                 @click="toggleTodayModal"
             />
-            <div v-if="showTodayModal" class="modal-content" @click.self="closeModals">
+            <div v-if="showTodayModal" class="modal-content z-99" @click.self="closeModals">
                 <ShortTermList
                     :selected-date="todayDate"
                     :todos="todos"
@@ -214,6 +214,7 @@ const isMainOrCalendar = computed(() =>
     max-height: 80vh;
     overflow-y: auto;
 }
+
 .icon-img {
     width: 4rem;
     height: 4rem;
