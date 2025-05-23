@@ -43,6 +43,7 @@ const handleKey = (e) => {
 };
 
 const barWidth = (current, max) => {
+    if (props.memberInfo.level === 10) return '100%';
     if (!max || max === 0) return '0%';
     const ratio = Math.min(current / max, 1);
     return `${(ratio * 100).toFixed(1)}%`;
@@ -102,7 +103,13 @@ const barWidth = (current, max) => {
 
         <!-- 경험치 수치 -->
         <div style="font-size: var(--dlp-font-size-text-sm)">
-            {{ memberInfo.exp }} / {{ max }}
+            <template v-if="memberInfo.level === 10">
+                max
+            </template>
+            <template v-else>
+                {{ memberInfo.exp }} / {{ max }}
+            </template>
         </div>
+
     </div>
 </template>
