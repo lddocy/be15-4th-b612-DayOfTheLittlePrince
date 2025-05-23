@@ -58,17 +58,26 @@ onMounted(() => {
     subscribeUserToPush();
   }
 });
+
+function handleItemVisibilityChange() {
+    refreshItemMap.value++;
+}
 </script>
 
 <template>
   <div id="app" class="flex h-screen w-screen overflow-hidden relative">
     <LoadingSpinner v-if="isSceneLoading" />
 
+        <!-- 사이드바 -->
+        <SideBar
+            v-if="useLayout && !uiStore.isCapturing"
+            @item-visibility-changed="handleItemVisibilityChange"
+        />
         <!-- 사이드바 숨김 조건 -->
         <SideBar v-if="useLayout && !uiStore.isCapturing" />
     <SideBar v-if="useLayout" />
 
-      <!-- 음악 플레이어 숨김 조건 -->
+      <!-- BGM 플레이어 -->
       <div
           v-show="!uiStore.isCapturing"
           class="absolute bottom-6 left-[90px] lg:left-[160px] md:left-[120px] z-50"
@@ -84,6 +93,12 @@ onMounted(() => {
         :class="{'planet-front' : route.path === '/'}"
         @loaded="handleSceneLoaded"
     />
+        <!-- '/' 경로에서는 배경으로 안쓰이게 -->
+        <PlanetScene
+            :class="{'planet-front' : route.path === '/'}"
+            :refresh-flag="refreshItemMap"
+            @loaded="handleSceneLoaded"
+        />
 
     <div class="flex-1" :class="{ layout: useLayout }">
       <router-view />

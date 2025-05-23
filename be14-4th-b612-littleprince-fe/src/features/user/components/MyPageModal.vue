@@ -241,6 +241,7 @@
   const authStore = useAuthStore();
   import { toggleItemHidden } from '@/features/user/api';
   import { fetchTaskCompletionRate } from '@/features/user/api';
+  import { useUserStore } from '@/stores/user';
 
   onMounted(async () => {
     try {
@@ -391,15 +392,16 @@
     const selectedBadge = titles.value[selectedIdx];
 
     try {
-      await selectBadge(selectedBadge.badgeId);
+      await selectBadge(selectedBadge.badgeId); // 서버에 선택 요청
 
-      // 모든 칭호의 isSelected를 'N'으로 초기화
       titles.value.forEach((t) => {
         t.isSelected = 'N';
       });
 
       // 선택된 것만 'Y'로 설정
       titles.value[selectedIdx].isSelected = 'Y';
+
+      await userStore.loadMemberInfo();
 
     } catch (e) {
       console.error('칭호 선택 실패:', e);
@@ -427,6 +429,10 @@
     } catch (e) {
       console.error('아이템 숨김 토글 실패:', e);
     }
+  }
+  const userStore = useUserStore();
+  function onClickTitle(title) {
+    userStore.setTitle(title);
   }
 
 
