@@ -5,18 +5,21 @@ import { onMounted } from 'vue';
 import { subscribePush } from '@/features/user/api';
 
 import SideBar from '@/components/layout/SideBar.vue';
-import PlanetScene from "@/components/common/PlanetScene.vue";
+import PlanetScene from "@/features/main/components/PlanetScene.vue";
 import BgmPlayer from './components/common/BgmPlayer.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
+import {useUIStore} from "@/stores/ui.js";
 
 const route = useRoute();
-const useLayout = computed(() => route.meta.layout !== 'none');
-const isSceneLoading = ref(true);
 const uiStore = useUIStore();
+const isSceneLoading = ref(true);
+const refreshItemMap = ref(0);
+const useLayout = computed(() => route.meta.layout !== 'none');
 
 function handleSceneLoaded() {
   isSceneLoading.value = false;
 }
+
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -66,16 +69,13 @@ function handleItemVisibilityChange() {
 
 <template>
   <div id="app" class="flex h-screen w-screen overflow-hidden relative">
-    <LoadingSpinner v-if="isSceneLoading" />
+      <LoadingSpinner v-if="isSceneLoading" />
 
-        <!-- 사이드바 -->
-        <SideBar
-            v-if="useLayout && !uiStore.isCapturing"
-            @item-visibility-changed="handleItemVisibilityChange"
-        />
-        <!-- 사이드바 숨김 조건 -->
-        <SideBar v-if="useLayout && !uiStore.isCapturing" />
-    <SideBar v-if="useLayout" />
+      <!-- 사이드바 -->
+      <SideBar
+          v-if="useLayout && !uiStore.isCapturing"
+          @item-visibility-changed="handleItemVisibilityChange"
+      />
 
       <!-- BGM 플레이어 -->
       <div
@@ -84,21 +84,13 @@ function handleItemVisibilityChange() {
       >
         <BgmPlayer />
       </div>
-    <div class="absolute bottom-6 left-[90px] lg:left-[160px] md:left-[120px] z-50">
-      <BgmPlayer />
-    </div>
 
-    <!-- '/' 경로에서는 배경으로 안쓰이게 -->
-    <PlanetScene
-        :class="{'planet-front' : route.path === '/'}"
-        @loaded="handleSceneLoaded"
-    />
-        <!-- '/' 경로에서는 배경으로 안쓰이게 -->
-        <PlanetScene
-            :class="{'planet-front' : route.path === '/'}"
-            :refresh-flag="refreshItemMap"
-            @loaded="handleSceneLoaded"
-        />
+     <!-- '/' 경로에서는 배경으로 안쓰이게 -->
+     <PlanetScene
+         :class="{'planet-front' : route.path === '/'}"
+         :refresh-flag="refreshItemMap"
+         @loaded="handleSceneLoaded"
+     />
 
     <div class="flex-1" :class="{ layout: useLayout }">
       <router-view />

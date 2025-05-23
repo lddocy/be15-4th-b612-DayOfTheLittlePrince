@@ -101,13 +101,13 @@ const toggleCheck = async (taskId, checked) => {
 
 const addTodo = () => {
   const newId = Date.now()
-  props.todos.push({
+  todos.value.push({
     task_id: newId,
     content: '',
     is_checked: 'N',
     project_id: null
   })
-  props.editableMap[newId] = true
+  editable.value[newId] = true
 
 }
 
