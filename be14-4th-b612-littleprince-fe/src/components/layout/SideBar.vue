@@ -59,7 +59,7 @@ const handleCapture = async () => {
 
   const canvas = document.querySelector('.scene-container canvas')
   if (!canvas) {
-    alert('캔버스를 찾을 수 없어요 😢')
+    toast.error('캔버스를 찾을 수 없어요 😢')
     uiStore.isCapturing = false
     return
   }
@@ -69,6 +69,8 @@ const handleCapture = async () => {
   link.href = image
   link.download = `my-planet-${new Date().toISOString().slice(0, 10)}.png`
   link.click()
+
+  toast.success('🌍 내 우주가 저장되었어요!')
 
   setTimeout(() => {
     uiStore.isCapturing = false
