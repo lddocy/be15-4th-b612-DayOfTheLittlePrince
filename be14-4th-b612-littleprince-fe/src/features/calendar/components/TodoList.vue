@@ -1,5 +1,12 @@
 <script setup>
 import { nextTick, ref } from 'vue'
+import {useAuthStore} from "@/stores/auth.js";
+import {useToast} from "vue-toastification";
+import {getAiList} from "@/features/calendar/api.js";
+import AISuggestionModal from "@/features/calendar/components/AISuggestionModal.vue";
+
+const authStore = useAuthStore()
+const toast = useToast()
 
 const props = defineProps({
   todos: Array,
@@ -9,13 +16,22 @@ const props = defineProps({
 const emit = defineEmits(['request-ai-modal', 'add-suggested-todo'])
 
 const isModalOpen = ref(false)
-const aiSuggestions = ref([
-  { content: '요구사항 명세서 작성 끝내기' },
-  { content: '인프런 스프링부트 1강 듣기' },
-  { content: '피그마 작업 마무리하기' },
-  { content: 'ERD 작업 시작하기' },
-  { content: '프론트엔드 초기 세팅 끝내기' }
-])
+const aiSuggestions = ref([])
+const isLoadingAi = ref(false)
+const handleSuggestAdd = (content) => emit('add-suggested-todo', content)
+
+const fetchAiSuggestions = async () => {
+  isLoadingAi.value = true
+  try {
+    const res = await getAiList(authStore.accessToken)
+    aiSuggestions.value = res.data.data.generatePlanList.map(content => ({ content }))
+    isModalOpen.value = true
+  } catch (err) {
+    toast.error('10일 이내에 플랜 5개 이상을 작성하셔야합니다.')
+  } finally {
+    isLoadingAi.value = false
+  }
+}
 
 const listContainerRef = ref(null)
 
@@ -27,7 +43,7 @@ const deleteTodo = (taskId) => {
       delete props.editableMap[taskId]
     }
   } else {
-    alert(`ID ${taskId} 삭제`)
+    toast.error(`등록 후 삭제 가능합니다.`)
   }
 }
 
@@ -48,15 +64,6 @@ const addTodo = async () => {
   }
 }
 
-const addSuggestedTodo = (content) => {
-  const newId = Date.now()
-  props.todos.push({
-    task_id: newId,
-    content,
-    is_checked: 'N',
-    project_id: null
-  })
-}
 </script>
 
 <template>
@@ -103,11 +110,21 @@ const addSuggestedTodo = (content) => {
                  text-black rounded-full border border-white/10 transition">
         +
       </button>
-      <button @click="emit('request-ai-modal')"
-          class="bg-[#C9C3E3]/40 hover:bg-[#A49CAC]/60 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
-        AI 생성하기
+      <button @click="fetchAiSuggestions"
+              class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
+        <span v-if="isLoadingAi">생성 중...</span>
+        <span v-else>AI 생성하기</span>
       </button>
     </div>
+
+    <!-- AI 모달 -->
+    <AISuggestionModal
+        :visible="isModalOpen"
+        :date="props.selectedDate"
+        :suggestion-list="aiSuggestions"
+        @close="isModalOpen = false"
+        @addTodo="handleSuggestAdd"
+    />
   </div>
 </template>
 

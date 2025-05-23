@@ -8,4 +8,6 @@ public interface AuthQueryService {
     TokenResponse login(@Valid LoginRequest request);
 
     TokenResponse reissue(String refreshToken);
+
+    void findPassword(String email);
 }

@@ -23,11 +23,11 @@ public class LongTodoCommandController {
 
     @PostMapping
     @Operation(summary = "장기 투두 생성", description = "하나의 프로젝트와 연결된 여러 개의 체크리스트 항목을 생성합니다.")
-    public ResponseEntity<ApiResponse<Void>> createProjectWithTasks(
+    public ResponseEntity<ApiResponse<Long>> createProjectWithTasks(
             @AuthenticationPrincipal CustomUserDetail user,
             @RequestBody @Valid CreateLongTodoRequestDto dto
     ) {
-        longTodoCommandService.createProjectWithTasks(user.getMemberId(), dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(null));
+        Long projectId = longTodoCommandService.createProjectWithTasks(user.getMemberId(), dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(projectId));
     }
 }

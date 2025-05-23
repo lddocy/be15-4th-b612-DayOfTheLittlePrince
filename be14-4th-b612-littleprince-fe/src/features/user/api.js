@@ -1,8 +1,42 @@
 import api from '@/plugins/axios';
 
+/* 내 칭호 조회 */
 export async function fetchMyBadges() {
     const res = await api.get('/badges/me');
     return res.data.data;
+}
+
+/* 내 칭호 선택*/
+export async function selectBadge(badgeId) {
+    return api.patch('/badges/select', { badgeId });
+}
+
+/* 내 아이템 조회 */
+export async function fetchMyItems() {
+    const res = await api.get('/item/list');
+    return res.data.data.itemList; // ← Postman 응답 기준으로 수정
+}
+
+/* 아이템 숨김 , 보임 */
+export function toggleItemHidden(itemId) {
+    return api.patch(`/item/${itemId}/toggle`);
+}
+
+/* 내 경험치 조회*/
+export async function fetchMyExp() {
+    const res = await api.get('/curexp');
+    return res.data.data; // { currentExp, currentLevel, totalExpToNextLevel }
+}
+
+/* 달성률 조회 */
+export async function fetchTaskCompletionRate() {
+    const res = await api.get('/plans/rate');
+    return res.data; // { totalRate, monthlyRate }
+}
+
+/* 푸시 알림용*/
+export function subscribePush(subscription) {
+    return api.post('/push/subscribe', subscription);
 }
 
 export function signup(data) {
@@ -21,6 +55,18 @@ export function logout(accessToken) {
             headers: { Authorization: `Bearer ${accessToken}` },
         }
     );
+}
+
+export function findPassword(email) {
+    return api.get('auth/find/password', {
+        params: {
+            email: email,
+        },
+    });
+}
+
+export function changePassword(data) {
+    return api.post('/auth/change/password', data);
 }
 
 export function refreshMemberToken() {

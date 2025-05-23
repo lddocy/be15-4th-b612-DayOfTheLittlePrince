@@ -3,13 +3,20 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '/src/stores/auth.js';
 import { ref } from 'vue';
 import MainLogo from '@/features/user/components/MainLogo.vue';
+import FamousQuotesModal from '@/components/layout/FamousQuotesModal.vue';
 import '@/assets/styles/auth-container.css';
 import { useToast } from 'vue-toastification';
 import { login } from '../api.js';
+import { useUserStore } from '@/stores/user.js';
+import { getFamousQuotes } from '@/features/main/api.js';
 
 const router = useRouter();
 const authStore = useAuthStore();
+const userStore = useUserStore();
 const toast = useToast();
+
+const showModal = ref(false);
+const quote = ref('');
 
 const email = ref('');
 const password = ref('');
@@ -30,7 +37,15 @@ const handleLogin = async () => {
         const at = resp.data.data.accessToken;
         authStore.setAccessToken(at);
         console.log(email.value + ' ' + password.value);
-        await router.replace('/');
+
+        const { data } = await getFamousQuotes(at); // token으로 명언 불러오기
+        quote.value = data?.data || '오늘의 명언을 불러오지 못했습니다.';
+        showModal.value = true;
+
+        setTimeout(() => {
+            showModal.value = false;
+            router.replace('/');
+        }, 3000);
     } catch (e) {
         toast.error(e.response.data.message);
     }
@@ -59,6 +74,7 @@ const handleLogin = async () => {
                 <RouterLink to="signup">회원가입</RouterLink>
             </div>
         </div>
+        <FamousQuotesModal v-if="showModal" :title="quote" />
     </div>
 </template>
 

@@ -2,18 +2,33 @@
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ShortTermList from '@/features/calendar/components/ShortTermList.vue'
+import MyPageModal from '@/features/user/components/MyPageModal.vue'
 import NotificationModal from '@/features/main/components/NotificationModal.vue';
+import { getNotifications } from '@/features/main/api';
+import { onMounted } from 'vue'
+
+
 
 const router = useRouter();
 const route = useRoute();
 
 const showTodayModal = ref(false);
 const showNotificationModal = ref(false);
+const showMyPageModal = ref(false)
 
 const closeModals = () => {
     showTodayModal.value = false;
     showNotificationModal.value = false;
 };
+
+const handleLevelUp = () => {
+  showMyPageModal.value = true
+}
+
+const handleShowToday = () => {
+  showNotificationModal.value = false
+  showTodayModal.value = true
+}
 
 const todayDate = new Date().toISOString().slice(0, 10);
 
@@ -36,11 +51,33 @@ const aiSuggestions = ref([
     { content: '프론트엔드 초기 세팅 끝내기' }
 ]);
 
-const notifications = ref([
-    { noti_id: 1, content: '경험치가 +10 증가하였습니다!' },
-    { noti_id: 2, content: '오늘의 할 일을 확인해보세요!' },
-    { noti_id: 3, content: '아직 남은 할 일이 있어요! 확인해보세요!' },
-]);
+const notifications = ref([])
+const fetchNotifications = async () => {
+  try {
+    const res = await getNotifications({ limit: 30, offset: 0 })
+    console.log('📦 API 응답 결과:', res)
+    const notiList = res?.data?.data?.notifications ?? []
+    console.log('🔔 알림 리스트:', notiList)
+    notifications.value = notiList.map((n, idx) => ({
+      noti_id: n.notificationId, // ← 여기 중요!
+      content: n.content,
+      isRead: n.isRead,
+      createdAt: n.createdAt,
+      categoryId: n.categoryId
+    }))
+    console.log('🎯 알림 상태값(vue ref):', notifications.value)
+
+  } catch (err) {
+    console.error('알림 불러오기 실패:', err)
+  }
+}
+const unreadCount = computed(() =>
+    notifications.value.filter(n => n.isRead === 'N').length
+)
+
+onMounted(() => {
+  fetchNotifications()
+})
 
 const addTodo = () => {
     const newId = Date.now()
@@ -94,7 +131,7 @@ const toggleNotificationModal = () => {
 };
 
 const isMainOrCalendar = computed(() =>
-    route.path === '/' || route.path.startsWith('/calendar')
+    route.path === '/' || route.path === '/calendar'
 );
 
 </script>
@@ -102,22 +139,27 @@ const isMainOrCalendar = computed(() =>
 <template>
     <div class="icon-overlay" v-if="isMainOrCalendar">
 
-        <div class="today-container">
-            <img
-                src="@/assets/icons/notification.png"
-                alt="today-list"
-                class="icon-img cursor-pointer"
-                @click="toggleNotificationModal"
-            />
-            <div v-if="showNotificationModal" class="modal-content" @click.self="closeModals">
-                    <NotificationModal
-                        :selected-date="todayDate"
-                        @cancel="closeModals"
-                        :notifications="notifications"
-                    />
-            </div>
+      <div class="today-container">
+        <img
+            src="@/assets/icons/notification.png"
+            alt="today-list"
+            class="icon-img cursor-pointer"
+            @click="toggleNotificationModal"
+        />
+        <div v-if="unreadCount > 0" class="notification-bubble">
+          {{ unreadCount > 9 ? '9+' : unreadCount }}
         </div>
 
+        <div v-if="showNotificationModal" class="modal-content" @click.self="closeModals">
+          <NotificationModal
+              :selected-date="todayDate"
+              @cancel="closeModals"
+              @level-up="handleLevelUp"
+              @show-today="handleShowToday"
+              :notifications="notifications"
+          />
+        </div>
+      </div>
         <div class="today-container">
             <img
                 src="@/assets/icons/today.png"
@@ -139,11 +181,12 @@ const isMainOrCalendar = computed(() =>
                     @add-suggested-todo="addSuggestedTodo"
                     @confirm="handleConfirm"
                     @cancel="goBack"
-                    @update:isModalOpen="val => isModalOpen.value = val"
+                    @update:isModalOpen="val => isModalOpen = val"
                 />
             </div>
         </div>
     </div>
+  <MyPageModal v-if="showMyPageModal" :isOpen="true" @close="showMyPageModal = false" />
 </template>
 
 <style scoped>
@@ -188,5 +231,34 @@ const isMainOrCalendar = computed(() =>
         height: 6rem;
     }
 }
+.notification-bubble {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: #FF6B6B;
+  color: white;
+  font-weight: bold;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px 12px 12px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  font-family: 'Gowun Dodum', sans-serif;
+  transform: translate(40%, -30%);
+  white-space: nowrap;
+}
+
+/* 말풍선 꼬리 추가 */
+.notification-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 6px;
+  width: 0;
+  height: 0;
+  border-top: 4px solid #FF6B6B;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+}
+
 
 </style>

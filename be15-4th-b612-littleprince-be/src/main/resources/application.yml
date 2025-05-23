@@ -4,6 +4,23 @@ server:
     context-path: /api/v1
 
 spring:
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    # ?? ?? ????!
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+        debug: true
   ai:
     openai:
       api-key: ${OPEN_AI_API_KEY}
@@ -39,4 +56,10 @@ springdoc:
   packages-to-scan: littleprince
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
+
+webpush:
+  vapid:
+    public-key: ${PUBLIC_KEY}
+    private-key: ${PRIVATE_KEY}
+    subject: ${SUBJECT}
 
