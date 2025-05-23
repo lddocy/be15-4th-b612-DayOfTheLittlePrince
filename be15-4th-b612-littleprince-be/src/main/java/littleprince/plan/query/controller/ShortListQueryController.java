@@ -52,14 +52,13 @@ public class ShortListQueryController {
     }
 
     // 단기 플랜 전체 조회 => task table 안에 있는 오늘 날짜 전체 조회(장기 플랜 내에 있는 것까지 포함한 모든 단기 리스트 조회)
-    @GetMapping("/short/{date}/all")
+    @GetMapping("/short/all")
     public ResponseEntity<ApiResponse<ShortListsAllResponse>> getShortListsAll(
-            @AuthenticationPrincipal CustomUserDetail customUserDetail,
-            @PathVariable Date date
+            @AuthenticationPrincipal CustomUserDetail customUserDetail
     ){
         Long memberId = customUserDetail.getMemberId();
 
-        ShortListsAllResponse response = planQueryService.getShortListsAll(memberId, date);
+        ShortListsAllResponse response = planQueryService.getShortListsAll(memberId);
 
         return ResponseEntity.ok(ApiResponse.success(response));
     }

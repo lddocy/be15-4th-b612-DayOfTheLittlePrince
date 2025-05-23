@@ -60,7 +60,7 @@
         , date
         FROM task
         WHERE member_id = #{ memberId }
-        AND date = #{ date }
+        AND date = CURDATE()
         ORDER BY created_at
     </select>
 
