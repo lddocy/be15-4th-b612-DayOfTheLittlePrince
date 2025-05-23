@@ -99,6 +99,7 @@ public class SecurityConfig {
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+//        config.addAllowedOrigin("*"); // 허용할 도메인
         config.addAllowedOrigin("http://localhost:5173"); // 허용할 도메인
         config.addAllowedOrigin("http://localhost:5174"); // 허용할 도메인
         config.addAllowedOrigin("http://localhost:5175"); // 허용할 도메인

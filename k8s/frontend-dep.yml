@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-dep
+spec:
+  selector:
+    matchLabels:
+      app: frontend-kube
+  template:
+    metadata:
+      labels:
+        app: frontend-kube
+    spec:
+      containers:
+        - name: frontend-container
+          image: toki0327/k8s-b612-frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80      # 5173이 아니라 80으로 바꿔야 한다.

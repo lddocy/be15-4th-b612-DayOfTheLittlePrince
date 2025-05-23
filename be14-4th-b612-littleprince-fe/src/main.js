@@ -43,4 +43,7 @@ async function bootstrap() {
     app.mount('#app');
 }
 
-await bootstrap();
+// 우회 방식
+(async () => {
+    await bootstrap()
+})()

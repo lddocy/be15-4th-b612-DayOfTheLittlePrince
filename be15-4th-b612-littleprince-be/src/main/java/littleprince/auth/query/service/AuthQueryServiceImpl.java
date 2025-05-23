@@ -43,6 +43,7 @@ public class AuthQueryServiceImpl implements AuthQueryService{
         if (!passwordEncoder.matches(request.getPassword(), foundMember.getPassword())) {
             throw new BusinessException(MemberErrorCode.INVALID_LOGIN_REQUEST);
         }
+        log.info("유저 찾기 완료");
 
         /* 로그인 성공 */
 
@@ -55,7 +56,7 @@ public class AuthQueryServiceImpl implements AuthQueryService{
 
         /* 5. redis에 토큰 저장 */
         refreshTokenRepository.save(foundMember.getMemberId(), refreshToken);
-
+        log.info("레디스에 토큰 저장 완료");
         /* 6. 사용자에게 토큰 전달 */
         return TokenResponse.builder()
                 .accessToken(accessToken)

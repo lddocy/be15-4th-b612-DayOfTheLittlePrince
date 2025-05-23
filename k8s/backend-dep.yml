@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-dep
+spec:
+  selector:
+    matchLabels:
+      app: backend-kube
+#   replicas: 3
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: backend-kube
+    spec:
+      containers:
+        - name: frontend-container
+          image: toki0327/k8s-b612-backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080

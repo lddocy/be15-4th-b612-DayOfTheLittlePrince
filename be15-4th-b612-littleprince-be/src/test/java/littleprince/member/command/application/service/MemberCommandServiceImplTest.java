@@ -1,7 +1,10 @@
 package littleprince.member.command.application.service;
 
 import littleprince.common.exception.BusinessException;
+import littleprince.item.command.application.service.BadgeCommandService;
+import littleprince.item.command.application.service.ItemCommandService;
 import littleprince.member.command.application.dto.request.SignupRequest;
+import littleprince.member.command.domain.aggregate.MemberDTO;
 import littleprince.member.command.mapper.MemberCommandMapper;
 import littleprince.member.exception.MemberErrorCode;
 import littleprince.member.fixture.SignupRequestFixture;
@@ -28,6 +31,10 @@ class MemberCommandServiceImplTest {
     private MemberCommandMapper memberCommandMapper;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private ItemCommandService itemCommandService;
+    @Mock
+    private BadgeCommandService badgeCommandService;
     @InjectMocks
     private MemberCommandServiceImpl memberCommandService;
 
@@ -58,22 +65,22 @@ class MemberCommandServiceImplTest {
         // given
         SignupRequest request = SignupRequestFixture.validRequest();
 
-        /* 존재하지 않는다는 가정 */
         when(memberQueryMapper.findMemberByEmail(request.getEmail()))
                 .thenReturn(Optional.empty());
 
-        /* 인코딩 된 패스워드 생성*/
         when(passwordEncoder.encode(request.getPassword()))
                 .thenReturn("encoded1234");
+
+        doAnswer(invocation -> {
+            MemberDTO member = invocation.getArgument(0);
+            member.setMemberId(1L);  // 임의의 ID 설정
+            return null;
+        }).when(memberCommandMapper).insertMember(any(MemberDTO.class));
 
         // when
         memberCommandService.signup(request);
 
         // then
-        /* verify(memberCommandMapper, times(1))
-         * : memberCommandMapper가 한번 호출 되었는지 확인!!*/
-        /* argThat
-         * : 전달된 인자가 조건을 만족하는지 확인 */
         verify(memberCommandMapper, times(1)).insertMember(argThat(member ->
                 member.getEmail().equals(request.getEmail()) &&
                         member.getPassword().equals("encoded1234")
