@@ -77,7 +77,7 @@
 
     /* 에러 메세지 : 연핑크 */
     .error-toast {
-        background-color: #B000B9;
+        background-color: #D61F1F;
         border-color: var(--dlp-lilacpink-50);
     }
 
