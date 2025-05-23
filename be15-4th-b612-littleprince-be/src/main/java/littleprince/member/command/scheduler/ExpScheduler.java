@@ -14,11 +14,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -33,7 +30,7 @@ public class ExpScheduler {
 
     /* 매일 오전 12시 1분에 실행 */
 //    @Scheduled(cron = "0 1 0 * * *")
-//@Scheduled(cron = "0 */1 * * * *")
+//@Scheduled(cron = "0 */1 * * * *") // 1분
     @Scheduled(cron = "*/20 * * * * *")
 @Transactional
     public void giveDailyExp() {
