@@ -206,8 +206,11 @@ const goBack = () => {
                  text-black rounded-full border border-white/10 transition">
             +
           </button>
-          <button @click="fetchAiSuggestions"
-                  class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition">
+          <button
+              @click="fetchAiSuggestions"
+              :disabled="isLoadingAi"
+              class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-2 py-1 rounded-xl text-sm border border-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             <span v-if="isLoadingAi">생성 중...</span>
             <span v-else>AI 생성하기</span>
           </button>

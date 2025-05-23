@@ -1,20 +1,29 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ShortTermList from '@/features/calendar/components/ShortTermList.vue'
 import MyPageModal from '@/features/user/components/MyPageModal.vue'
 import NotificationModal from '@/features/main/components/NotificationModal.vue';
 import { getNotifications } from '@/features/main/api';
-import { onMounted } from 'vue'
-
-
+import { getShortList, createShortTodo, deleteShortTodo, toggleCheck } from '@/features/calendar/api.js'
+import { useAuthStore } from '@/stores/auth.js'
+import { useToast } from 'vue-toastification';
 
 const router = useRouter();
 const route = useRoute();
+const toast = useToast();
+
+
+const authStore = useAuthStore();
+const todos = ref([]);
+const editable = ref({});
+const isModalOpen = ref(false);
+const todayDate = new Date().toISOString().slice(0, 10);
 
 const showTodayModal = ref(false);
 const showNotificationModal = ref(false);
 const showMyPageModal = ref(false)
+
 
 const closeModals = () => {
     showTodayModal.value = false;
@@ -30,26 +39,7 @@ const handleShowToday = () => {
   showTodayModal.value = true
 }
 
-const todayDate = new Date().toISOString().slice(0, 10);
-
-const todos = ref([
-    { task_id: 1, content: '단기 리스트 조회하기', is_checked: 'N' },
-    { task_id: 2, content: '인프런 스프링부트 1강 듣기', is_checked: 'N' },
-    { task_id: 3, content: '오운완', is_checked: 'N' },
-    { task_id: 4, content: '꽃동이 산책 20분 시키기', is_checked: 'N' },
-    { task_id: 5, content: '정보처리기사 chap01 끝내기', is_checked: 'Y' }
-]);
-
-const editable = ref({});
-const isModalOpen = ref(false);
-
-const aiSuggestions = ref([
-    { content: '어린왕자랑 놀아주기' },
-    { content: '바오밥 나무' },
-    { content: '푸바오밥주기' },
-    { content: '얼른 쉬기' },
-    { content: '프론트엔드 초기 세팅 끝내기' }
-]);
+const aiSuggestions = ref([]);
 
 const notifications = ref([])
 const fetchNotifications = async () => {
@@ -59,7 +49,7 @@ const fetchNotifications = async () => {
     const notiList = res?.data?.data?.notifications ?? []
     console.log('🔔 알림 리스트:', notiList)
     notifications.value = notiList.map((n, idx) => ({
-      noti_id: n.notificationId, // ← 여기 중요!
+      noti_id: n.notificationId,
       content: n.content,
       isRead: n.isRead,
       createdAt: n.createdAt,
@@ -75,8 +65,23 @@ const unreadCount = computed(() =>
     notifications.value.filter(n => n.isRead === 'N').length
 )
 
+const fetchTodayTodos = async () => {
+  try {
+    const res = await getShortList(authStore.accessToken, todayDate);
+    todos.value = res.data.data.shortList.map(item => ({
+      task_id: item.taskId,
+      content: item.content,
+      is_checked: item.isChecked
+    }));
+  } catch (err) {
+    console.error('오늘의 할 일 불러오기 실패:', err);
+    toast.error('오늘의 할 일을 불러오지 못했어요.');
+  }
+};
+
 onMounted(() => {
-  fetchNotifications()
+  fetchNotifications();
+  fetchTodayTodos();
 })
 
 const addTodo = () => {
@@ -85,13 +90,20 @@ const addTodo = () => {
     editable.value[newId] = true
 };
 
-const deleteTodo = (taskId) => {
-    if (editable.value[taskId]) {
-        todos.value = todos.value.filter(todo => todo.task_id !== taskId)
-        delete editable.value[taskId]
-    } else {
-      toast.error(`ID ${taskId} 삭제`)
+const deleteTodo = async (taskId) => {
+  if (editable.value[taskId]) {
+    todos.value = todos.value.filter(todo => todo.task_id !== taskId);
+    delete editable.value[taskId];
+  } else {
+    try {
+      await deleteShortTodo(authStore.accessToken, taskId);
+      todos.value = todos.value.filter(todo => todo.task_id !== taskId);
+      toast.success('할 일이 삭제되었습니다.');
+    } catch (err) {
+      console.error('삭제 실패:', err);
+      toast.error('삭제에 실패했습니다.');
     }
+  }
 };
 
 const updateTodoContent = (taskId, content) => {
@@ -99,20 +111,45 @@ const updateTodoContent = (taskId, content) => {
     if (target) target.content = content
 };
 
-const toggleTodoChecked = (taskId, checked) => {
-    const target = todos.value.find(todo => todo.task_id === taskId)
-    if (target) target.is_checked = checked ? 'Y' : 'N'
+const toggleTodoChecked = async (taskId, checked) => {
+  const target = todos.value.find(todo => todo.task_id === taskId);
+  if (target) {
+    try {
+      await toggleCheck(authStore.accessToken, taskId);
+      target.is_checked = checked ? 'Y' : 'N';
+    } catch (err) {
+      console.error('체크 상태 변경 실패:', err);
+      toast.error('체크 상태 변경에 실패했어요.');
+    }
+  }
 };
 
 const addSuggestedTodo = (content) => {
     const newId = Date.now()
     todos.value.push({ task_id: newId, content, is_checked: 'N' })
+    editable.value[newId] = true
 };
 
-const handleConfirm = () => {
-    todos.value = todos.value.filter(todo => todo.content.trim() !== '')
-    editable.value = {}
-    toast.error('할 일이 저장되었습니다.')
+const handleConfirm = async () => {
+  const newTodos = todos.value.filter(todo => editable.value[todo.task_id]);
+  if (newTodos.length === 0) {
+    toast.error('저장할 새로운 할 일이 없어요.');
+    return;
+  }
+  try {
+    for (const todo of newTodos) {
+      await createShortTodo(authStore.accessToken, {
+        content: todo.content,
+        date: todayDate
+      });
+    }
+    toast.success('할 일이 저장되었습니다.');
+    await fetchTodayTodos();
+    editable.value = {};
+  } catch (err) {
+    console.error('저장 실패:', err);
+    toast.error('할 일을 저장하는 데 실패했어요.');
+  }
 };
 
 const goBack = () => {
@@ -173,7 +210,6 @@ const isMainOrCalendar = computed(() =>
                     :todos="todos"
                     :editable="editable"
                     :is-modal-open="isModalOpen"
-                    :ai-suggestions="aiSuggestions"
                     @update-content="updateTodoContent"
                     @toggle-checked="toggleTodoChecked"
                     @delete-todo="deleteTodo"
