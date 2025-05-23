@@ -16,14 +16,13 @@ public class NotificationQueryService {
 
     private final NotificationQueryMapper notificationQueryMapper;
 
-    public NotificationListResponse getByMemberId(Long memberId, int page, int size) {
-        int offset = page * size;
+    public NotificationListResponse getByMemberId(Long memberId, int offset, int limit) {
 
         List<NotificationDto> dtos =
-                notificationQueryMapper.findByMemberIdWithPaging(memberId, offset, size);
+                notificationQueryMapper.findByMemberIdWithPaging(memberId, offset, limit);
 
         List<NotificationResponse> notifications = dtos.stream()
-                .map(dto -> new NotificationResponse(dto.getNotificationId(),dto.getTemplate(), dto.getCreatedAt(), dto.getIsRead(), dto.getCategoryId()))
+                .map(dto -> new NotificationResponse(dto.getNotificationId(),dto.getContent(), dto.getCreatedAt(), dto.getIsRead(), dto.getCategoryId()))
                 .collect(Collectors.toList());
 
         long unreadCount = notificationQueryMapper.countUnreadByMemberId(memberId);

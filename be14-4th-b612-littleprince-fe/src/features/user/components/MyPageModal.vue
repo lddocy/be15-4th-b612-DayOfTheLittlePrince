@@ -1,4 +1,209 @@
-  <template>
+<script setup>
+import { ref, computed, watchEffect, onMounted } from 'vue';
+import DeleteAccountModal from '@/features/user/components/DeleteAccountModal.vue';
+import { useAuthStore } from '@/stores/auth';
+import { fetchMyBadges, fetchMyExp, fetchMyItems } from '@/features/user/api';
+import { selectBadge } from '@/features/user/api';
+const authStore = useAuthStore();
+import { toggleItemHidden } from '@/features/user/api';
+import { fetchTaskCompletionRate } from '@/features/user/api';
+import { useUserStore } from '@/stores/user';
+
+onMounted(async () => {
+  try {
+    /* 칭호 데이터 */
+    const badgeRes = await fetchMyBadges();
+    console.log('fetchMyBadges 응답:', badgeRes);
+
+    titles.value = badgeRes.badges.map((badge) => ({
+      badgeId: badge.badgeId,
+      label: badge.badgeName,
+      description: badge.badgeMean,
+      isSelected: badge.isSelected,
+    }));
+
+
+    badgeRes.badges.forEach((badge, index) => {
+      if (badge.isSelected === 'Y') {
+        selectedTitleIndex.value = index;
+        titles.value[index].selected = true;
+      }
+    });
+
+    /* 경험치 */
+    const expRes = await fetchMyExp();
+    console.log('fetchMyExp 응답:', expRes);
+
+    currentExp.value = expRes.currentExp;
+    maxExp.value = expRes.totalExpToNextLevel;
+    currentLevel.value = expRes.currentLevel;
+    nextLevel.value = expRes.currentLevel + 1;
+
+    /* 아이템 */
+    const itemRes = await fetchMyItems();
+    console.log('fetchMyItems 응답:', itemRes);
+
+    const levelToImageName = {
+      1: 'fox',
+      2: 'water-well',
+      3: 'wine',
+      4: 'sheep',
+      5: 'flowers',
+      6: 'baobab-tree',
+      7: 'bigplane',
+      8: 'blue-planet',
+      9: 'royalty',
+      10: 'crown'
+    };
+    items.value = itemRes
+        .filter(item => item.level > 0)
+        .map(item => ({
+          itemId: item.itemId,
+          imagePath: levelToImageName[item.level]
+              ? `/itemimages/${item.level}-${levelToImageName[item.level]}.png`
+              : null,
+          isHidden: item.isHidden,
+        }));
+
+    /* 달성률 */
+    const rateRes = await fetchTaskCompletionRate();
+    console.log('fetchTaskCompletionRate 응답:', rateRes);
+
+    totalRate.value = rateRes.data.totalRate;
+    monthlyRate.value = rateRes.data.monthlyRate;
+
+
+  } catch (e) {
+    console.error('데이터 조회 실패:', e);
+  }
+});
+
+defineProps({ isOpen: Boolean });
+defineEmits(['close']);
+
+const tabs = ['칭호', '달성률', '경험치'];
+const activeTab = ref(null);
+const selectedTitleIndex = ref(-1);
+
+
+// 칭호
+const titles = ref([]);
+
+// 달성률
+const totalRate = ref(0);
+const monthlyRate = ref(0);
+const animatedTotalRate = ref(0);
+const animatedMonthlyRate = ref(0);
+
+watchEffect(() => {
+  if (activeTab.value === '달성률') {
+    animateProgress(animatedTotalRate, totalRate.value);
+    animateProgress(animatedMonthlyRate, monthlyRate.value);
+  }
+});
+
+function animateProgress(refValue, target, speed = 10) {
+  refValue.value = 0;
+  const interval = setInterval(() => {
+    if (refValue.value < target) {
+      refValue.value += 1;
+    } else {
+      refValue.value = target;
+      clearInterval(interval);
+    }
+  }, speed);
+}
+const itemsPerPage = 4;
+const currentPage = ref(1); // 0부터 시작
+
+const paginatedItems = computed(() => {
+  const start = currentPage.value * itemsPerPage;
+  return items.value.slice(start, start + itemsPerPage);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(items.value.length / itemsPerPage);
+});
+
+function goToPrevPage() {
+  if (currentPage.value > 0) currentPage.value--;
+}
+
+function goToNextPage() {
+  if (currentPage.value < totalPages.value - 1) currentPage.value++;
+}
+
+
+// 경험치 (동적으로 갱신)
+const currentExp = ref(0);
+const maxExp = ref(0);
+const currentLevel = ref(0);
+const nextLevel = ref(1);
+
+const expPercent = computed(() =>
+    Math.min((currentExp.value / maxExp.value) * 100, 100).toFixed(1)
+);
+
+const expLogs = [
+  '5 exp · 2025.05.20 일기 완료',
+  '10 exp · 2025.05.21 10개 완료',
+  '30 exp · 2025.05.22 마이페이지 진입',
+];
+
+// 사용자 아이템
+const items = ref([]);
+
+/* 칭호 선택 함수 */
+async function selectTitle(selectedIdx) {
+  const selectedBadge = titles.value[selectedIdx];
+
+  try {
+    await selectBadge(selectedBadge.badgeId); // 서버에 선택 요청
+
+    titles.value.forEach((t) => {
+      t.isSelected = 'N';
+    });
+
+    // 선택된 것만 'Y'로 설정
+    titles.value[selectedIdx].isSelected = 'Y';
+
+    await userStore.loadMemberInfo();
+
+  } catch (e) {
+    console.error('칭호 선택 실패:', e);
+  }
+}
+function selectItem(idx) {
+  items.value[idx].selected = !items.value[idx].selected;
+}
+const showDeleteModal = ref(false);
+const MAX_LEVEL = 10; // 만렙
+
+const nextLevelText = computed(() => {
+  return currentLevel.value >= MAX_LEVEL
+      ? '최고 레벨입니다'
+      : `LV.${nextLevel.value}`;
+});
+
+/* 아이템 토글 */
+async function toggleItemVisibility(idx) {
+  const item = items.value[idx];
+
+  try {
+    await toggleItemHidden(item.itemId); // 서버에 PATCH 요청
+    item.isHidden = item.isHidden === 'Y' ? 'N' : 'Y'; // 상태 반전
+    emit('refresh-item-map');
+  } catch (e) {
+    console.error('아이템 숨김 토글 실패:', e);
+  }
+}
+const userStore = useUserStore();
+function onClickTitle(title) {
+  userStore.setTitle(title);
+}
+</script>
+
+<template>
       <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div
               class="bg-[#f9f9fb] w-[800px] rounded-[32px] p-10 shadow-lg relative border border-white/40">
@@ -231,203 +436,3 @@
               @confirm="handleAccountDeletion" />
       </div>
   </template>
-
-  <script setup>
-  import { ref, computed, watchEffect, onMounted } from 'vue';
-  import DeleteAccountModal from '@/features/user/components/DeleteAccountModal.vue';
-  import { useAuthStore } from '@/stores/auth';
-  import { fetchMyBadges, fetchMyExp, fetchMyItems } from '@/features/user/api';
-  import { selectBadge } from '@/features/user/api';
-  const authStore = useAuthStore();
-  import { toggleItemHidden } from '@/features/user/api';
-  import { fetchTaskCompletionRate } from '@/features/user/api';
-
-  onMounted(async () => {
-    try {
-      /* 칭호 데이터 */
-      const badgeRes = await fetchMyBadges();
-      console.log('fetchMyBadges 응답:', badgeRes);
-
-      titles.value = badgeRes.badges.map((badge) => ({
-        badgeId: badge.badgeId,
-        label: badge.badgeName,
-        description: badge.badgeMean,
-        isSelected: badge.isSelected,
-      }));
-
-
-      badgeRes.badges.forEach((badge, index) => {
-        if (badge.isSelected === 'Y') {
-          selectedTitleIndex.value = index;
-          titles.value[index].selected = true;
-        }
-      });
-
-      /* 경험치 */
-      const expRes = await fetchMyExp();
-      console.log('fetchMyExp 응답:', expRes);
-
-      currentExp.value = expRes.currentExp;
-      maxExp.value = expRes.totalExpToNextLevel;
-      currentLevel.value = expRes.currentLevel;
-      nextLevel.value = expRes.currentLevel + 1;
-
-      /* 아이템 */
-      const itemRes = await fetchMyItems();
-      console.log('fetchMyItems 응답:', itemRes);
-
-      const levelToImageName = {
-        1: 'fox',
-        2: 'water-well',
-        3: 'wine',
-        4: 'sheep',
-        5: 'flowers',
-        6: 'baobab-tree',
-        7: 'bigplane',
-        8: 'blue-planet',
-        9: 'royalty',
-        10: 'crown'
-      };
-      items.value = itemRes
-          .filter(item => item.level > 0)
-          .map(item => ({
-            itemId: item.itemId,
-            imagePath: levelToImageName[item.level]
-                ? `/itemimages/${item.level}-${levelToImageName[item.level]}.png`
-                : null,
-            isHidden: item.isHidden,
-          }));
-
-      /* 달성률 */
-      const rateRes = await fetchTaskCompletionRate();
-      console.log('fetchTaskCompletionRate 응답:', rateRes);
-
-      totalRate.value = rateRes.data.totalRate;
-      monthlyRate.value = rateRes.data.monthlyRate;
-
-
-    } catch (e) {
-      console.error('데이터 조회 실패:', e);
-    }
-  });
-
-  defineProps({ isOpen: Boolean });
-  defineEmits(['close']);
-
-  const tabs = ['칭호', '달성률', '경험치'];
-  const activeTab = ref(null);
-  const selectedTitleIndex = ref(-1);
-
-
-  // 칭호
-  const titles = ref([]);
-
-  // 달성률
-  const totalRate = ref(0);
-  const monthlyRate = ref(0);
-  const animatedTotalRate = ref(0);
-  const animatedMonthlyRate = ref(0);
-
-  watchEffect(() => {
-    if (activeTab.value === '달성률') {
-      animateProgress(animatedTotalRate, totalRate.value);
-      animateProgress(animatedMonthlyRate, monthlyRate.value);
-    }
-  });
-
-  function animateProgress(refValue, target, speed = 10) {
-    refValue.value = 0;
-    const interval = setInterval(() => {
-      if (refValue.value < target) {
-        refValue.value += 1;
-      } else {
-        refValue.value = target;
-        clearInterval(interval);
-      }
-    }, speed);
-  }
-  const itemsPerPage = 4;
-  const currentPage = ref(0); // 0부터 시작
-
-  const paginatedItems = computed(() => {
-    const start = currentPage.value * itemsPerPage;
-    return items.value.slice(start, start + itemsPerPage);
-  });
-
-  const totalPages = computed(() => {
-    return Math.ceil(items.value.length / itemsPerPage);
-  });
-
-  function goToPrevPage() {
-    if (currentPage.value > 0) currentPage.value--;
-  }
-
-  function goToNextPage() {
-    if (currentPage.value < totalPages.value - 1) currentPage.value++;
-  }
-
-
-  // 경험치 (동적으로 갱신)
-  const currentExp = ref(0);
-  const maxExp = ref(0);
-  const currentLevel = ref(0);
-  const nextLevel = ref(1);
-
-  const expPercent = computed(() =>
-      Math.min((currentExp.value / maxExp.value) * 100, 100).toFixed(1)
-  );
-
-  const expLogs = [
-    '5 exp · 2025.05.20 일기 완료',
-    '10 exp · 2025.05.21 10개 완료',
-    '30 exp · 2025.05.22 마이페이지 진입',
-  ];
-
-  // 사용자 아이템
-  const items = ref([]);
-
-  /* 칭호 선택 함수 */
-  async function selectTitle(selectedIdx) {
-    const selectedBadge = titles.value[selectedIdx];
-
-    try {
-      await selectBadge(selectedBadge.badgeId);
-
-      // 모든 칭호의 isSelected를 'N'으로 초기화
-      titles.value.forEach((t) => {
-        t.isSelected = 'N';
-      });
-
-      // 선택된 것만 'Y'로 설정
-      titles.value[selectedIdx].isSelected = 'Y';
-
-    } catch (e) {
-      console.error('칭호 선택 실패:', e);
-    }
-  }
-  function selectItem(idx) {
-    items.value[idx].selected = !items.value[idx].selected;
-  }
-  const showDeleteModal = ref(false);
-  const MAX_LEVEL = 10; // 만렙
-
-  const nextLevelText = computed(() => {
-    return currentLevel.value >= MAX_LEVEL
-        ? '최고 레벨입니다'
-        : `LV.${nextLevel.value}`;
-  });
-
-  /* 아이템 토글 */
-  async function toggleItemVisibility(idx) {
-    const item = items.value[idx];
-
-    try {
-      await toggleItemHidden(item.itemId); // 서버에 PATCH 요청
-      item.isHidden = item.isHidden === 'Y' ? 'N' : 'Y'; // 상태 반전
-    } catch (e) {
-      console.error('아이템 숨김 토글 실패:', e);
-    }
-  }
-
-
-  </script>

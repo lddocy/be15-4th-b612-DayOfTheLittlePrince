@@ -41,15 +41,15 @@ const handleConfirm = async () => {
     try {
       // 1. 프로젝트 생성
       const res = await createLongTodo(authStore.accessToken, {
-        title: title.value.trim(),
+        title: title.value.trim() ,
         startDate: startDate.value,
         endDate: endDate.value,
       })
 
       const projectId = res.data.data
 
-      if (projectId) {
-        toast.success("장기 플랜이 등록되었습니다.")
+      if (!projectId) {
+        toast.error("장기 플랜이 등록 실패")
       }
 
       // 2. 프로젝트에 연결된 체크리스트 생성

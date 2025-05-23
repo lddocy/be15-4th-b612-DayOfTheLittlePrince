@@ -1,8 +1,10 @@
 <script setup>
 import { markNotificationAsRead } from '@/features/main/api'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
-const emit = defineEmits(['cancel', 'level-up']) // level-up: 상위에서 마이페이지 모달 띄움
+const emit = defineEmits(['cancel', 'level-up', 'show-today'])
 const props = defineProps({ notifications: Array })
 
 // ✅ 모달 닫기 버튼
@@ -28,7 +30,13 @@ const handleNotificationClick = async (noti) => {
       emit('level-up')
       break
     case 2:
-      console.log('오늘의 할 일 알림 → 처리 예정')
+      console.log('오늘의 할일 모달 띄우기')
+      emit('show-today')
+      break
+    case 3:
+      console.log('캘린더 페이지로 이동')
+      router.push('/calendar')
+      emit('cancel')
       break
     default:
       console.log('기타 알림')
@@ -37,41 +45,40 @@ const handleNotificationClick = async (noti) => {
 </script>
 
 <template>
-    <div class="w-[500px] h-[75vh] bg-[#E8D0FF]/30 rounded-2xl p-6 flex flex-col text-black shadow-lg overflow-y-auto self-center">
+  <div class="w-[500px] h-[75vh] bg-[#E8D0FF]/30 rounded-2xl p-6 flex flex-col text-black shadow-lg self-center overflow-hidden">
 
-        <!-- 제목 -->
-        <div style="color: var(--dlp-lavender-100); font-size: var(--dlp-font-size-text-md); margin-bottom: 15px;">
-            알림
-        </div>
-
-        <div class="w-full h-[1px] bg-white/20 mb-6" />
-
-      <!--알림 목록-->
-        <div class="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-1 w-[90%] ml-4">
-          <div
-              v-for="noti in props.notifications"
-              :key="noti.noti_id"
-              @click="handleNotificationClick(noti)"
-              :class="[
-              'group flex items-center justify-between px-3 py-2 rounded-xl h-[40px] cursor-pointer',
-              noti.isRead === 'Y' ? 'bg-dlp_card/20' : 'bg-dlp_card/40 font-bold',
-              'hover:bg-dlp_card_hover/80'
-              ]"
-                >
-            <!-- 변경 -->
-            <span class="bg-transparent text-sm text-[#161717] outline-none w-full">
-              {{ noti.template }}
-            </span>
-          </div>
-            <!-- 확인 버튼 -->
-            <div class="flex justify-end mt-auto gap-2">
-                <button
-                    @click="handleCancel"
-                    class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-4 py-1 rounded-xl text-sm border border-white/10 transition"
-                >
-                    확인
-                </button>
-            </div>
-        </div>
+    <!-- 제목 -->
+    <div style="color: var(--dlp-lavender-100); font-size: var(--dlp-font-size-text-md); margin-bottom: 15px;">
+      알림
     </div>
+    <div class="w-full h-[1px] bg-white/20 mb-4" />
+
+    <!-- 알림 목록 (스크롤 영역) -->
+    <div class="flex flex-col gap-2 overflow-y-auto pr-1 w-[90%] ml-4 mb-4 max-h-[calc(75vh-140px)]">
+      <div
+          v-for="noti in props.notifications"
+          :key="noti.noti_id"
+          @click="handleNotificationClick(noti)"
+          :class="[
+          'group flex items-center justify-between px-3 py-2 rounded-xl h-[40px] cursor-pointer',
+          noti.isRead === 'Y' ? 'bg-dlp_card/20' : 'bg-dlp_card/40 font-bold',
+          'hover:bg-dlp_card_hover/80'
+        ]"
+      >
+        <span class="bg-transparent text-sm text-[#161717] w-full">
+          {{ noti.content }}
+        </span>
+      </div>
+    </div>
+
+    <!-- 확인 버튼 (스크롤 영향 X) -->
+    <div class="flex justify-end gap-2 mt-auto pr-6">
+      <button
+          @click="handleCancel"
+          class="bg-dlp_card/40 hover:bg-dlp_card_hover/80 text-black px-4 py-1 rounded-xl text-sm border border-white/10 transition"
+      >
+        확인
+      </button>
+    </div>
+  </div>
 </template>

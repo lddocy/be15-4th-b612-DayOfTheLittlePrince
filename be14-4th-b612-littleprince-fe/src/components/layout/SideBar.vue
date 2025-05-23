@@ -5,7 +5,10 @@ import MyPageModal from '@/features/user/components/MyPageModal.vue';
 import { useAuthStore } from '/src/stores/auth.js';
 import { useToast } from 'vue-toastification';
 import { logout } from '@/features/user/api.js';
+import { useUIStore } from '@/stores/ui'
+import { nextTick } from 'vue'
 
+const uiStore = useUIStore()
 const router = useRouter();
 const toast = useToast();
 const authStore = useAuthStore();
@@ -48,6 +51,31 @@ function navigate(target) {
             break;
     }
 }
+
+const handleCapture = async () => {
+  uiStore.isCapturing = true
+  await nextTick()
+  await new Promise(resolve => setTimeout(resolve, 100))
+
+  const canvas = document.querySelector('.scene-container canvas')
+  if (!canvas) {
+    toast.error('캔버스를 찾을 수 없어요 😢')
+    uiStore.isCapturing = false
+    return
+  }
+
+  const image = canvas.toDataURL('image/png')
+  const link = document.createElement('a')
+  link.href = image
+  link.download = `my-planet-${new Date().toISOString().slice(0, 10)}.png`
+  link.click()
+
+  toast.success('🌍 내 우주가 저장되었어요!')
+
+  setTimeout(() => {
+    uiStore.isCapturing = false
+  }, 1000)
+}
 </script>
 
 <template>
@@ -57,6 +85,7 @@ function navigate(target) {
             <!-- 로고 -->
             <div class="flex flex-col items-center cursor-pointer" @click="navigate('main')">
                 <img
+                    alt="mini-logo"
                     src="@/assets/icons/mini-logo.png"
                     class="w-20 h-20 md:w-24 md:h-24 lg:w-32 lg:h-32" />
             </div>
@@ -81,6 +110,7 @@ function navigate(target) {
                 </div>
                 <!-- 캡처모드 -->
                 <div
+                    @click="handleCapture"
                     class="bg-white/20 p-1 rounded-2xl hover:bg-dlp_purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 cursor-pointer">
                     <img
                         src="@/assets/icons/capture.png"
@@ -98,7 +128,11 @@ function navigate(target) {
                 </div>
             </div>
         </div>
-        <MyPageModal :isOpen="isMyPageOpen" @close="isMyPageOpen = false" />
+        <MyPageModal
+            :isOpen="isMyPageOpen"
+            @close="isMyPageOpen = false"
+            @refresh-item-map="$emit('refresh-item-map')"
+        />
     </div>
 </template>
 
