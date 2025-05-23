@@ -1,13 +1,16 @@
 <script setup>
 import { ref, watch } from 'vue';
+import { useUserStore } from '@/stores/user';
+const userStore = useUserStore();
+import { computed } from 'vue';
+
 
 const props = defineProps({
     memberInfo: Object,
     current: { type: Number, default: 0 },
     max: { type: Number, default: 0 },
-    badge: { type: String, default: '이름 없음' },
 });
-
+const badge = computed(() => userStore.memberInfo?.badgeName?.trim() || '우주 먼지');
 const emit = defineEmits(['edit-planet-name']);
 
 const isEditing = ref(false);
