@@ -75,7 +75,7 @@
         border-color: var(--dlp-lilacpink-50);
     }
 
-    /* 에러 메세지 : 연핑크 */
+    /* 에러 메세지 : 빨강 */
     .error-toast {
         background-color: #D61F1F;
         border-color: var(--dlp-lilacpink-50);
