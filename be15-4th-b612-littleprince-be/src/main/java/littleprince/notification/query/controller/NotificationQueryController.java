@@ -22,13 +22,13 @@ public class NotificationQueryController {
     @GetMapping
     public ResponseEntity<ApiResponse<NotificationListResponse>> getMyNotifications(
             @AuthenticationPrincipal CustomUserDetail user,
-            @RequestParam(defaultValue = "0") int page
+            @RequestParam(defaultValue = "30") int limit,
+            @RequestParam(defaultValue = "0") int offset
     ) {
         Long memberId = user.getMemberId();
-        int size = 5;
 
         NotificationListResponse response =
-                notificationQueryService.getByMemberId(memberId, page, size);
+                notificationQueryService.getByMemberId(memberId, offset, limit); // 순서 주의!
 
         return ResponseEntity.ok(ApiResponse.success(response));
     }

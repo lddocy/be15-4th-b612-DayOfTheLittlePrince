@@ -57,10 +57,10 @@ export function toggleItemHidden(accessToken, itemId) {
 }
 
 /* 알림 조회 */
-export const getNotifications = async () => {
-    const response = await api.get('/notifications');
-    return response.data;
-};
+export const getNotifications = ({ limit = 30, offset = 0 }) =>
+    api.get('/notifications', {
+        params: { limit, offset }
+    });
 
 /* 읽음 처리*/
 export const markNotificationAsRead = (notificationId) => {

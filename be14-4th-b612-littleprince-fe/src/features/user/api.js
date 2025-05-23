@@ -34,6 +34,11 @@ export async function fetchTaskCompletionRate() {
     return res.data; // { totalRate, monthlyRate }
 }
 
+/* 푸시 알림용*/
+export function subscribePush(subscription) {
+    return api.post('/push/subscribe', subscription);
+}
+
 export function signup(data) {
     return api.post('/member/signup', data);
 }

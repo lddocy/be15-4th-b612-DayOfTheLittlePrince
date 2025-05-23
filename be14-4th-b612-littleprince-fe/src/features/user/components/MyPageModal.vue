@@ -348,7 +348,7 @@
     }, speed);
   }
   const itemsPerPage = 4;
-  const currentPage = ref(0); // 0부터 시작
+  const currentPage = ref(1); // 0부터 시작
 
   const paginatedItems = computed(() => {
     const start = currentPage.value * itemsPerPage;
