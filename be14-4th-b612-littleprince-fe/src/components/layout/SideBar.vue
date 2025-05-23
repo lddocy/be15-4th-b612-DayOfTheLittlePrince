@@ -85,6 +85,7 @@ const handleCapture = async () => {
             <!-- 로고 -->
             <div class="flex flex-col items-center cursor-pointer" @click="navigate('main')">
                 <img
+                    alt="mini-logo"
                     src="@/assets/icons/mini-logo.png"
                     class="w-20 h-20 md:w-24 md:h-24 lg:w-32 lg:h-32" />
             </div>
@@ -127,7 +128,11 @@ const handleCapture = async () => {
                 </div>
             </div>
         </div>
-        <MyPageModal :isOpen="isMyPageOpen" @close="isMyPageOpen = false" />
+        <MyPageModal
+            :isOpen="isMyPageOpen"
+            @close="isMyPageOpen = false"
+            @refresh-item-map="$emit('refresh-item-map')"
+        />
     </div>
 </template>
 
