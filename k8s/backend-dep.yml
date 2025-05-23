@@ -14,8 +14,104 @@ spec:
         app: backend-kube
     spec:
       containers:
-        - name: frontend-container
+        - name: backend-container
           image: toki0327/k8s-b612-backend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: database_url
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: password
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: port
+            - name: REDIS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: username
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: password
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: host
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: secret
+            - name: JWT_EXPIRATION
+              valueFrom:
+                configMapKeyRef:
+                  name: jwt-config
+                  key: at-expiration
+            - name: JWT_REFRESH_EXPIRATION
+              valueFrom:
+                configMapKeyRef:
+                  name: jwt-config
+                  key: rt-expiration
+            - name: EMAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: email-secret
+                  key: username
+            - name: EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: email-secret
+                  key: password
+            - name: EMAIL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: email-config
+                  key: port
+            - name: EMAIL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: email-config
+                  key: host
+            - name: OPEN_AI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ai-secret
+                  key: api-key
+            - name: OPEN_AI_MODEL_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: ai-secret
+                  key: model-name
+            - name: PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: web-push-secret
+                  key: public-key
+            - name: PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: web-push-secret
+                  key: private-key
+            - name: SUBJECT
+              valueFrom:
+                secretKeyRef:
+                  name: web-push-secret
+                  key: subject

@@ -7,12 +7,35 @@ spec:
     - name: mariadb
       image: mariadb:10.7
       env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "my-secret-pw"
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: root-password
+        - name: MARIADB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: database_name
+        - name: MARIADB_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: username
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
       volumeMounts:
         - name: mysql-storage
           mountPath: /var/lib/mysql
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d
   volumes:
     - name: mysql-storage
       persistentVolumeClaim:
         claimName: pvc-mysql
+    - name: init-script
+      configMap:
+        name: db-init-script
