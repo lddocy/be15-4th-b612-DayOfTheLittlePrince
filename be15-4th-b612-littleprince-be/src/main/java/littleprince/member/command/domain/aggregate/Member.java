@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @Setter(AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -38,12 +39,14 @@ public class Member {
 
     private LocalDate createdAt;
 
-    public void changePassword(String encryptPassword){
+    public void changePassword(String encryptPassword) {
         this.password = encryptPassword;
     }
 
     public void changePlanetName(String planetName) {
         this.planetName = planetName;
     }
+
+    public void delete() { this.isDeleted = StatusType.Y; }
 
 }

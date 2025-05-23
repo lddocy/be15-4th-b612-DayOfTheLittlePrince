@@ -2,12 +2,18 @@
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import DeleteAccountModal from '@/features/user/components/DeleteAccountModal.vue';
 import { useAuthStore } from '@/stores/auth';
-import { fetchMyBadges, fetchMyExp, fetchMyItems, fetchExpHistory } from '@/features/user/api';
+import { deleteMember, fetchMyBadges, fetchMyExp, fetchMyItems, fetchExpHistory } from '@/features/user/api';
+
 import { selectBadge } from '@/features/user/api';
-const authStore = useAuthStore();
 import { toggleItemHidden } from '@/features/user/api';
 import { fetchTaskCompletionRate } from '@/features/user/api';
 import { useUserStore } from '@/stores/user';
+import {useToast} from "vue-toastification";
+import {useRouter} from "vue-router";
+
+const authStore = useAuthStore();
+const router = useRouter();
+const toast = useToast();
 
 defineProps({ isOpen: Boolean });
 const emit = defineEmits(['close', 'refresh-item-map']);
@@ -105,6 +111,10 @@ onMounted(async () => {
     console.error('데이터 조회 실패:', e);
   }
 });
+
+
+const {isOpen, handleDeleteUser} = defineProps({ isOpen: Boolean, handleDeleteUser: Function });
+defineEmits(['close']);
 
 const tabs = ['칭호', '달성률', '경험치'];
 const activeTab = ref(null);
@@ -458,6 +468,6 @@ function onClickTitle(title) {
           <DeleteAccountModal
               :isOpen="showDeleteModal"
               @close="showDeleteModal = false"
-              @confirm="handleAccountDeletion" />
+              @confirm="handleDeleteUser" />
       </div>
   </template>
