@@ -1,6 +1,7 @@
 <script setup>
-import { useRoute } from 'vue-router';
-import { computed, ref } from 'vue';
+import { useRoute } from 'vue-router'
+import { computed, ref } from 'vue'
+import { useUIStore } from '@/stores/ui'
 
 import SideBar from '@/components/layout/SideBar.vue';
 import PlanetScene from "@/components/common/PlanetScene.vue";
@@ -10,6 +11,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 const route = useRoute();
 const useLayout = computed(() => route.meta.layout !== 'none');
 const isSceneLoading = ref(true);
+const uiStore = useUIStore();
 
 function handleSceneLoaded() {
     isSceneLoading.value = false;
@@ -20,11 +22,16 @@ function handleSceneLoaded() {
     <div id="app" class="flex h-screen w-screen overflow-hidden relative">
         <LoadingSpinner v-if="isSceneLoading" />
 
-        <SideBar v-if="useLayout" />
+        <!-- 사이드바 숨김 조건 -->
+        <SideBar v-if="useLayout && !uiStore.isCapturing" />
 
-        <div class="absolute bottom-6 left-[90px] lg:left-[160px] md:left-[120px] z-50">
-            <BgmPlayer />
-        </div>
+      <!-- 음악 플레이어 숨김 조건 -->
+      <div
+          v-show="!uiStore.isCapturing"
+          class="absolute bottom-6 left-[90px] lg:left-[160px] md:left-[120px] z-50"
+      >
+        <BgmPlayer />
+      </div>
 
         <!-- '/' 경로에서는 배경으로 안쓰이게 -->
         <PlanetScene
