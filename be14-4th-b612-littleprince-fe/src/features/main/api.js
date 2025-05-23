@@ -49,4 +49,11 @@ export const markNotificationAsRead = (notificationId) => {
     return api.patch(`/notifications/${notificationId}/read`)
 }
 
-
+/* 명언 랜덤 조회 */
+export function getFamousQuotes(accessToken) {
+    return api.get('/famous-quotes', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+}
