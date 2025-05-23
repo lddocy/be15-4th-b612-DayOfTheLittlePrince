@@ -1,45 +1,98 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Calendar from "@/features/calendar/components/Calendar.vue";
-import TodoList from "@/features/calendar/components/TodoList.vue";
+import Calendar from "@/features/calendar/components/Calendar.vue"
+import TodoList from "@/features/calendar/components/TodoList.vue"
 import AISuggestionModal from '@/features/calendar/components/AISuggestionModal.vue'
+import { useToast } from 'vue-toastification'
+
+
+import { useAuthStore } from '@/stores/auth'
+import { createShortTodo, createLongTodo, createProjectTasks } from '@/features/calendar/api'
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
+const toast = useToast();
+
 const toggle = ref(false)
 
-// 날짜 값을 쿼리에서 받음
 const startDate = ref(route.query.date || '')
 const endDate = ref('')
+const title = ref('')
 
-const todos = ref([
-  { task_id: 1, content: '요구사항 명세서 작성 끝내기', is_checked: 'N', project_id: null },
-  { task_id: 2, content: '인프런 스프링부트 1강 듣기', is_checked: 'N', project_id: 5 },
-  { task_id: 3, content: '피그마 작업 마무리하기', is_checked: 'N', project_id: null },
-  { task_id: 4, content: 'ERD 작업 시작하기', is_checked: 'N', project_id: 5 },
-  { task_id: 5, content: '프론트엔드 초기 세팅 끝내기', is_checked: 'Y', project_id: null }
-])
+const todos = ref([])
 
 const editable = ref({})
-
-// AI 모달
 const isModalOpen = ref(false)
-const aiSuggestions = ref([
-  { content: 'GitHub README 작성하기' },
-  { content: 'API 명세 정리하기' },
-  { content: 'AI 회의록 작성' },
-  { content: '추천4' },
-  { content: '추천5' }
-])
+const aiSuggestions = ref([])
 
-const handleConfirm = () => {
+const handleConfirm = async () => {
   todos.value = todos.value.filter(todo => todo.content.trim() !== '')
   editable.value = {}
-  alert('할 일이 등록되었습니다.')
+
+  if (toggle.value) {
+    // 장기 플랜
+    if (!startDate.value || !endDate.value || !title.value.trim()) {
+      toast.error('제목, 시작일, 종료일을 모두 입력해주세요.')
+      return
+    }
+
+    try {
+      // 1. 프로젝트 생성
+      const res = await createLongTodo(authStore.accessToken, {
+        title: title.value.trim() ,
+        startDate: startDate.value,
+        endDate: endDate.value,
+      })
+
+      const projectId = res.data.data
+
+      if (!projectId) {
+        toast.error("장기 플랜이 등록 실패")
+      }
+
+      // 2. 프로젝트에 연결된 체크리스트 생성
+      const tasks = todos.value.map(todo => ({
+        content: todo.content,
+        date: todo.date || startDate.value, // 날짜 지정 없으면 시작일로
+      }))
+
+      await createProjectTasks(authStore.accessToken, projectId, { tasks })
+
+      toast.success("장기 플랜이 등록되었습니다.")
+      return router.push(`/calendar/${startDate.value}/project/${projectId}`)
+
+    } catch (err) {
+      console.error(err)
+      toast.error('장기 플랜 등록 중 오류가 발생했습니다.')
+    }
+
+  } else {
+    // 단기 플랜
+    if (!startDate.value) {
+      toast.error('날짜를 선택해주세요.')
+      return
+    }
+
+    try {
+      for (const todo of todos.value) {
+        await createShortTodo(authStore.accessToken, {
+          content: todo.content,
+          date: startDate.value,
+        })
+      }
+
+      toast.success('단기 플랜이 등록되었습니다.')
+      router.push(`/calendar/${startDate.value}/todo`)
+
+    } catch (err) {
+      console.error(err)
+      alert('단기 플랜 등록 중 오류가 발생했습니다.')
+    }
+  }
 }
 
-// AI 추천 항목 추가 핸들러
 const addSuggestedTodo = (content) => {
   const newId = Date.now()
   todos.value.push({
@@ -49,6 +102,11 @@ const addSuggestedTodo = (content) => {
     project_id: null
   })
 }
+
+const backRouter = () => {
+  router.push(`/calendar/${route.query.date}`)
+}
+
 </script>
 
 <template>
@@ -76,11 +134,11 @@ const addSuggestedTodo = (content) => {
         </div>
 
         <!-- 제목 입력 -->
-        <div class="flex flex-col">
-          <input v-if="toggle" type="text" placeholder="제목을 입력하세요."
-                 class="w-full px-3 py-2 rounded-xl bg-[#C9C3E3]/40 text-black placeholder-[#161717]/50 border-none focus:outline-none text-sm" />
-        </div>
-
+        <input v-if="toggle"
+               v-model="title"
+               type="text"
+               placeholder="제목을 입력하세요."
+               class="w-full px-3 py-2 rounded-xl bg-[#C9C3E3]/40 text-black placeholder-[#161717]/50 border-none focus:outline-none text-sm" />
         <div class="w-full h-[1px] bg-white/40" />
 
         <!-- 투두 리스트 -->
@@ -94,7 +152,7 @@ const addSuggestedTodo = (content) => {
         <div class="flex justify-between mt-auto">
           <div class="flex gap-2 ml-auto">
             <button
-                @click="router.push('../../calendar')"
+                @click="backRouter"
                 class="bg-[#C9C3E3]/30 hover:bg-[#A49CAC]/60 text-black px-3 py-1 rounded-xl text-sm border border-white/10 transition">취소</button>
             <button
                 @click="handleConfirm"
