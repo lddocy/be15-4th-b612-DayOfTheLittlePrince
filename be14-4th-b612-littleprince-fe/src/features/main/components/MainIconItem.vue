@@ -90,7 +90,7 @@ const deleteTodo = (taskId) => {
         todos.value = todos.value.filter(todo => todo.task_id !== taskId)
         delete editable.value[taskId]
     } else {
-        alert(`ID ${taskId} 삭제`)
+      toast.error(`ID ${taskId} 삭제`)
     }
 };
 
@@ -112,7 +112,7 @@ const addSuggestedTodo = (content) => {
 const handleConfirm = () => {
     todos.value = todos.value.filter(todo => todo.content.trim() !== '')
     editable.value = {}
-    alert('할 일이 저장되었습니다.')
+    toast.error('할 일이 저장되었습니다.')
 };
 
 const goBack = () => {

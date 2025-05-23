@@ -88,7 +88,7 @@ const handleConfirm = async () => {
 
     } catch (err) {
       console.error(err)
-      alert('단기 플랜 등록 중 오류가 발생했습니다.')
+      toast.error('단기 플랜 등록 중 오류가 발생했습니다.')
     }
   }
 }

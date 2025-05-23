@@ -35,7 +35,7 @@ onMounted(async () => {
     }))
   } catch (e) {
     console.error('단기 투두 조회 실패:', e)
-    alert('투두 리스트를 불러오지 못했습니다.')
+    toast.error('투두 리스트를 불러오지 못했습니다.')
   }
 })
 
@@ -59,7 +59,7 @@ const deleteTodo = async (taskId) => {
         todos.value = todos.value.filter(todo => todo.task_id !== taskId)
       } catch (e) {
         console.error('삭제 실패:', e)
-        alert('삭제에 실패했습니다.')
+        toast.error('삭제에 실패했습니다.')
       }
     }
 }
@@ -81,7 +81,7 @@ const toggleTodoChecked = async (taskId, checked) => {
         target.is_checked = checked ? 'Y' : 'N'
       } catch (e) {
         console.error('체크 상태 토글 실패:', e)
-        alert('체크 상태 변경 실패')
+        toast.error('체크 상태 변경 실패')
       }
     }
 }
@@ -114,10 +114,10 @@ const handleConfirm = async () => {
     }))
 
     editable.value = {}
-    alert('할 일이 저장되었습니다.')
+    toast.error('할 일이 저장되었습니다.')
   } catch (e) {
     console.error('저장 실패:', e)
-    alert('저장에 실패했습니다.')
+    toast.error('저장에 실패했습니다.')
   }
 }
 
