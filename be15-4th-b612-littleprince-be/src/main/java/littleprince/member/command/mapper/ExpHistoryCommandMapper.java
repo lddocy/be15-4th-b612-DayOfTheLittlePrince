@@ -8,5 +8,5 @@ public interface ExpHistoryCommandMapper {
     void insertExpHistory(@Param("memberId") Long memberId, @Param("expPoint") int expPoint);
 
 
-    void insertExpHistoryId(Long memberId, int amount, Long projectId);
+    void insertExpHistoryId(@Param("memberId") Long memberId, @Param("expPoint") int expPoint, Long projectId);
 }

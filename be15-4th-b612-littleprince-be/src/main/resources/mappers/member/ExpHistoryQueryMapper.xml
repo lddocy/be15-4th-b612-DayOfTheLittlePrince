@@ -18,7 +18,6 @@
             count(*) totalExp
           FROM task
         WHERE member_id = #{ memberId }
-          AND project_id IS NULL
           AND is_checked = 'Y'
           AND date = CURDATE() - INTERVAL 1 DAY
     </select>
