@@ -12,6 +12,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 const route = useRoute();
 const useLayout = computed(() => route.meta.layout !== 'none');
 const isSceneLoading = ref(true);
+const uiStore = useUIStore();
 
 function handleSceneLoaded() {
   isSceneLoading.value = false;
@@ -63,8 +64,17 @@ onMounted(() => {
   <div id="app" class="flex h-screen w-screen overflow-hidden relative">
     <LoadingSpinner v-if="isSceneLoading" />
 
+        <!-- 사이드바 숨김 조건 -->
+        <SideBar v-if="useLayout && !uiStore.isCapturing" />
     <SideBar v-if="useLayout" />
 
+      <!-- 음악 플레이어 숨김 조건 -->
+      <div
+          v-show="!uiStore.isCapturing"
+          class="absolute bottom-6 left-[90px] lg:left-[160px] md:left-[120px] z-50"
+      >
+        <BgmPlayer />
+      </div>
     <div class="absolute bottom-6 left-[90px] lg:left-[160px] md:left-[120px] z-50">
       <BgmPlayer />
     </div>
