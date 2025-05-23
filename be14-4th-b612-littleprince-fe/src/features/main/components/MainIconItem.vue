@@ -232,33 +232,30 @@ const isMainOrCalendar = computed(() =>
         height: 6rem;
     }
 }
+
 .notification-bubble {
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: 0;
+  right: 0;
+  transform: translate(45%, 1%);
   background-color: #FF6B6B;
   color: white;
   font-weight: bold;
-  font-size: 0.7rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px 12px 12px 0;
+  font-size: 0.85rem;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   font-family: 'Gowun Dodum', sans-serif;
-  transform: translate(40%, -30%);
   white-space: nowrap;
 }
 
-/* 말풍선 꼬리 추가 */
+/* 말풍선 꼬리 제거 */
 .notification-bubble::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 6px;
-  width: 0;
-  height: 0;
-  border-top: 4px solid #FF6B6B;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
+  display: none;
 }
 
 
