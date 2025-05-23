@@ -6,11 +6,18 @@ import { sceneItems } from '@/assets/data/SceneItems.js';
 const props = defineProps({
     scene: Object,
     routePath: String,
+    memberLevel: Number,
+    itemVisibilityMap: Object,
 });
 
 const shouldShow = (path) => path === '/';
 
-function addItem({ path, name, position, scale, rotation = [0, 0, 0], onTraverse }) {
+function addItem({ path, name, position, scale, rotation = [0, 0, 0], onTraverse, level = 0 }) {
+    const isVisible = props.itemVisibilityMap?.[name] === 'N'; // isHidden === 'N'
+    const levelValid = props.memberLevel >= level;
+
+    if (!isVisible || !levelValid) return;
+
     loadGLTF(path, props.scene, (model) => {
         model.name = name;
 
@@ -18,7 +25,6 @@ function addItem({ path, name, position, scale, rotation = [0, 0, 0], onTraverse
             if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
-
                 if (onTraverse) onTraverse(child);
             }
         });
@@ -33,6 +39,7 @@ function addItem({ path, name, position, scale, rotation = [0, 0, 0], onTraverse
 }
 
 onMounted(() => {
+    if (!props.scene) return;
     sceneItems.forEach(addItem);
 });
 
@@ -46,6 +53,7 @@ watch(
             }
         });
     }
+
 );
 </script>
 

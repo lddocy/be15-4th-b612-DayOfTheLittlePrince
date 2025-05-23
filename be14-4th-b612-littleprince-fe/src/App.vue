@@ -4,17 +4,22 @@ import { computed, ref } from 'vue'
 import { useUIStore } from '@/stores/ui'
 
 import SideBar from '@/components/layout/SideBar.vue';
-import PlanetScene from "@/components/common/PlanetScene.vue";
+import PlanetScene from "@/features/main/components/PlanetScene.vue";
 import BgmPlayer from './components/common/BgmPlayer.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 
 const route = useRoute();
 const useLayout = computed(() => route.meta.layout !== 'none');
 const isSceneLoading = ref(true);
+const refreshItemMap = ref(0);
 const uiStore = useUIStore();
 
 function handleSceneLoaded() {
     isSceneLoading.value = false;
+}
+
+function handleItemVisibilityChange() {
+    refreshItemMap.value++;
 }
 </script>
 
@@ -22,10 +27,13 @@ function handleSceneLoaded() {
     <div id="app" class="flex h-screen w-screen overflow-hidden relative">
         <LoadingSpinner v-if="isSceneLoading" />
 
-        <!-- 사이드바 숨김 조건 -->
-        <SideBar v-if="useLayout && !uiStore.isCapturing" />
+        <!-- 사이드바 -->
+        <SideBar
+            v-if="useLayout && !uiStore.isCapturing"
+            @item-visibility-changed="handleItemVisibilityChange"
+        />
 
-      <!-- 음악 플레이어 숨김 조건 -->
+      <!-- BGM 플레이어 -->
       <div
           v-show="!uiStore.isCapturing"
           class="absolute bottom-6 left-[90px] lg:left-[160px] md:left-[120px] z-50"
@@ -36,6 +44,7 @@ function handleSceneLoaded() {
         <!-- '/' 경로에서는 배경으로 안쓰이게 -->
         <PlanetScene
             :class="{'planet-front' : route.path === '/'}"
+            :refresh-flag="refreshItemMap"
             @loaded="handleSceneLoaded"
         />
 
