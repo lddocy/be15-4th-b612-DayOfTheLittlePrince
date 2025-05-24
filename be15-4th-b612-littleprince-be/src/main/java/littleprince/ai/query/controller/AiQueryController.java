@@ -6,7 +6,6 @@ import littleprince.ai.query.dto.response.GeneratePlaneResponse;
 import littleprince.ai.query.service.AiQueryService;
 import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
-import littleprince.plan.query.dto.response.ShortListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "투두리스트")
+@Tag(name = "AI 투두 추천")
 @RestController
 @RequiredArgsConstructor()
 @RequestMapping("/ai")

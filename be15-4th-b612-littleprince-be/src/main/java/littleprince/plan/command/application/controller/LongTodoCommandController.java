@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/plans/long-todos")
-@Tag(name = "장기 투두 API", description = "장기 프로젝트 기반 투두 생성 API")
+@Tag(name = "장기 투두 리스트")
 public class LongTodoCommandController {
 
     private final LongTodoCommandService longTodoCommandService;
