@@ -25,8 +25,8 @@ public class ShortListQueryService {
     }
 
     // 모든 단기 리스트 조회
-    public ShortListsAllResponse getShortListsAll(Long memberId, Date date) {
-        List<ShortListsAllDTO> listAllDTO = shortListQueryMapper.getShortListsAll(memberId, date);
+    public ShortListsAllResponse getShortListsAll(Long memberId) {
+        List<ShortListsAllDTO> listAllDTO = shortListQueryMapper.getShortListsAll(memberId);
 
         return ShortListsAllResponse.builder()
                 .shortListsAll(listAllDTO)

@@ -52,15 +52,15 @@
 
     <select id="getShortListsAll" resultType="littleprince.plan.query.dto.response.ShortListsAllDTO">
         SELECT
-        task_id
-        , project_id
-        , member_id
-        , content
-        , is_checked
-        , date
+              task_id
+            , project_id
+            , member_id
+            , content
+            , is_checked
+            , date
         FROM task
         WHERE member_id = #{ memberId }
-        AND date = #{ date }
+        AND date = CURDATE()
         ORDER BY created_at
     </select>
 
