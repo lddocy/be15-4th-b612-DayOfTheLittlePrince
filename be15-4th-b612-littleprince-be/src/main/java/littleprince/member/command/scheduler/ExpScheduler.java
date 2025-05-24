@@ -29,10 +29,10 @@ public class ExpScheduler {
     private final TaskRepository taskRepository;
 
     /* 매일 오전 12시 1분에 실행 */
-//    @Scheduled(cron = "0 1 0 * * *")
+    @Scheduled(cron = "0 1 0 * * *")
 //@Scheduled(cron = "0 */1 * * * *") // 1분
-    @Scheduled(cron = "*/20 * * * * *")
-@Transactional
+//    @Scheduled(cron = "*/20 * * * * *") // 20초
+    @Transactional
     public void giveDailyExp() {
         List<MemberExpDTO> members = memberQueryMapper.findAllExpInfo();
 
