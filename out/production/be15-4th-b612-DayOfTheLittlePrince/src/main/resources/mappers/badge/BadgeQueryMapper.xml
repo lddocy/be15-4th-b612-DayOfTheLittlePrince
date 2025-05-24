@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="littleprince.item.query.mapper.GetBadgeQueryMapper">
+
+    <!--내가 얻은 칭호들 조회-->
+    <select id="findBadgesByMemberId" resultType="littleprince.item.query.dto.BadgeDTO">
+        SELECT
+        b.badge_id AS badgeId,
+        b.badge_name AS badgeName,
+        b.badge_mean AS badgeMean,
+        b.level AS level,
+        gb.is_selected AS isSelected
+        FROM get_badge gb
+        JOIN badge b ON gb.badge_id = b.badge_id
+        WHERE gb.member_id = #{memberId}
+    </select>
+
+    <!--해당 레벨에 따른 칭호 조회-->
+    <select id="findBadgeIdByLevel" resultType="long">
+        SELECT badge_id FROM badge WHERE level = #{level}
+    </select>
+
+    <!-- 내가 선택한 칭호 조회 -->
+    <select id="findSelectedBadgeByMemberId" resultType="String">
+        SELECT
+            b.badge_name
+        FROM badge b
+        JOIN get_badge gb ON gb.badge_id = b.badge_id
+        JOIN member m ON m.member_id = gb.member_id
+        WHERE gb.is_selected = 'Y'
+        AND m.member_id = #{ member_id }
+    </select>
+
+</mapper>

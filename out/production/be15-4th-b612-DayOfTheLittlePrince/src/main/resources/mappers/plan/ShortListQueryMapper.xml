@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="littleprince.plan.query.mapper.ShortListQueryMapper">
+    <!-- 단기 리스트  -->
+    <select id="getShortList" resultType="littleprince.plan.query.dto.response.ShortListDTO">
+        SELECT
+              task_id
+            , member_id
+            , content
+            , is_checked
+            , date
+          FROM task
+        WHERE member_id = #{ memberId }
+          AND date = #{ date }
+          AND project_id IS NULL
+        ORDER BY created_at
+    </select>
+
+    <!-- 단기플랜 리스트 있는 날 조회 -->
+    <!-- 있는지 없는지만 알려주면 되니까 DISTINCT 로 중복처리 -->
+    <select id="getShortDates" resultType="littleprince.plan.query.dto.response.ShortPlanDateDTO">
+        SELECT
+            DISTINCT date
+         FROM task
+        WHERE member_id = #{ memberId }
+          AND project_id IS NULL
+    </select>
+
+    <select id="getShortPlanByMemberId" resultType="littleprince.plan.query.dto.response.AiShortPlanDTO">
+        SELECT
+              content
+            , date
+        FROM
+            task
+        WHERE
+            member_id = #{ memberId }
+            AND project_id IS NULL
+            AND date >= CURDATE() - INTERVAL 10 DAY
+        ORDER BY date desc
+        LIMIT 50
+    </select>
+
+    <select id="countUncheckedTasks" resultType="long">
+        SELECT COUNT(*)
+        FROM task
+        WHERE member_id = #{memberId}
+        AND date = #{date}
+        AND is_checked = 'N'
+    </select>
+
+    <select id="getShortListsAll" resultType="littleprince.plan.query.dto.response.ShortListsAllDTO">
+        SELECT
+              task_id
+            , project_id
+            , member_id
+            , content
+            , is_checked
+            , date
+        FROM task
+        WHERE member_id = #{ memberId }
+        AND date = CURDATE()
+        ORDER BY created_at
+    </select>
+
+</mapper>

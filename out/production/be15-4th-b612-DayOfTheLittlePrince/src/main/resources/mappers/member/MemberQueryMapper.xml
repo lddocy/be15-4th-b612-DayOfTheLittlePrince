@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="littleprince.member.query.mapper.MemberQueryMapper">
+    <select id="findMemberByEmail" resultType="littleprince.member.query.dto.FindMemberDTO">
+        SELECT
+            m.member_id,
+            m.email,
+            m.password
+        FROM
+            member m
+        WHERE
+            m.email = #{ email }
+            AND m.is_deleted = 'N'
+    </select>
+
+    <select id="findById" resultType="littleprince.member.command.domain.aggregate.MemberDTO">
+        SELECT
+        member_id,
+        email,
+        password,
+        is_deleted,
+        exp,
+        level,
+        planet_name,
+        is_notification_enabled
+        FROM member
+        WHERE member_id = #{memberId}
+    </select>
+
+    <!-- 회원 관련 정보 조회 -->
+    <select id="findMemberByMemberId" resultType="littleprince.member.query.dto.response.MemberInfoResponse">
+        SELECT
+            m.member_id,
+            m.exp,
+            m.level,
+            m.planet_name,
+            gb.is_selected,
+            b.badge_name
+        FROM member m
+        JOIN get_badge gb ON gb.member_id = m.member_id
+        JOIN badge b ON b.badge_id = gb.badge_id
+        WHERE m.member_id = #{ member_id }
+            AND is_deleted = 'N'
+            AND gb.is_selected = 'Y'
+    </select>
+
+    <select id="findAllExpInfo" resultType="littleprince.member.query.dto.MemberExpDTO">
+        SELECT
+        member_id AS memberId,
+        exp,
+        level
+        FROM member
+    </select>
+
+</mapper>
