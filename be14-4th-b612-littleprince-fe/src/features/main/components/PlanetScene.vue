@@ -193,13 +193,14 @@ watch(
             :memberLevel="memberLevel"
             :itemVisibilityMap="itemVisibilityMap"
         />
-        <MainIconItem />
+        <MainIconItem v-if="isSceneReady" />
         <div class="fixed bottom-6 right-6 z-0">
             <MemberInfoItem
                 :memberInfo="memberInfo"
                 :max="totalExp"
                 :badge="badge"
                 @edit-planet-name="editPlanetName"
+                v-if="isSceneReady"
             />
         </div>
     </div>

@@ -13,6 +13,37 @@
         )
     </select>
 
+    <select id="getTaskExp" resultType="int">
+        SELECT
+            count(*) totalExp
+          FROM task
+        WHERE member_id = #{ memberId }
+          AND is_checked = 'Y'
+          AND date = CURDATE() - INTERVAL 1 DAY
+    </select>
+
+    <select id="getProjectExp" resultType="int">
+        SELECT
+            CEIL(COUNT(*) * 0.5) AS getTotalProjectExp
+          FROM task a
+          LEFT JOIN project b ON a.project_id = b.project_id
+        WHERE a.member_id = #{ memberId }
+          AND a.project_id = #{ taskProjectId }
+          AND b.end_date = CURDATE() - INTERVAL 1 DAY
+          AND a.is_checked = 'Y'
+    </select>
+
+    <select id="getProjectIdExp" resultType="Long">
+        SELECT
+            a.project_id
+        FROM task a
+        JOIN project b ON a.project_id = b.project_id
+        WHERE a.member_id = #{ memberId }
+        AND a.project_id = #{ taskProjectId }
+        AND b.end_date = CURDATE() - INTERVAL 1 DAY
+        AND is_checked = 'Y'
+    </select>
+
     <select id="getExpHistory" resultType="littleprince.member.query.dto.GetExpHistoryDTO">
         SELECT
         a.history_id AS historyId,
