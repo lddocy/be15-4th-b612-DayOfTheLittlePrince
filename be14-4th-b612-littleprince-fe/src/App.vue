@@ -139,11 +139,6 @@ html, body {
     z-index: 2 !important;
 }
 
-.loading-spinner {
-    z-index: 3 !important;
-    pointer-events: auto;
-}
-
 @font-face {
     font-family: 'Cafe24Oneprettynight';
     src: url('/fonts/Cafe24Oneprettynight-v2.0.woff2') format('woff2'),
