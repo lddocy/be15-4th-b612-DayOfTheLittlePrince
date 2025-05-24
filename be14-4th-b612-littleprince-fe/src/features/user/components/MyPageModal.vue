@@ -125,12 +125,28 @@ const monthlyRate = ref(0);
 const animatedTotalRate = ref(0);
 const animatedMonthlyRate = ref(0);
 
+/* 페이지 조회*/
+const items = ref([]);
+const itemsPerPage = 4;
+const currentPage = ref(1);
+const totalPages = computed(() => {
+  const pageCount = Math.ceil(items.value.length / itemsPerPage);
+  return pageCount === 0 ? 1 : pageCount;
+});
+
 watchEffect(() => {
   if (activeTab.value === '달성률') {
     animateProgress(animatedTotalRate, totalRate.value);
     animateProgress(animatedMonthlyRate, monthlyRate.value);
   }
 });
+
+watchEffect(() => {
+  if (currentPage.value > totalPages.value - 1) {
+    currentPage.value = totalPages.value - 1;
+  }
+});
+
 
 function animateProgress(refValue, target, speed = 10) {
   refValue.value = 0;
@@ -143,17 +159,13 @@ function animateProgress(refValue, target, speed = 10) {
     }
   }, speed);
 }
-const itemsPerPage = 4;
-const currentPage = ref(1); // 0부터 시작
 
 const paginatedItems = computed(() => {
   const start = currentPage.value * itemsPerPage;
   return items.value.slice(start, start + itemsPerPage);
 });
 
-const totalPages = computed(() => {
-  return Math.ceil(items.value.length / itemsPerPage);
-});
+
 
 function goToPrevPage() {
   if (currentPage.value > 0) currentPage.value--;
@@ -178,7 +190,6 @@ const expPercent = computed(() =>
 const expLogs = ref([]);
 
 // 사용자 아이템
-const items = ref([]);
 
 /* 칭호 선택 함수 */
 async function selectTitle(selectedIdx) {
