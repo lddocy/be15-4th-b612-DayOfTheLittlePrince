@@ -1,5 +1,7 @@
 package littleprince.auth.command.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import littleprince.auth.command.dto.request.ChangePasswordRequest;
 import littleprince.auth.command.service.AuthCommandService;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Tag (name = "회원")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class AuthCommandController {
 
     private final AuthCommandService authCommandService;
 
+    @Operation(summary = "로그 아웃",description = "사용자는 로그아웃 할 수 있다.")
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
             @AuthenticationPrincipal CustomUserDetail userDetail,
@@ -36,6 +40,7 @@ public class AuthCommandController {
                 .body(ApiResponse.success(null));
     }
 
+    @Operation(summary = "비밀번호 재설정",description = "사용자는 자신의 비밀번호를 변경할 수 있다.")
     @PostMapping("/change/password")
     public ResponseEntity<ApiResponse<Void>> changePassword(
             @RequestBody @Valid ChangePasswordRequest request

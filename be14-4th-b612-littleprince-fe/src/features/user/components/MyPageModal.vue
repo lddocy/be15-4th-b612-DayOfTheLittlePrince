@@ -125,12 +125,28 @@ const monthlyRate = ref(0);
 const animatedTotalRate = ref(0);
 const animatedMonthlyRate = ref(0);
 
+/* 페이지 조회*/
+const items = ref([]);
+const itemsPerPage = 4;
+const currentPage = ref(1);
+const totalPages = computed(() => {
+  const pageCount = Math.ceil(items.value.length / itemsPerPage);
+  return pageCount === 0 ? 1 : pageCount;
+});
+
 watchEffect(() => {
   if (activeTab.value === '달성률') {
     animateProgress(animatedTotalRate, totalRate.value);
     animateProgress(animatedMonthlyRate, monthlyRate.value);
   }
 });
+
+watchEffect(() => {
+  if (currentPage.value > totalPages.value - 1) {
+    currentPage.value = totalPages.value - 1;
+  }
+});
+
 
 function animateProgress(refValue, target, speed = 10) {
   refValue.value = 0;
@@ -143,17 +159,13 @@ function animateProgress(refValue, target, speed = 10) {
     }
   }, speed);
 }
-const itemsPerPage = 4;
-const currentPage = ref(1); // 0부터 시작
 
 const paginatedItems = computed(() => {
   const start = currentPage.value * itemsPerPage;
   return items.value.slice(start, start + itemsPerPage);
 });
 
-const totalPages = computed(() => {
-  return Math.ceil(items.value.length / itemsPerPage);
-});
+
 
 function goToPrevPage() {
   if (currentPage.value > 0) currentPage.value--;
@@ -178,7 +190,6 @@ const expPercent = computed(() =>
 const expLogs = ref([]);
 
 // 사용자 아이템
-const items = ref([]);
 
 /* 칭호 선택 함수 */
 async function selectTitle(selectedIdx) {
@@ -406,7 +417,14 @@ function onClickTitle(title) {
             <!-- 나의 아이템 -->
             <section>
               <h3 class="font-semibold mb-3 text-lg text-left">나의 아이템</h3>
-              <div class="flex items-center justify-between">
+
+              <!-- 아이템이 없는 경우 -->
+              <div v-if="items.length === 0" class="text-center text-gray-400 mt-6">
+                아이템이 아직 없네요. 앞으로 하나씩 모아보세요.
+              </div>
+
+              <!-- 아이템이 있는 경우 -->
+              <div v-else class="flex items-center justify-between">
                 <!-- ◀ 이전 버튼 -->
                 <button
                     class="text-xl text-gray-400 hover:text-gray-600 disabled:opacity-30"
@@ -416,20 +434,18 @@ function onClickTitle(title) {
                   ◀
                 </button>
 
-                <!-- 4개씩 표시되는 아이템 -->
+                <!-- 아이템 리스트 -->
                 <div class="flex gap-6">
                   <button
                       v-for="(item, idx) in paginatedItems"
                       :key="idx"
                       @click="toggleItemVisibility(idx + currentPage * itemsPerPage)"
-                      :style="
-                      item.isHidden === 'N'
-                      ? 'background-color: #FFE5EC; box-shadow: inset 0px 4px 4px rgba(0,0,0,0.25);'
-                      : 'background-color: white; box-shadow: 0px 4px 4px rgba(0,0,0,0.25);'
-                        "
-                          class="w-20 h-20 rounded-2xl flex items-center justify-center transition"
-                      >
-                  <template v-if="item.imagePath">
+                      :style="item.isHidden === 'N'
+              ? 'background-color: #FFE5EC; box-shadow: inset 0px 4px 4px rgba(0,0,0,0.25);'
+              : 'background-color: white; box-shadow: 0px 4px 4px rgba(0,0,0,0.25);'"
+                      class="w-20 h-20 rounded-2xl flex items-center justify-center transition"
+                  >
+                    <template v-if="item.imagePath">
                       <img :src="item.imagePath" alt="item" class="w-[95%] h-[95%] object-contain" />
                     </template>
                     <template v-else>
@@ -447,11 +463,13 @@ function onClickTitle(title) {
                   ▶
                 </button>
               </div>
+
               <!-- 페이지 번호 -->
-              <p class="text-sm text-right text-gray-400 mt-2">
+              <p v-if="items.length > 0" class="text-sm text-right text-gray-400 mt-2">
                 {{ currentPage + 1 }} / {{ totalPages }}
               </p>
             </section>
+
 
 
             <!-- 회원 탈퇴 -->
