@@ -67,11 +67,18 @@ export function logout(accessToken) {
 }
 
 export function findPassword(email) {
-    return api.get('auth/find/password', {
+    return api.get('/auth/find/password', {
         params: {
             email: email,
         },
     });
+}
+
+export function deleteMember(accessToken){
+    return api.delete('/member/delete',
+        {
+            headers: { Authorization: `Bearer ${accessToken}` },
+        })
 }
 
 export function changePassword(data) {

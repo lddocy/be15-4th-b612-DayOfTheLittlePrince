@@ -1,10 +1,6 @@
 package littleprince.plan.query.service;
 
-import littleprince.plan.query.dto.response.AiShortPlanDTO;
-import littleprince.plan.query.dto.response.ShortListDTO;
-import littleprince.plan.query.dto.response.ShortListResponse;
-import littleprince.plan.query.dto.response.ShortPlanDateDTO;
-import littleprince.plan.query.dto.response.ShortPlanDateResponse;
+import littleprince.plan.query.dto.response.*;
 import littleprince.plan.query.mapper.ShortListQueryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +24,16 @@ public class ShortListQueryService {
                 .build();
     }
 
-    /* 단기플랜 여부 조회 */
+    // 모든 단기 리스트 조회
+    public ShortListsAllResponse getShortListsAll(Long memberId) {
+        List<ShortListsAllDTO> listAllDTO = shortListQueryMapper.getShortListsAll(memberId);
+
+        return ShortListsAllResponse.builder()
+                .shortListsAll(listAllDTO)
+                .build();
+    }
+
+    /* 단기 플랜 여부 조회 */
     public ShortPlanDateResponse getShortDates(Long memberId) {
         List<ShortPlanDateDTO> planDateDTO = shortListQueryMapper.getShortDates(memberId);
 
@@ -36,8 +41,9 @@ public class ShortListQueryService {
                 .planDateDTO(planDateDTO)
                 .build();
     }
+
     /* Ai에서 사용할 사용자의 단기 리스트 전체 조회 */
-    public List<AiShortPlanDTO> getMemberShortPlan(Long memberId){
+    public List<AiShortPlanDTO> getMemberShortPlan(Long memberId) {
         return shortListQueryMapper.getShortPlanByMemberId(memberId);
     }
 
@@ -58,6 +64,5 @@ public class ShortListQueryService {
     public long countUncheckedTasks(Long memberId, Date date) {
         return shortListQueryMapper.countUncheckedTasks(memberId, date);
     }
-
 
 }
