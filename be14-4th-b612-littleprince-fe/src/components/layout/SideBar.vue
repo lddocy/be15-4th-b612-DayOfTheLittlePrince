@@ -104,7 +104,7 @@ const handleCapture = async () => {
                 <!-- 마이페이지 -->
                 <div
                     @click="openMyPage"
-                    class="bg-white/20 p-1 rounded-2xl hover:bg-purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 cursor-pointer">
+                    class="bg-white/20 p-1 rounded-2xl hover:bg-dlp_purple/20 transition w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 cursor-pointer">
                     <img
                         src="@/assets/icons/mypage.png"
                         alt="mypage"
