@@ -68,74 +68,87 @@ function handleItemVisibilityChange() {
 </script>
 
 <template>
-  <div id="app" class="flex h-screen w-screen overflow-hidden relative">
-      <LoadingSpinner v-if="isSceneLoading" />
+    <div id="app" class="flex h-screen w-screen overflow-hidden relative">
+        <!-- 메인 행성 -->
+        <!-- '/' 경로에서는 배경으로 안쓰이게 -->
+        <PlanetScene
+            :class="{'planet-front' : route.path === '/'}"
+            :refresh-flag="refreshItemMap"
+            @loaded="handleSceneLoaded"
+        />
 
-      <!-- 사이드바 -->
-      <SideBar
-          v-if="useLayout && !uiStore.isCapturing"
-          @item-visibility-changed="handleItemVisibilityChange"
-      />
+        <!-- 사이드바 -->
+        <SideBar
+            v-if="useLayout && !uiStore.isCapturing && !isSceneLoading"
+            @item-visibility-changed="handleItemVisibilityChange"
+        />
 
-      <!-- BGM 플레이어 -->
-      <div
-          v-show="!uiStore.isCapturing"
-          class="absolute bottom-6 left-[90px] lg:left-[160px] md:left-[120px] z-50"
-      >
-        <BgmPlayer />
-      </div>
+        <!-- BGM 플레이어 -->
+        <div
+            v-if="!isSceneLoading"
+            v-show="!uiStore.isCapturing"
+            class="absolute bottom-6 left-[90px] lg:left-[160px] md:left-[120px] z-50"
+        >
+            <BgmPlayer />
+        </div>
 
-     <!-- '/' 경로에서는 배경으로 안쓰이게 -->
-     <PlanetScene
-         :class="{'planet-front' : route.path === '/'}"
-         :refresh-flag="refreshItemMap"
-         @loaded="handleSceneLoaded"
-     />
+        <!-- Router View -->
+        <div
+            v-if="!isSceneLoading"
+            class="flex-1"
+            :class="{ layout: useLayout }"
+        >
+            <router-view />
+        </div>
 
-    <div class="flex-1" :class="{ layout: useLayout }">
-      <router-view />
-    </div>
+        <!-- 로딩 스피너 -->
+        <div
+            v-if="isSceneLoading"
+            class="fixed inset-0 flex items-center justify-center"
+        >
+            <LoadingSpinner />
+        </div>
 
   </div>
 </template>
 
 <style>
 html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
 }
 
 #app {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 /*.layout {
-  height: 100%;
-  overflow: auto;
+    height: 100%;
+    overflow: auto;
 }*/
 
 .layout {
-  position: relative;
-  z-index: 1;
+    position: relative;
+    z-index: 1;
 }
 
 .planet-front {
-  z-index: 2 !important;
-  pointer-events: auto;
+    z-index: 2 !important;
 }
 
 @font-face {
-  font-family: 'Cafe24Oneprettynight';
-  src: url('/fonts/Cafe24Oneprettynight-v2.0.woff2') format('woff2'),
-  url('/fonts/Cafe24Oneprettynight-v2.0.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'Cafe24Oneprettynight';
+    src: url('/fonts/Cafe24Oneprettynight-v2.0.woff2') format('woff2'),
+    url('/fonts/Cafe24Oneprettynight-v2.0.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
 * {
-  font-family: 'Cafe24Oneprettynight', sans-serif;
+    font-family: 'Cafe24Oneprettynight', sans-serif;
 }
 </style>
