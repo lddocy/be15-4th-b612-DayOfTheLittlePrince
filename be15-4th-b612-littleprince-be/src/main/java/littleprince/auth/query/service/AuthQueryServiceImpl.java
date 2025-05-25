@@ -117,7 +117,7 @@ public class AuthQueryServiceImpl implements AuthQueryService{
         sb.append("<h1>비밀번호 변경</h1>")
                 .append("<p>아래 버튼을 클릭하면 비밀번호 변경 페이지로 이동합니다.</p>")
                 .append("<a href=\"")
-                .append("http://localhost:5173/changePassword?uuid=")
+                .append("http://localhost/changePassword?uuid=")
                 .append(randomString)
                 .append("\" ")
                 .append("style=\"display:inline-block; padding:12px 24px; background-color:#4CAF50; color:#ffffff; text-align:center; text-decoration:none; font-size:16px; border-radius:6px; font-weight:bold;\">")
