@@ -164,3 +164,12 @@ export function getAiList(accessToken){
         },
     });
 }
+
+/* 오늘 날짜 전체 단기 리스트 조회 (단기 + 장기 플랜 포함) */
+export function getShortListsAll(accessToken) {
+    return api.get(`/plan/short/all`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+}

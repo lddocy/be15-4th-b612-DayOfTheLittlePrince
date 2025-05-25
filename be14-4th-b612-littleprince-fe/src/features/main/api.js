@@ -57,15 +57,25 @@ export function toggleItemHidden(accessToken, itemId) {
 }
 
 /* 알림 조회 */
-export const getNotifications = ({ limit = 30, offset = 0 }) =>
+export const getNotifications = ({ accessToken, limit = 30, offset = 0 }) =>
     api.get('/notifications', {
-        params: { limit, offset }
+        params: { limit, offset },
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
     });
 
-/* 읽음 처리*/
-export const markNotificationAsRead = (notificationId) => {
-    return api.patch(`/notifications/${notificationId}/read`)
-}
+
+
+/* 읽음 처리 */
+export const markNotificationAsRead = (notificationId, accessToken) => {
+    return api.patch(`/notifications/${notificationId}/read`, {}, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+};
+
 
 /* 명언 랜덤 조회 */
 export function getFamousQuotes(accessToken) {
@@ -73,5 +83,18 @@ export function getFamousQuotes(accessToken) {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
+    });
+}
+
+/* 날씨 */
+export function fetchWeatherRecommendation(accessToken, lat, lon) {
+    return api.get('/weather/recommendation', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+            lat,
+            lon,
+        }
     });
 }

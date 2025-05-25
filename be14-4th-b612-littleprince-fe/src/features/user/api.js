@@ -1,42 +1,70 @@
 import api from '@/plugins/axios';
 
 /* 내 칭호 조회 */
-export async function fetchMyBadges() {
-    const res = await api.get('/badges/me');
+export async function fetchMyBadges(accessToken) {
+    const res = await api.get('/badges/me', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
     return res.data.data;
 }
 
-/* 내 칭호 선택*/
-export async function selectBadge(badgeId) {
-    return api.patch('/badges/select', { badgeId });
+/* 내 칭호 선택 */
+export async function selectBadge(badgeId, accessToken) {
+    return api.patch('/badges/select', { badgeId }, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
 }
 
 /* 내 아이템 조회 */
-export async function fetchMyItems() {
-    const res = await api.get('/item/list');
+export async function fetchMyItems(accessToken) {
+    const res = await api.get('/item/list', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
     return res.data.data.itemList; // ← Postman 응답 기준으로 수정
 }
 
-/* 아이템 숨김 , 보임 */
-export function toggleItemHidden(itemId) {
-    return api.patch(`/item/${itemId}/toggle`);
+/* 아이템 숨김 / 보임 */
+export function toggleItemHidden(itemId, accessToken) {
+    return api.patch(`/item/${itemId}/toggle`, null, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
 }
 
-/* 내 경험치 조회*/
-export async function fetchMyExp() {
-    const res = await api.get('/curexp');
+/* 내 경험치 조회 */
+export async function fetchMyExp(accessToken) {
+    const res = await api.get('/curexp', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
     return res.data.data; // { currentExp, currentLevel, totalExpToNextLevel }
 }
 
 /* 달성률 조회 */
-export async function fetchTaskCompletionRate() {
-    const res = await api.get('/plans/rate');
+export async function fetchTaskCompletionRate(accessToken) {
+    const res = await api.get('/plans/rate', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
     return res.data; // { totalRate, monthlyRate }
 }
 
-/* 푸시 알림용*/
-export function subscribePush(subscription) {
-    return api.post('/push/subscribe', subscription);
+/* 푸시 알림용 */
+export function subscribePush(subscription, accessToken) {
+    return api.post('/push/subscribe', subscription, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
 }
 
 /* 최신날짜 3개씩 경험치 이력 조회 */
@@ -47,6 +75,7 @@ export function fetchExpHistory(accessToken) {
         },
     });
 }
+
 
 export function signup(data) {
     return api.post('/member/signup', data);

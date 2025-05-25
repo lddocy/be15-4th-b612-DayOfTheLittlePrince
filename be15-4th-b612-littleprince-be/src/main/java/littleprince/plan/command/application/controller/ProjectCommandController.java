@@ -1,6 +1,7 @@
 package littleprince.plan.command.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import littleprince.common.dto.ApiResponse;
 import littleprince.config.security.model.CustomUserDetail;
 import littleprince.plan.command.application.service.ProjectCommandService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/plans/projects")
+@Tag(name = "장기 투두 리스트")
 public class ProjectCommandController {
 
     private final ProjectCommandService projectCommandService;

@@ -26,6 +26,10 @@ spring:
         options:
           model: ${OPEN_AI_MODEL_NAME}
 
+  openweather:
+    api-key: ${OPEN_WEATHER_API_KEY}
+    base-url: ${OPEN_WEATHER_BASE_URL}
+
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://${DB_URL}

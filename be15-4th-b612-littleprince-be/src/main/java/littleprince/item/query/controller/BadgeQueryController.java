@@ -22,6 +22,7 @@ public class BadgeQueryController {
 
     private final BadgeQueryService badgeQueryService;
 
+    @Operation(summary = "칭호 조회",description = "사용자는 자신이 획득한 칭호를 조회할 수 있다. ")
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<MyBadgeResponse>> getMyBadges(@AuthenticationPrincipal CustomUserDetail user) {
         Long memberId = user.getMemberId();
@@ -29,6 +30,7 @@ public class BadgeQueryController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    @Operation(summary = "선택한 칭호 조회",description = "사용자는 자신이 선택한 칭호를 조회할 수 있다.")
     @GetMapping("/selected")
     public ResponseEntity<ApiResponse<String>> getSelectedBadge(
             @AuthenticationPrincipal CustomUserDetail user
