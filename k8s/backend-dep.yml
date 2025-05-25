@@ -6,8 +6,8 @@ spec:
   selector:
     matchLabels:
       app: backend-kube
-#   replicas: 3
-  replicas: 1
+  replicas: 3
+#  replicas: 1
   template:
     metadata:
       labels:
@@ -115,3 +115,25 @@ spec:
                 secretKeyRef:
                   name: web-push-secret
                   key: subject
+            - name: OPEN_WEATHER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: weather-secret
+                  key: api-key
+            - name: OPEN_WEATHER_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: weather-secret
+                  key: base-url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-ser
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8001
+      targetPort: 8080
+  selector:
+    app: backend-kube

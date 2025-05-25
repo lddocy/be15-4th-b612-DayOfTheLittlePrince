@@ -1,5 +1,5 @@
+CREATE USER IF NOT EXISTS 'b612'@'%' IDENTIFIED BY 'b612';
 GRANT ALL PRIVILEGES ON little_prince.* TO 'b612'@'%';
-
 USE little_prince;
 
 # DROP TABLE IF EXISTS `notification`;
