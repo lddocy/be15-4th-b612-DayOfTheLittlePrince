@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="littleprince.weather.query.mapper.WeatherMapper">
+    <select id="findByWeatherMain" resultType="littleprince.weather.query.dto.WeatherDTO">
+        SELECT
+            weather_main,
+            recommendation
+        FROM weather
+        WHERE weather_main = #{weatherMain}
+    </select>
+</mapper>
