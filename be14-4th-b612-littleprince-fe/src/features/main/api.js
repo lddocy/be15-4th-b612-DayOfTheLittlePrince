@@ -85,3 +85,16 @@ export function getFamousQuotes(accessToken) {
         },
     });
 }
+
+/* 날씨 */
+export function fetchWeatherRecommendation(accessToken, lat, lon) {
+    return api.get('/weather/recommendation', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+            lat,
+            lon,
+        }
+    });
+}
