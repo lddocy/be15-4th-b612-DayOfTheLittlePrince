@@ -5,7 +5,7 @@ import ShortTermList from '@/features/calendar/components/ShortTermList.vue'
 import MyPageModal from '@/features/user/components/MyPageModal.vue'
 import NotificationModal from '@/features/main/components/NotificationModal.vue';
 import { getNotifications } from '@/features/main/api';
-import { getShortList, createShortTodo, deleteShortTodo, toggleCheck } from '@/features/calendar/api.js'
+import { getShortListsAll, createShortTodo, deleteShortTodo, toggleCheck } from '@/features/calendar/api.js'
 import { useAuthStore } from '@/stores/auth.js'
 import { useToast } from 'vue-toastification';
 
@@ -67,8 +67,8 @@ const unreadCount = computed(() =>
 
 const fetchTodayTodos = async () => {
   try {
-    const res = await getShortList(authStore.accessToken, todayDate);
-    todos.value = res.data.data.shortList.map(item => ({
+    const res = await getShortListsAll(authStore.accessToken);
+    todos.value = res.data.data.shortListsAll.map(item => ({
       task_id: item.taskId,
       content: item.content,
       is_checked: item.isChecked
