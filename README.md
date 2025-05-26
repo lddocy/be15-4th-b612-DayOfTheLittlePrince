@@ -260,14 +260,14 @@
 <summary><strong>회원</strong></summary>
 <div>
 <h2>회원</h2>
-  
 <h4>로그인<h4>
-  
+<img src="https://github.com/user-attachments/assets/804bde9d-1ae4-4694-ab1f-d544102170cd"/>
 <h4>회원가입<h4>
-  
+<img src="https://github.com/user-attachments/assets/43ae111d-8331-4550-886b-e6c7432b3f60"/>
 <h4>비밀번호 찾기<h4>
-
+<img src="https://github.com/user-attachments/assets/1234150d-845c-4c44-9268-b452e1c59a53"/>
 <h4>회원 탈퇴<h4>
+<img src="https://github.com/user-attachments/assets/1778a4fc-ad12-412b-99fe-468bfce90121"/>
 
 </div>
 </details>
@@ -276,13 +276,10 @@
 <summary><strong>메인페이지</strong></summary>
 <div>
 <h2>메인페이지</h2>
-  
 <h4>아이템 조회<h4>
 <img src="https://github.com/user-attachments/assets/54367e8b-c54a-4b21-89ff-3e4fadf234df/>
-  
 <h4>행성 이름 수정<h4>
 <img src="https://github.com/user-attachments/assets/818a296f-1c4f-4ac8-b59c-e805d473233b"/>
-  
 <h4>날씨 할 일 추천<h4>
 <img src="https://github.com/user-attachments/assets/a0556acf-b04f-4199-b77a-035dea3b7c61"/>
 </div>
@@ -351,9 +348,14 @@
 <div>
 <h2>알림</h2>
 <h4>알림 확인</h4>
+<img src="https://github.com/user-attachments/assets/88376b06-6d66-43f6-bdaa-7f8d4b5d2c53"/>
 <h5>오전/오후 알림</h5>
+<img src="https://github.com/user-attachments/assets/e02e8df7-1266-4bb2-af6d-2164bfa96b73"/>
 <h5>레벨업 알림</h5>
+<img src="https://github.com/user-attachments/assets/fa4dad5d-47e5-4d20-8b09-014e39768c50"/>
 <h4>알림 읽음 표시</h4>
+<img src="https://github.com/user-attachments/assets/00efd585-790d-419d-b31f-4faa5398e559"/>
+
 </div>
 </details>
 
@@ -455,7 +457,7 @@ one or more objects failed to apply, reason: error when patching "/dev/shm/27920
 |박장우|  |
 |박준서|이번 프로젝트는 Docker를 활용하여 배포까지 직접 경험해볼 수 있었던 소중한 기회였습니다. 프로젝트 기간이 짧았던 만큼, 기능적인 범위는 이전 프로젝트에 비해 다소 축소되었지만, 주제가 Todolist였기 때문에 구현 난이도가 낮아 전체적인 진행은 비교적 수월했습니다. 이를 통해 프로젝트의 난이도와 주어진 기간을 고려하여 기능을 어떻게 조절할지에 대한 감각을 점차 익힐 수 있었습니다. 이번 프로젝트에서는 새로운 기술과 API를 적용해볼 수 있는 기회가 많았습니다. Three.js와 Web Push처럼 처음 접해보는 기술을 실제 코드에 적용하면서, 단순한 구현을 넘어서 UX 측면에서도 어떻게 구성할지 고민하며 개발에 임했습니다. 특히 프론트엔드에서 애니메이션을 직접 구현해본 경험은 매우 인상 깊었습니다. 전체적으로 기능 구현, 새로운 기술 학습, UX에 대한 고민, 그리고 배포 환경까지 경험하면서 개발자로서 한 단계 성장할 수 있었던 프로젝트였습니다. 이번 경험을 바탕으로, 다가올 최종 프로젝트에서는 보다 완성도 높은 결과물을 만들 수 있도록 더욱 적극적이고 주도적으로 임하겠습니다.|
 |오유경|  |
-|윤채영|  |
+|윤채영|Three.js를 활용한 3D 아이템 배치 기능과 게임 요소를 결합한 웹 서비스를 팀 프로젝트로 개발하며, 단순한 기술 구현을 넘어서 사용자 경험과 상업성까지 함께 고민했습니다. 프론트엔드에서는 직관적인 UI/UX의 중요성을, 백엔드에서는 사용자 상태를 정교하게 관리하기 위한 데이터 흐름과 구조 설계의 필요성을 절감했습니다. 특히 자유도 높은 아이템 배치를 통해 의미 있는 상호작용을 제공하려 노력했고, 그 과정에서 게임성과 실용성, 시장성 간의 균형을 추구했습니다. 무엇보다 각자의 전문 영역을 책임감 있게 수행해준 팀원들과의 협업을 통해, 혼자였다면 구현하기 어려웠을 완성도를 이끌어낼 수 있었고, 커뮤니케이션의 중요성과 팀워크의 시너지를 다시 한 번 실감한 프로젝트였습니다.|
 |이승재|  |
 |조현승|  |
 
