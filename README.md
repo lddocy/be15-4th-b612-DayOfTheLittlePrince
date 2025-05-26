@@ -1,4 +1,4 @@
-<br>
+![레벨업 알림](https://github.com/user-attachments/assets/76446074-bfae-4a46-ae90-7304541fc625)<br>
 <img src="https://github.com/user-attachments/assets/9e9d201a-1f3e-40ce-a266-f44450217ac3" />
 
 
@@ -401,13 +401,16 @@ pipeline {
 <div>
 <h2>회원</h2>
 <h4>로그인</h4>
-<img src="https://github.com/user-attachments/assets/804bde9d-1ae4-4694-ab1f-d544102170cd"/>
+<img src="https://github.com/user-attachments/assets/981369c3-170b-49f8-a867-64eb78076c88"/>
+
 <h4>회원가입</h4>
-<img src="https://github.com/user-attachments/assets/43ae111d-8331-4550-886b-e6c7432b3f60"/>
+<img src="https://github.com/user-attachments/assets/d7b80f67-dded-4cc6-8a08-d5ab5d3560d7"/>
+
 <h4>비밀번호 찾기</h4>
-<img src="https://github.com/user-attachments/assets/1234150d-845c-4c44-9268-b452e1c59a53"/>
+<img src="https://github.com/user-attachments/assets/64db753a-1925-4d66-a1d1-25efa0b6faad"/>
+
 <h4>회원 탈퇴</h4>
-<img src="https://github.com/user-attachments/assets/1778a4fc-ad12-412b-99fe-468bfce90121"/>
+<img src="https://github.com/user-attachments/assets/8847919d-c0e6-4e29-b5d9-aa919ee885b8"/>
 
 </div>
 </details>
@@ -417,11 +420,12 @@ pipeline {
 <div>
 <h2>메인페이지</h2>
 <h4>아이템 조회</h4>
-<img src="https://github.com/user-attachments/assets/54367e8b-c54a-4b21-89ff-3e4fadf234df/>
+  
 <h4>행성 이름 수정</h4>
 <img src="https://github.com/user-attachments/assets/818a296f-1c4f-4ac8-b59c-e805d473233b"/>
+
 <h4>날씨 할 일 추천</h4>
-<img src="https://github.com/user-attachments/assets/a0556acf-b04f-4199-b77a-035dea3b7c61"/>
+
 </div>
 </details>
 
@@ -431,13 +435,16 @@ pipeline {
 <h2>마이페이지</h2>
   
 <h4>아이템 숨김/배치</h4>
-<img src="https://github.com/user-attachments/assets/32bed5f7-d6d7-495c-aedd-aa20a08640b6"/>
+<img src="https://github.com/user-attachments/assets/3ecfb889-fdbd-404a-af7b-b8593f7e5ad1"/>
+
 <h4>칭호 선택</h4>
-<img src="https://github.com/user-attachments/assets/b409c552-4dbf-44d4-937e-0f4e50ae2823"/>
+<img src="https://github.com/user-attachments/assets/c30d1ebd-4b53-44f0-be11-e3acc76520c8"/>
+
 <h4>달성률 조회</h4>
-<img src="https://github.com/user-attachments/assets/1f30ccad-0b19-4629-8706-d33a715e7386"/>
+<img src="https://github.com/user-attachments/assets/f73f0e33-0bbc-4950-95a7-e9052f90981c"/>
+
 <h4>경험치 조회</h4>
-<img src="https://github.com/user-attachments/assets/a5891987-59bd-442d-a068-defaffc660e1"/>
+<img src="https://github.com/user-attachments/assets/03cb5e7a-27f9-403d-8bab-fbfd1785f5b3"/>
 </div>
 </details>
   
@@ -446,26 +453,25 @@ pipeline {
 <div>
 <h2>투두 리스트</h2>
 <h4>단기 투두 리스트</h4>
-<h5>단기 투두리스트 조회</h5>
-<img src="https://github.com/user-attachments/assets/357479f0-2d29-4783-b755-efc5a4224647"/>
-<h5>단기 투두리스트 삭제</h5>
-<img src="https://github.com/user-attachments/assets/1d04b311-f161-4ad7-a58c-c4c474397805"/>
+<h5>단기 투두리스트 등록</h5>
 
-  <h4>장기 플랜<h4>
-<h5>장기 플랜 조회</h5>
-<img src="https://github.com/user-attachments/assets/fa0863f7-dd0b-45fc-9216-4e16ed54d40e"/>
-<h5>장기 플랜 등록</h5>
-<img src="https://github.com/user-attachments/assets/5cee7c20-d836-47b5-8638-666b7164b1f0"/>
-<h5>장기 플랜 하위 투두리스트 등록</h5>
-<img src="https://github.com/user-attachments/assets/aae88f98-59c5-41be-a8b4-8e6be3471832"/>
-<h5>장기 플랜 삭제</h5>
-<img src="https://github.com/user-attachments/assets/1205978a-c169-456f-b6a1-cd2322abf3ea"/>
+<h5>단기 투두리스트 조회</h5>
+  
+<h5>단기 투두리스트 삭제</h5>
 
 <h4>AI 추천<h4>
 <h5>AI 생성 성공</h5>
-<img src="https://github.com/user-attachments/assets/75ea1a77-9903-4f00-8edd-d44633829adc"/>
+
 <h5>AI 생성 실패</h5>
-<img src="https://github.com/user-attachments/assets/65e5ae7f-4cfa-4a83-8ac8-e010404eab96"/>
+
+<h4>장기 플랜<h4>
+<h5>장기 플랜 등록</h5>
+  
+<h5>장기 플랜 조회</h5>
+
+<h5>장기 플랜 하위 투두리스트 등록</h5>
+
+<h5>장기 플랜 삭제</h5>
 
 </div>
 </details>
@@ -475,11 +481,11 @@ pipeline {
 <div>
 <h2>캘린더</h2>
 <h4>메인 캘린더 조회</h4>
-<img src="https://github.com/user-attachments/assets/d52fee46-3264-4de7-9639-d76f605fc10f"/>
+
 <h4>회고 등록</h4>
-<img src="https://github.com/user-attachments/assets/3041a958-337a-4dac-9281-3261c02613e6"/>
+
 <h4>회고 수정</h4>
-<img src="https://github.com/user-attachments/assets/aa7bdf79-cab7-4179-9434-e1ee2a20d513"/>
+
 </div>
 </details>
 
@@ -488,13 +494,16 @@ pipeline {
 <div>
 <h2>알림</h2>
 <h4>알림 확인</h4>
-<img src="https://github.com/user-attachments/assets/88376b06-6d66-43f6-bdaa-7f8d4b5d2c53"/>
+<img src="https://github.com/user-attachments/assets/ba392977-0c95-4a19-bfce-bf33325e0395"/>
+
 <h5>오전/오후 알림</h5>
-<img src="https://github.com/user-attachments/assets/e02e8df7-1266-4bb2-af6d-2164bfa96b73"/>
+<img src="https://github.com/user-attachments/assets/78fffe45-270e-4480-8569-d7804c8a60d5"/>
+
 <h5>레벨업 알림</h5>
-<img src="https://github.com/user-attachments/assets/fa4dad5d-47e5-4d20-8b09-014e39768c50"/>
+<img src="https://github.com/user-attachments/assets/623bcff1-c682-4092-8f58-21c0a10b3fe2"/>
+
 <h4>알림 읽음 표시</h4>
-<img src="https://github.com/user-attachments/assets/00efd585-790d-419d-b31f-4faa5398e559"/>
+<img src="https://github.com/user-attachments/assets/577ba7be-6ebe-4828-a5f1-ba14d02e5a55"/>
 
 </div>
 </details>
