@@ -233,7 +233,7 @@
 
 ##  <p id="2-4">2-4. REST API 명세서 </p>
 <div >
-  <img src="https://github.com/user-attachments/assets/0fac6c7d-313c-434e-a97d-c912c27bb93e" />
+  <img src="https://github.com/user-attachments/assets/0fac6c7d-313c-434e-a97d-c912c27bb93e"/>
 </div>
 
 <br><br>
@@ -244,12 +244,152 @@
 <br><br>
 
 ## <p id="4"> 🤖 4. 빌드 및 배포 </p>
+[![CI/CD 시연](https://img.shields.io/badge/CI/CD시연영상-바로가기-purple?style=for-the-badge)](https://www.youtube.com/watch?v=t-E7YVeR91A) 
 
 <details>
-<summary><strong>Jenkins Pipeline Script</strong></summary>
-<div>
-내용 추가
-</div>
+<summary><strong>Jenkins Pipeline Script 보기</strong></summary>
+
+```groovy
+pipeline {
+    agent any
+
+    tools {
+        gradle 'gradle'
+        jdk 'openJDK17'
+        nodejs 'Node JS 22.15'
+    }
+
+    environment {
+        SOURCE_GITHUB_URL = 'https://github.com/Cho-Hyun-Seung/CI-CD-test'
+        MANIFESTS_GITHUB_URL = 'https://github.com/Cho-Hyun-Seung/b612-manifest'
+        GIT_USERNAME = 'Cho-Hyun-Seung'
+        GIT_EMAIL = 'toki0327@naver.com'
+    }
+
+    stages {
+        stage('Checkout Source') {
+            steps {
+                git branch: 'main', url: "${env.SOURCE_GITHUB_URL}"
+            }
+        }
+
+        stage('Build Backend') {
+            steps {
+                dir('be15-4th-b612-littleprince-be') {
+                    script {
+                        if (isUnix()) {
+                            sh './gradlew clean bootJar'
+                        } else {
+                            bat 'gradlew.bat clean bootJar'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                dir('be14-4th-b612-littleprince-fe') {
+                    script {
+                        if (isUnix()) {
+                            sh 'npm install'
+                            sh 'npm run build'
+                        } else {
+                            bat 'npm install'
+                            bat 'npm run build'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Docker Login & Push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    script {
+                        if (isUnix()) {
+                            sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                        } else {
+                            bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
+                        }
+
+                        dir('be15-4th-b612-littleprince-be') {
+                            if (isUnix()) {
+                                sh "docker build -t ${DOCKER_USER}/k8s-b612-backend:${currentBuild.number} ."
+                                sh "docker build -t ${DOCKER_USER}/k8s-b612-backend:latest ."
+                                sh "docker push ${DOCKER_USER}/k8s-b612-backend:${currentBuild.number}"
+                                sh "docker push ${DOCKER_USER}/k8s-b612-backend:latest"
+                            } else {
+                                bat "docker build -t ${DOCKER_USER}/k8s-b612-backend:${currentBuild.number} ."
+                                bat "docker build -t ${DOCKER_USER}/k8s-b612-backend:latest ."
+                                bat "docker push ${DOCKER_USER}/k8s-b612-backend:${currentBuild.number}"
+                                bat "docker push ${DOCKER_USER}/k8s-b612-backend:latest"
+                            }
+                        }
+
+                        dir('be14-4th-b612-littleprince-fe') {
+                            if (isUnix()) {
+                                sh "docker build -t ${DOCKER_USER}/k8s-b612-frontend:${currentBuild.number} ."
+                                sh "docker build -t ${DOCKER_USER}/k8s-b612-frontend:latest ."
+                                sh "docker push ${DOCKER_USER}/k8s-b612-frontend:${currentBuild.number}"
+                                sh "docker push ${DOCKER_USER}/k8s-b612-frontend:latest"
+                            } else {
+                                bat "docker build -t ${DOCKER_USER}/k8s-b612-frontend:${currentBuild.number} ."
+                                bat "docker build -t ${DOCKER_USER}/k8s-b612-frontend:latest ."
+                                bat "docker push ${DOCKER_USER}/k8s-b612-frontend:${currentBuild.number}"
+                                bat "docker push ${DOCKER_USER}/k8s-b612-frontend:latest"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Update K8s Manifests') {
+            steps {
+                git credentialsId: 'github', url: "${env.MANIFESTS_GITHUB_URL}", branch: 'main'
+                script {
+                    if (isUnix()) {
+                        sh "sed -i '' 's/k8s-b612-backend:.*\$/k8s-b612-backend:${currentBuild.number}/g' backend-dep.yml"
+                        sh "sed -i '' 's/k8s-b612-frontend:.*\$/k8s-b612-frontend:${currentBuild.number}/g' frontend-dep.yml"
+                        sh "git add backend-dep.yml frontend-dep.yml"
+                        sh "git config --global user.name '${env.GIT_USERNAME}'"
+                        sh "git config --global user.email '${env.GIT_EMAIL}'"
+                        sh "git commit -m '[UPDATE] ${currentBuild.number} image versioning'"
+                        sh "git push -u origin main"
+                    } else {
+                        bat "powershell -Command \"(Get-Content backend-dep.yml) -replace 'k8s-b612-backend:.*', 'k8s-b612-backend:${currentBuild.number}' | Set-Content backend-dep.yml\""
+                        bat "powershell -Command \"(Get-Content frontend-dep.yml) -replace 'k8s-b612-frontend:.*', 'k8s-b612-frontend:${currentBuild.number}' | Set-Content frontend-dep.yml\""
+                        bat "git add backend-dep.yml frontend-dep.yml"
+                        bat "git config --global user.name '${env.GIT_USERNAME}'"
+                        bat "git config --global user.email '${env.GIT_EMAIL}'"
+                        bat "git commit -m \"[UPDATE] ${currentBuild.number} image versioning\""
+                        bat "git push -u origin main"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                if (isUnix()) {
+                    sh 'docker logout'
+                } else {
+                    bat 'docker logout'
+                }
+            }
+        }
+        success {
+            echo '✅ Pipeline completed successfully.'
+        }
+        failure {
+            echo '❌ Pipeline failed.'
+        }
+    }
+}
+```
 </details>
 
 <br><br>
@@ -260,13 +400,13 @@
 <summary><strong>회원</strong></summary>
 <div>
 <h2>회원</h2>
-<h4>로그인<h4>
+<h4>로그인</h4>
 <img src="https://github.com/user-attachments/assets/804bde9d-1ae4-4694-ab1f-d544102170cd"/>
-<h4>회원가입<h4>
+<h4>회원가입</h4>
 <img src="https://github.com/user-attachments/assets/43ae111d-8331-4550-886b-e6c7432b3f60"/>
-<h4>비밀번호 찾기<h4>
+<h4>비밀번호 찾기</h4>
 <img src="https://github.com/user-attachments/assets/1234150d-845c-4c44-9268-b452e1c59a53"/>
-<h4>회원 탈퇴<h4>
+<h4>회원 탈퇴</h4>
 <img src="https://github.com/user-attachments/assets/1778a4fc-ad12-412b-99fe-468bfce90121"/>
 
 </div>
@@ -276,11 +416,11 @@
 <summary><strong>메인페이지</strong></summary>
 <div>
 <h2>메인페이지</h2>
-<h4>아이템 조회<h4>
+<h4>아이템 조회</h4>
 <img src="https://github.com/user-attachments/assets/54367e8b-c54a-4b21-89ff-3e4fadf234df/>
-<h4>행성 이름 수정<h4>
+<h4>행성 이름 수정</h4>
 <img src="https://github.com/user-attachments/assets/818a296f-1c4f-4ac8-b59c-e805d473233b"/>
-<h4>날씨 할 일 추천<h4>
+<h4>날씨 할 일 추천</h4>
 <img src="https://github.com/user-attachments/assets/a0556acf-b04f-4199-b77a-035dea3b7c61"/>
 </div>
 </details>
@@ -292,11 +432,11 @@
   
 <h4>아이템 숨김/배치</h4>
 <img src="https://github.com/user-attachments/assets/32bed5f7-d6d7-495c-aedd-aa20a08640b6"/>
-<h4>칭호 선택<h4>
+<h4>칭호 선택</h4>
 <img src="https://github.com/user-attachments/assets/b409c552-4dbf-44d4-937e-0f4e50ae2823"/>
-<h4>달성률 조회<h4>
+<h4>달성률 조회</h4>
 <img src="https://github.com/user-attachments/assets/1f30ccad-0b19-4629-8706-d33a715e7386"/>
-<h4>경험치 조회<h4>
+<h4>경험치 조회</h4>
 <img src="https://github.com/user-attachments/assets/a5891987-59bd-442d-a068-defaffc660e1"/>
 </div>
 </details>
