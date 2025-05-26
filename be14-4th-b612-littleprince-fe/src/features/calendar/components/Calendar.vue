@@ -91,6 +91,12 @@ function onDateSelected(date) {
   calendarRef.value.getApi().gotoDate(date)
 }
 
+function addDays(date, days) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
 async function fetchAllPlans() {
   try {
     const [longRes, shortRes] = await Promise.all([
@@ -106,7 +112,7 @@ async function fetchAllPlans() {
       return {
         title: plan.title,
         start: plan.startDate,
-        end: plan.endDate,
+        end: addDays(plan.endDate,0),
         className: ['fc-event-bar', `bg-event-${classIndex}`],
       }
     })
