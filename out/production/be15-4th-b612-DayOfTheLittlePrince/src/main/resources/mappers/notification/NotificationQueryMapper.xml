@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="littleprince.notification.query.mapper.NotificationQueryMapper">
+
+    <select id="findByMemberIdWithPaging" resultType="littleprince.notification.query.dto.NotificationDto">
+        SELECT
+            n.notification_id,
+            n.category_id,
+            n.content AS content,
+            n.is_read,
+            n.created_at
+        FROM notification n
+                 JOIN notification_type t ON n.category_id = t.notification_type
+        WHERE n.member_id = #{memberId}
+        ORDER BY n.created_at DESC
+            LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countByMemberId" resultType="long">
+        SELECT COUNT(*)
+        FROM notification
+        WHERE member_id = #{memberId}
+    </select>
+
+    <select id="countUnreadByMemberId" resultType="long">
+        SELECT COUNT(*)
+        FROM notification
+        WHERE member_id = #{memberId}
+          AND is_read = 'N'
+    </select>
+
+</mapper>

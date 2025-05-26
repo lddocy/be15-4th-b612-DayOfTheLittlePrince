@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="littleprince.member.query.mapper.ExpHistoryQueryMapper">
+
+    <select id="existsTodayHistory" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM exp_history
+            WHERE member_id = #{memberId}
+              AND DATE(created_at) = CURRENT_DATE
+        )
+    </select>
+
+    <select id="getTaskExp" resultType="int">
+        SELECT
+            count(*) totalExp
+          FROM task
+        WHERE member_id = #{ memberId }
+          AND is_checked = 'Y'
+          AND date = CURDATE() - INTERVAL 1 DAY
+    </select>
+
+    <select id="getProjectExp" resultType="int">
+        SELECT
+            CEIL(COUNT(*) * 0.5) AS getTotalProjectExp
+          FROM task a
+          LEFT JOIN project b ON a.project_id = b.project_id
+        WHERE a.member_id = #{ memberId }
+          AND a.project_id = #{ taskProjectId }
+          AND b.end_date = CURDATE() - INTERVAL 1 DAY
+          AND a.is_checked = 'Y'
+    </select>
+
+    <select id="getProjectIdExp" resultType="Long">
+        SELECT
+            a.project_id
+        FROM task a
+        JOIN project b ON a.project_id = b.project_id
+        WHERE a.member_id = #{ memberId }
+        AND a.project_id = #{ taskProjectId }
+        AND b.end_date = CURDATE() - INTERVAL 1 DAY
+        AND is_checked = 'Y'
+    </select>
+
+    <select id="getExpHistory" resultType="littleprince.member.query.dto.GetExpHistoryDTO">
+        SELECT
+        a.history_id AS historyId,
+        a.project_id AS projectId,
+        p.title AS title,
+        p.end_date AS endDate,
+        a.exp_point AS expPoint
+        FROM exp_history a
+        JOIN project p ON a.project_id = p.project_id
+        WHERE a.member_id = #{memberId}
+
+        UNION ALL
+
+        SELECT
+        a.history_id AS historyId,
+        a.project_id AS projectId,
+        NULL AS title,
+        t.date AS endDate,
+        a.exp_point AS expPoint
+        FROM exp_history a
+        JOIN task t ON a.member_id = t.member_id
+        WHERE a.project_id IS NULL
+        AND a.member_id = #{memberId}
+
+        ORDER BY endDate DESC
+        LIMIT 3;
+    </select>
+
+
+</mapper>

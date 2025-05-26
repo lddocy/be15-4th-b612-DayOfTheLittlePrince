@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="littleprince.item.query.mapper.ItemMapper">
+    <select id="findItemListByLevel" resultType="littleprince.item.query.dto.ItemDTO">
+        <![CDATA[
+        SELECT
+            gi.item_id,
+            gi.is_hidden,
+            i.item_name,
+            i.level
+        FROM member m
+        JOIN get_item gi ON gi.member_id = m.member_id
+        JOIN item i ON i.item_id = gi.item_id
+        WHERE m.member_id = #{ member_id }
+            AND i.level <= m.level
+        ]]>
+    </select>
+
+    <select id="findGetItemListByMemberId" resultType="littleprince.item.query.dto.GetItemDTO">
+        SELECT *
+        FROM get_item gi
+        WHERE gi.get_item_id = #{ get_item_id }
+            AND gi.member_id = #{ member_id }
+    </select>
+
+</mapper>

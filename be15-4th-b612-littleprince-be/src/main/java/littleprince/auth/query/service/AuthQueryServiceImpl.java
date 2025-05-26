@@ -43,6 +43,7 @@ public class AuthQueryServiceImpl implements AuthQueryService{
         if (!passwordEncoder.matches(request.getPassword(), foundMember.getPassword())) {
             throw new BusinessException(MemberErrorCode.INVALID_LOGIN_REQUEST);
         }
+        log.info("유저 찾기 완료");
 
         /* 로그인 성공 */
 
@@ -55,7 +56,7 @@ public class AuthQueryServiceImpl implements AuthQueryService{
 
         /* 5. redis에 토큰 저장 */
         refreshTokenRepository.save(foundMember.getMemberId(), refreshToken);
-
+        log.info("레디스에 토큰 저장 완료");
         /* 6. 사용자에게 토큰 전달 */
         return TokenResponse.builder()
                 .accessToken(accessToken)
@@ -116,7 +117,7 @@ public class AuthQueryServiceImpl implements AuthQueryService{
         sb.append("<h1>비밀번호 변경</h1>")
                 .append("<p>아래 버튼을 클릭하면 비밀번호 변경 페이지로 이동합니다.</p>")
                 .append("<a href=\"")
-                .append("http://localhost:5173/changePassword?uuid=")
+                .append("http://localhost/changePassword?uuid=")
                 .append(randomString)
                 .append("\" ")
                 .append("style=\"display:inline-block; padding:12px 24px; background-color:#4CAF50; color:#ffffff; text-align:center; text-decoration:none; font-size:16px; border-radius:6px; font-weight:bold;\">")

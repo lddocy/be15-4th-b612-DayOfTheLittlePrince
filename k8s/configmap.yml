@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+data:
+  database_url: "mariadb:3307/little_prince?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+  database_name: "little_prince"
+  charset: "utf8mb4"
+  collation: "utf8mb4_unicode_ci"
+  timeout: "30"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+data:
+  host: "b612-redis"
+  port: "6379"
+  timeout: "30"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jwt-config
+data:
+  at-expiration: "900000"
+  rt-expiration: "604800000"
+  timeout: "30"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: email-config
+data:
+  host: "smtp.gmail.com"
+  port: "587"
