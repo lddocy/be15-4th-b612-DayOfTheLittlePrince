@@ -75,7 +75,7 @@ const fetchTodayTodos = async () => {
     }));
   } catch (err) {
     console.error('오늘의 할 일 불러오기 실패:', err);
-    toast.error('오늘의 할 일을 불러오지 못했어요.');
+    // toast.error('오늘의 할 일을 불러오지 못했어요.');
   }
 };
 
