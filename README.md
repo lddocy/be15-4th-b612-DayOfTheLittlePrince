@@ -238,7 +238,7 @@
 <br><br>
 
 ## <p id="3"> 🧩 3. 프로젝트 아키텍처 구조도 </p>
-내용추가예정
+<img src="https://github.com/user-attachments/assets/7dad7c4d-48ab-40a3-ae58-72a3d4fe9362"/>
 
 <br><br>
 
@@ -418,12 +418,11 @@ pipeline {
 <summary><strong>메인페이지</strong></summary>
 <div>
 <h2>메인페이지</h2>
-<h4>아이템 조회</h4>
-  
+<h4>날씨로 할 일 추천 & 아이템 조회</h4>
+<img src="https://github.com/user-attachments/assets/bd36ac0d-e726-4b61-9d1e-5bc690844da4"/>
+
 <h4>행성 이름 수정</h4>
 <img src="https://github.com/user-attachments/assets/818a296f-1c4f-4ac8-b59c-e805d473233b"/>
-
-<h4>날씨 할 일 추천</h4>
 
 </div>
 </details>
@@ -453,24 +452,33 @@ pipeline {
 <h2>투두 리스트</h2>
 <h4>단기 투두 리스트</h4>
 <h5>단기 투두리스트 등록</h5>
+<img src="https://github.com/user-attachments/assets/b133dd6f-be2e-4f0f-a23b-589e04d85127"/>
 
 <h5>단기 투두리스트 조회</h5>
-  
+<img src="https://github.com/user-attachments/assets/c1d894d2-b661-4a49-a5c8-85b1647836d8"/>
+
 <h5>단기 투두리스트 삭제</h5>
+<img src="https://github.com/user-attachments/assets/d193472a-0222-4985-b150-1469ae4c7840"/>
 
 <h4>AI 추천<h4>
 <h5>AI 생성 성공</h5>
+<img src="https://github.com/user-attachments/assets/62640adc-c763-4a3d-9370-733a4dd9f5f8"/>
 
 <h5>AI 생성 실패</h5>
+<img src="https://github.com/user-attachments/assets/f61354f9-5545-41c2-8371-2ea6d575f971"/>
 
 <h4>장기 플랜<h4>
 <h5>장기 플랜 등록</h5>
-  
+<img src="https://github.com/user-attachments/assets/5ba6d17a-d6f5-45fa-86ec-e59ea9409b97"/>
+
 <h5>장기 플랜 조회</h5>
+<img src="https://github.com/user-attachments/assets/3c9f107b-c2d2-40a4-81a3-72b0dbca8255"/>
 
 <h5>장기 플랜 하위 투두리스트 등록</h5>
+<img src="https://github.com/user-attachments/assets/7c0cd3ac-2cc5-433d-9b02-f04e16b67420"/>
 
 <h5>장기 플랜 삭제</h5>
+<img src="https://github.com/user-attachments/assets/12e6ab8b-8788-484c-8642-d1d3139b1637"/>
 
 </div>
 </details>
@@ -480,10 +488,13 @@ pipeline {
 <div>
 <h2>캘린더</h2>
 <h4>메인 캘린더 조회</h4>
+<img src="https://github.com/user-attachments/assets/0741a74f-ffa4-43bd-a254-0b1425f355d2"/>
 
 <h4>회고 등록</h4>
+<img src="https://github.com/user-attachments/assets/db04dae2-86ab-4c6a-bf7b-79e928519991"/>
 
 <h4>회고 수정</h4>
+<img src="https://github.com/user-attachments/assets/2831e576-9005-4617-a6a6-2f7b167ad214"/>
 
 </div>
 </details>
@@ -534,6 +545,14 @@ pipeline {
 
 > ## 🚧 GitHub 대용량 파일 푸시 오류 <br>
 > #### **1️⃣ 문제 상황** <br>
+```
+vbnet
+복사편집
+error: File ... is 147.17 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: GH001: Large files detected.
+fatal: remote rejected
+
+```
 > - .exr 확장자의 고해상도 HDRI 배경 이미지를 git add 후 커밋<br>
 > - GitHub는 100MB 초과 단일 파일에 대해 푸시 자체를 거절<br>
 > - .gitignore을 추가해도, 이미 커밋된 히스토리는 여전히 남아 있음<br>
@@ -542,12 +561,22 @@ pipeline {
 > - 단일 파일 최대 100MB, 권장 50MB 이하<br>
 > - .gitignore만으로는 커밋 이력 제거 불가<br>
 > #### **3️⃣ 해결 방법** <br>
-> - .gitignore에 예외 등록<br>
+> - .gitignore에 예외 등록  
 > - Git 기록 정리를 위한 새 clone<br>
 > - git filter-repo로 Git 히스토리에서 완전 삭제<br>
 > - .gitignore 반영 커밋<br>
 > - 강제 푸시 (push --force)
-
+> #### **🚨 주의 사항** <br>
+> - 클린 클론 없이 filter-repo 시도 → 히스토리에 여전히 대형 파일 남아있어 푸시 실패
+> - 새로 clone 후 작업하니 히스토리까지 완전 정리됨 → push 성공
+> - `git filter-repo`는 히스토리를 파괴하므로 **백업 브랜치 권장**
+```bash
+bash
+복사편집
+git branch backup-before-filter
+```  
+> - 협업 중이라면 `push --force` 전에 반드시 **팀원과 조율할 것**
+> - 장기적으로는 Git LFS, S3, CDN 등을 통한 대용량 파일 관리 체계 고려
 <br>
 
 > ## 🚧 마이페이지 아이템 실시간 반영 실패 <br>
@@ -566,7 +595,7 @@ pipeline {
 > - `SceneItemManager.vue` 내에서 `watch(() => props.itemVisibilityMap, ...)`로 변경 사항을 감지해보려 시도  
 > - `scene.children` 내 오브젝트를 순회하며 `.name` 기준으로 찾아 `.visible` 속성을 수동으로 업데이트하는 방식도 적용  
 > - `props.memberLevel`, `routePath`와의 조건을 다시 체크해 `.visible` 조건을 재계산하도록 작성  
-> #### **4️⃣ 해결 방법**  
+> #### **4️⃣ 최종 결과**  
 > 여러 시도를 했지만 결국 실시간 반영에는 실패했다.  
 > Three.js가 내부적으로 관리하는 3D 오브젝트와 Vue의 반응형 상태를 자연스럽게 연결하기가 어려웠다.  
 > 결국 `window.location.reload()`로 씬 전체를 리로드하는 방식 외에는 반영이 되지 않아 임시 방편으로 사용 중이다.
@@ -596,6 +625,61 @@ one or more objects failed to apply, reason: error when patching "/dev/shm/27920
 > - spec.ignoreDifferences 설정과 syncPolicy.syncOptions에서 RespectIgnoreDifferences=true를 설정을 통해 특정 필드 무시 및 동기화 오류 회피  
 > <img src="https://github.com/user-attachments/assets/cbedae61-7b98-47b4-a471-bfe5201ece66"/>
 
+<br>
+
+> ## 🚧 FullCalendar에서 end_date가 하루 전까지만 표시되는 문제 <br>
+> #### **1️⃣ 문제 상황** <br>
+> FullCalendar에서 일정 데이터를 아래와 같이 등록했음에도 불구하고
+```jsx
+start: plan.startDate
+end: plan.endDate // "2025-05-07"
+```
+> 실제로는 **5월 6일까지만 일정이 표시**되고, **7일은 빈 칸처럼 보임** (마치 6일이 종료일인 것처럼)
+> ![image](https://github.com/user-attachments/assets/3d82659e-1cb7-48d4-a986-cda56314d1d0)
+> #### **2️⃣ 원인** <br>
+> - FullCalendar는 `end` 값을 **exclusive (해당 날짜 전까지 표시)** 방식으로 처리함
+> - 즉, `end: "2025-05-07"` → **내부적으로 `2025-05-07T00:00:00` 처리**
+> - 결과적으로 **5월 7일 00:00에 끝나므로, 실제 표시 범위는 5월 1일 ~ 6일**
+> #### **3️⃣ 해결 방법** <br>
+> - addDays() 함수로 endDate를 명시적으로 Date 객체로 변환
+```jsx
+function addDays(date, days) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+```
+> - 기존 코드에서 변경
+```jsx
+// 기존: 문자열 그대로 사용
+const longEvents = longPlans.map((plan, index) => {
+      const classIndex = (index % 5) + 1
+      return {
+        title: plan.title,
+        start: plan.startDate,
+        end: plan.endDate,
+        className: ['fc-event-bar', `bg-event-${classIndex}`],
+      }
+    })
+
+// 수정: 날짜 객체로 감싸서 전달 (타임존 적용)
+const longEvents = longPlans.map((plan, index) => {
+      const classIndex = (index % 5) + 1
+      return {
+        title: plan.title,
+        start: plan.startDate,
+        end: addDays(plan.endDate, 0),
+        className: ['fc-event-bar', `bg-event-${classIndex}`],
+      }
+    })
+
+**end: addDays(plan.endDate, 0), // Wed May 07 2025 00:00:00 GMT+0900 (한국 표준시)**
+
+```
+> - addDays(..., 0)은 단순히 문자열을 Date 객체로 명확히 바꿔주는 역할을 하며,
+> FullCalendar는 이를 **정확한 로컬 시간**으로 해석해 해당 날짜까지 포함시킴
+> - 후속 문제 : 이벤트에 12a가 붙음	(시작 시간이 00:00이라 자동 표시)
+> displayEventTime: false 옵션 추가로 해결
 <br><br>
 
 ##  <p id="8"> 🧑🏻‍🚀 8. 팀원 회고 </p>
@@ -604,10 +688,10 @@ one or more objects failed to apply, reason: error when patching "/dev/shm/27920
 |:-----------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |박장우|수행 기간이 길지 않았던지라 걱정도 많이 되었고 불확실성으로 가득 찼었던 이번 프로젝트였는데, 팀원 모두가 원활한 소통을 기반으로 합심해서 수행한 덕분에 수월하게 마칠 수 있었습니다. 직전 프로젝트에서 놓치고, 만들어보지 못했었던 코드들을 이번 프로젝트를 통해서 팀원 분들의 많은 도움을 받아 가며 만들어내보며 전체적인 감을 잡는 데 큰 도움이 되었던 것 같습니다. 다만, 데브옵스 프로젝트에서 데브옵스에 관련한 일을 수행해 보지 못한 것은 많이 아쉽게 남습니다. 따라서, 최종 프로젝트에 들어가서는 배포 기능 구현에도 힘을 보태고자 하며, 마지막인 만큼 완성도 높은 결과물을 도출해낼 수 있도록 후회 없이 최선을 다해서 임하도록 하겠습니다. 짧은 시간 모두 고생 많으셨습니다 !|
 |박준서|이번 프로젝트는 Docker를 활용하여 배포까지 직접 경험해볼 수 있었던 소중한 기회였습니다. 프로젝트 기간이 짧았던 만큼, 기능적인 범위는 이전 프로젝트에 비해 다소 축소되었지만, 주제가 Todolist였기 때문에 구현 난이도가 낮아 전체적인 진행은 비교적 수월했습니다. 이를 통해 프로젝트의 난이도와 주어진 기간을 고려하여 기능을 어떻게 조절할지에 대한 감각을 점차 익힐 수 있었습니다. 이번 프로젝트에서는 새로운 기술과 API를 적용해볼 수 있는 기회가 많았습니다. Three.js와 Web Push처럼 처음 접해보는 기술을 실제 코드에 적용하면서, 단순한 구현을 넘어서 UX 측면에서도 어떻게 구성할지 고민하며 개발에 임했습니다. 특히 프론트엔드에서 애니메이션을 직접 구현해본 경험은 매우 인상 깊었습니다. 전체적으로 기능 구현, 새로운 기술 학습, UX에 대한 고민, 그리고 배포 환경까지 경험하면서 개발자로서 한 단계 성장할 수 있었던 프로젝트였습니다. 이번 경험을 바탕으로, 다가올 최종 프로젝트에서는 보다 완성도 높은 결과물을 만들 수 있도록 더욱 적극적이고 주도적으로 임하겠습니다.|
-|오유경|  |
-|윤채영|Three.js를 활용한 3D 아이템 배치 기능과 게임 요소를 결합한 웹 서비스를 팀 프로젝트로 개발하며, 단순한 기술 구현을 넘어서 사용자 경험과 상업성까지 함께 고민했습니다. 프론트엔드에서는 직관적인 UI/UX의 중요성을, 백엔드에서는 사용자 상태를 정교하게 관리하기 위한 데이터 흐름과 구조 설계의 필요성을 절감했습니다. 특히 자유도 높은 아이템 배치를 통해 의미 있는 상호작용을 제공하려 노력했고, 그 과정에서 게임성과 실용성, 시장성 간의 균형을 추구했습니다. 무엇보다 각자의 전문 영역을 책임감 있게 수행해준 팀원들과의 협업을 통해, 혼자였다면 구현하기 어려웠을 완성도를 이끌어낼 수 있었고, 커뮤니케이션의 중요성과 팀워크의 시너지를 다시 한 번 실감한 프로젝트였습니다.|
-|이승재|  |
-|조현승|  |
+|오유경|이번 프로젝트는 CI/CD 파이프라인 구축 및 실제 배포를 목표로 설계되었습니다. 배포를 우선 과제로 삼기 위해 필수 기능만을 엄선하여 풀스택 개발에 집중했고, 덕분에 기획 → 개발 → 테스트 → 배포의 전 과정을 체계적으로 경험할 수 있었습니다. 아쉽게도 실제 배포 단계에는 제가 직접 참여하지 못했지만, 다음 프로젝트에서는 배포까지 온전히 책임질 수 있도록 개인적으로 복습과 실습을 진행할 예정입니다. 단기간에 완전한 개발 사이클을 완성해야 한다고 생각했지만, 불필요한 기능을 과감히 줄이고 팀원 간 효율적인 협업을 이뤄낸 덕분에 예상보다 여유롭게 마무리할 수 있었습니다. 특히 테스트와 검토 단계에 충분한 시간을 들여 안정성을 확보했고, 그 결과 배포 직전에도 큰 문제 없이 릴리즈 준비를 완료할 수 있었습니다. 이번 경험을 바탕으로, 다음에는 직접 배포까지 담당하며 **더욱 견고한 CI/CD 파이프라인**을 구현하고, 배포 자동화를 한층 고도화해 볼 생각입니다. 짧은 기간 안에 핵심에 집중하는 방법을 확실히 익힌 만큼, 앞으로는 기능과 안정성 모두를 놓치지 않는 개발자가 되도록 노력하겠습니다.|
+|윤채영|Three.js를 활용한 3D 아이템 배치 기능과 게임 요소를 결합한 웹 서비스를 팀 프로젝트로 개발하며, 단순한 기술 구현을 넘어서 사용자 경험과 상업성까지 함께 고민했습니다. 프론트엔드에서는 직관적인 UI/UX의 중요성을, 백엔드에서는 사용자 상태를 정교하게 관리하기 위한 데이터 흐름과 구조 설계의 필요성을 절감했습니다. 특히 자유도 높은 아이템 배치를 통해 의미 있는 상호작용을 제공하려 노력했고, 그 과정에서 게임성과 실용성, 시장성 간의 균형을 추구했습니다. 또한 CI/CD 파이프라인과 자동 배포 환경 구축을 통해 개발 효율성과 안정성을 동시에 확보한 것도 큰 성과였습니다. GitHub Actions와 같은 자동화 도구를 활용해 테스트 및 빌드, 배포 과정이 매끄럽게 이루어졌고, 이를 통해 개발-운영 간의 피드백 루프가 빨라졌습니다. 버전 관리, 브랜치 전략, 그리고 배포 주기 설계 등에서 체계적인 협업 문화를 경험할 수 있었으며, 이러한 DevOps적인 접근이 서비스의 완성도 향상에 큰 기여를 했습니다. 무엇보다 각자의 영역을 책임감 있게 수행해준 팀원들과의 협업을 통해, 혼자였다면 구현하기 어려웠을 완성도를 이끌어낼 수 있었고, 커뮤니케이션의 중요성과 팀워크의 시너지를 다시 한 번 실감한 프로젝트였습니다.|
+|이승재|이번 4차 프로젝트는 배포가 주된 목적이었기 때문에 기능 구현은 최소한으로 진행했습니다. 백엔드의 경우, 복잡한 기능 없이 기본적인 구조만 구현했기 때문에 비교적 수월하게 마무리할 수 있었습니다. 반면, 프론트엔드는 아직 미숙한 부분이 많다는 것을 느꼈고, 앞으로 더 보완이 필요하다는 생각이 들었습니다. 실제 배포는 팀원 한 분이 전담해주셨기 때문에, 큰 어려움 없이 프로젝트를 마칠 수 있었지만, 개인적으로는 Kubernetes와 Docker에 대한 이해가 부족해 아쉬움이 남았습니다. 최종 프로젝트 전까지 배포 환경에 대한 이해를 높여, 직접 실습해보고 팀에 도움이 되는 역할을 할 수 있도록 준비해야겠습니다.|
+|조현승|처음으로 배포 과정을 직접 경험하면서, 그동안 개념적으로만 알고 있던 Docker와 Kubernetes를 실제로 활용해볼 수 있어 뜻깊은 시간이었습니다. 특히 Jenkins를 활용한 테스트 및 버전 관리 자동화를 통해 DevOps 환경에 대한 이해도 함께 높일 수 있었습니다. 또한 OpenAI API를 적용해 AI 기반 서비스 개발도 직접 경험해보며, 단순한 구현을 넘어 실제 사용자에게 가치를 줄 수 있는 AI 활용 방식에 대해 고민할 수 있는 좋은 기회가 되었습니다.|
 
 <br>
 
