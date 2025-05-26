@@ -260,9 +260,15 @@
 <summary><strong>회원</strong></summary>
 <div>
 <h2>회원</h2>
+  
 <h4>로그인<h4>
+  
 <h4>회원가입<h4>
+  
 <h4>비밀번호 찾기<h4>
+
+<h4>회원 탈퇴<h4>
+
 </div>
 </details>
 
@@ -270,10 +276,15 @@
 <summary><strong>메인페이지</strong></summary>
 <div>
 <h2>메인페이지</h2>
+  
 <h4>아이템 조회<h4>
+<img src="https://github.com/user-attachments/assets/54367e8b-c54a-4b21-89ff-3e4fadf234df/>
+  
 <h4>행성 이름 수정<h4>
 <img src="https://github.com/user-attachments/assets/818a296f-1c4f-4ac8-b59c-e805d473233b"/>
-
+  
+<h4>날씨 할 일 추천<h4>
+<img src="https://github.com/user-attachments/assets/a0556acf-b04f-4199-b77a-035dea3b7c61"/>
 </div>
 </details>
 
@@ -281,24 +292,44 @@
 <summary><strong>마이페이지</strong></summary>
 <div>
 <h2>마이페이지</h2>
+  
 <h4>아이템 숨김/배치</h4>
+<img src="https://github.com/user-attachments/assets/32bed5f7-d6d7-495c-aedd-aa20a08640b6"/>
 <h4>칭호 선택<h4>
+<img src="https://github.com/user-attachments/assets/b409c552-4dbf-44d4-937e-0f4e50ae2823"/>
 <h4>달성률 조회<h4>
+<img src="https://github.com/user-attachments/assets/1f30ccad-0b19-4629-8706-d33a715e7386"/>
 <h4>경험치 조회<h4>
+<img src="https://github.com/user-attachments/assets/a5891987-59bd-442d-a068-defaffc660e1"/>
 </div>
 </details>
-
+  
 <details>
 <summary><strong>투두 리스트</strong></summary>
 <div>
 <h2>투두 리스트</h2>
 <h4>단기 투두 리스트</h4>
-<h5>등록</h5>
-<h5>AI 추천</h5>
-<h5>조회</h5>
-<h4>장기 목표<h4>
-<h5>등록</h5>
-<h5>조회</h5>
+<h5>단기 투두리스트 조회</h5>
+<img src="https://github.com/user-attachments/assets/357479f0-2d29-4783-b755-efc5a4224647"/>
+<h5>단기 투두리스트 삭제</h5>
+<img src="https://github.com/user-attachments/assets/1d04b311-f161-4ad7-a58c-c4c474397805"/>
+
+  <h4>장기 플랜<h4>
+<h5>장기 플랜 조회</h5>
+<img src="https://github.com/user-attachments/assets/fa0863f7-dd0b-45fc-9216-4e16ed54d40e"/>
+<h5>장기 플랜 등록</h5>
+<img src="https://github.com/user-attachments/assets/5cee7c20-d836-47b5-8638-666b7164b1f0"/>
+<h5>장기 플랜 하위 투두리스트 등록</h5>
+<img src="https://github.com/user-attachments/assets/aae88f98-59c5-41be-a8b4-8e6be3471832"/>
+<h5>장기 플랜 삭제</h5>
+<img src="https://github.com/user-attachments/assets/1205978a-c169-456f-b6a1-cd2322abf3ea"/>
+
+<h4>AI 추천<h4>
+<h5>AI 생성 성공</h5>
+<img src="https://github.com/user-attachments/assets/75ea1a77-9903-4f00-8edd-d44633829adc"/>
+<h5>AI 생성 실패</h5>
+<img src="https://github.com/user-attachments/assets/65e5ae7f-4cfa-4a83-8ac8-e010404eab96"/>
+
 </div>
 </details>
 
@@ -307,8 +338,11 @@
 <div>
 <h2>캘린더</h2>
 <h4>메인 캘린더 조회</h4>
+<img src="https://github.com/user-attachments/assets/d52fee46-3264-4de7-9639-d76f605fc10f"/>
 <h4>회고 등록</h4>
+<img src="https://github.com/user-attachments/assets/3041a958-337a-4dac-9281-3261c02613e6"/>
 <h4>회고 수정</h4>
+<img src="https://github.com/user-attachments/assets/aa7bdf79-cab7-4179-9434-e1ee2a20d513"/>
 </div>
 </details>
 
@@ -348,7 +382,7 @@
 
 ##  <p id="7"> ☄️ 7. 트러블 슈팅 </p>
 
-> ### 🚧 GitHub 대용량 파일 푸시 오류 <br>
+> ## 🚧 GitHub 대용량 파일 푸시 오류 <br>
 > #### **1️⃣ 문제 상황** <br>
 > - .exr 확장자의 고해상도 HDRI 배경 이미지를 git add 후 커밋<br>
 > - GitHub는 100MB 초과 단일 파일에 대해 푸시 자체를 거절<br>
@@ -364,14 +398,62 @@
 > - .gitignore 반영 커밋<br>
 > - 강제 푸시 (push --force)
 
+<br>
+
+> ## 🚧 마이페이지 아이템 실시간 반영 실패 <br>
+> #### **1️⃣ 문제 상황**  
+> 마이페이지에서 아이템을 토글(숨김/표시)하면 `itemVisibilityMap` 값은 분명히 잘 변경되었고, 콘솔에도 정상적으로 출력되었다.  
+> 하지만 Three.js 씬에는 그 변경사항이 실시간으로 반영되지 않았다.  
+> 강제로 `window.location.reload()`를 호출하면 반영되긴 했지만, 이건 깔끔한 해결은 아니었다.
+> #### **2️⃣ 원인**  
+> - Three.js는 `scene.add()`로 추가된 오브젝트의 `.visible` 속성을 외부 반응형 상태로 자동 업데이트해주지 않음  
+> - Vue에서는 `itemVisibilityMap`을 반응형으로 관리했지만, 해당 값이 바뀌어도 씬에 이미 추가된 모델에는 아무런 영향을 주지 않음  
+> - 라우트가 변경될 때는 `.visible` 속성을 조정했지만, `itemVisibilityMap` 변경을 감지해서 처리하는 로직은 빠져 있었음
+> #### **3️⃣ 해결 방법**
+> 
+> - `MyPageModal.vue`에서 아이템을 토글할 때 `@refresh-item-map` 이벤트 emit  
+> - 상위 컴포넌트에서 `fetchItemMap()` 호출하여 `itemVisibilityMap`을 갱신  
+> - `SceneItemManager.vue` 내에서 `watch(() => props.itemVisibilityMap, ...)`로 변경 사항을 감지해보려 시도  
+> - `scene.children` 내 오브젝트를 순회하며 `.name` 기준으로 찾아 `.visible` 속성을 수동으로 업데이트하는 방식도 적용  
+> - `props.memberLevel`, `routePath`와의 조건을 다시 체크해 `.visible` 조건을 재계산하도록 작성  
+> #### **4️⃣ 해결 방법**  
+> 여러 시도를 했지만 결국 실시간 반영에는 실패했다.  
+> Three.js가 내부적으로 관리하는 3D 오브젝트와 Vue의 반응형 상태를 자연스럽게 연결하기가 어려웠다.  
+> 결국 `window.location.reload()`로 씬 전체를 리로드하는 방식 외에는 반영이 되지 않아 임시 방편으로 사용 중이다.
+
+<br>
+
+> ## 🚧 ArgoCD Sync 에러 <br>
+> #### **1️⃣ 문제 상황** <br>
+> - ArgoCD Sync 과정에서 에러 발생<br>
+![에러 스크린샷](https://github.com/user-attachments/assets/fe9e47bc-5ea0-4d37-b183-895a3ec9e2be)
+> #### **2️⃣ 원인** <br>
+> - mariadb-pvc를 읽어오는 과정에서 argoCD가 manifest 파일을 수정하려고 해서 오류가 발생<br>
+```
+one or more objects failed to apply, reason: error when patching "/dev/shm/2792027684": PersistentVolumeClaim "mariadb-pvc" is invalid: spec: Forbidden: spec is immutable after creation except resources.requests and volumeAttributesClassName for bound claims
+  core.PersistentVolumeClaimSpec{
+  	... // 2 identical fields
+  	Resources:        {Requests: {s"storage": {i: {...}, s: "2Gi", Format: "BinarySI"}}},
+  	VolumeName:       "mariadb-pv",
+- 	StorageClassName: &"manual",
++ 	StorageClassName: nil,
+  	VolumeMode:       &"Filesystem",
+  	DataSource:       nil,
+  	... // 2 identical fields
+  }. Retrying attempt #5 at 12:53PM.
+```
+> #### **3️⃣ 해결 방법** <br>
+> - spec.ignoreDifferences 설정과 syncPolicy.syncOptions에서 RespectIgnoreDifferences=true를 설정을 통해 특정 필드 무시 및 동기화 오류 회피  
+> <img src="https://github.com/user-attachments/assets/cbedae61-7b98-47b4-a471-bfe5201ece66"/>
+
 <br><br>
 
 ##  <p id="8"> 🧑🏻‍🚀 8. 팀원 회고 </p>
 
 |이름|회고|
-|:-----------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|:-----------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |박장우|  |
-|박준서|  |
+|박준서|이번 프로젝트는 Docker를 활용하여 배포까지 직접 경험해볼 수 있었던 소중한 기회였습니다. 프로젝트 기간이 짧았던 만큼, 기능적인 범위는 이전 프로젝트에 비해 다소 축소되었지만, 주제가 Todolist였기 때문에 구현 난이도가 낮아 전체적인 진행은 비교적 수월했습니다. 이를 통해 프로젝트의 난이도와 주어진 기간을 고려하여 기능을 어떻게 조절할지에 대한 감각을 점차 익힐 수 있었습니다. 이번 프로젝트에서는 새로운 기술과 API를 적용해볼 수 있는 기회가 많았습니다. Three.js와 Web Push처럼 처음 접해보는 기술을 실제 코드에 적용하면서, 단순한 구현을 넘어서 UX 측면에서도 어떻게 구성할지 고민하며 개발에 임했습니다. 특히 프론트엔드에서 애니메이션을 직접 구현해본 경험은 매우 인상 깊었습니다. 전체적으로 기능 구현, 새로운 기술 학습, UX에 대한 고민, 그리고 배포 환경까지 경험하면서 개발자로서 한 단계 성장할 수 있었던 프로젝트였습니다. 이번 경험을 바탕으로, 다가올 최종 프로젝트에서는 보다 완성도 높은 결과물을 만들 수 있도록 더욱 적극적이고 주도적으로 임하겠습니다.|
 |오유경|  |
 |윤채영|  |
 |이승재|  |
