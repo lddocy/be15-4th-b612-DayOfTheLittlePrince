@@ -62,6 +62,7 @@ const calendarOptions = ref({
   plugins: [dayGridPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
   height: '100%',
+  displayEventTime: false,
   events(fetchInfo, successCallback, failureCallback) {
     successCallback(calendarEvents.value)
   },
