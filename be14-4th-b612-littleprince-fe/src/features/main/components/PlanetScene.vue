@@ -102,7 +102,7 @@ async function fetchItemMap() {
         itemVisibilityMap.value = map;
     } catch (e) {
         console.error('아이템 목록 조회 실패:', e);
-        toast.error('아이템 정보를 불러오지 못했습니다.');
+        // toast.error('아이템 정보를 불러오지 못했습니다.');
     }
 }
 
