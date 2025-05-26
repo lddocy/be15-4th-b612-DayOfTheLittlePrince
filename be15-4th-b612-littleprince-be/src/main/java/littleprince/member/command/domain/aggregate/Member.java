@@ -3,6 +3,8 @@ package littleprince.member.command.domain.aggregate;
 import jakarta.persistence.*;
 import littleprince.common.domain.StatusType;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,8 +14,10 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "member")
 @Getter
-@Setter(AccessLevel.PACKAGE)
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Member {
 
     @Id

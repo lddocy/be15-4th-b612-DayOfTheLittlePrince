@@ -152,6 +152,50 @@ public class MemberCommandServiceImpl implements MemberCommandService {
                 .build();
     }
 
+    @Override
+    @Transactional
+    public ExpResponse addExp(Long memberId, int amount, Long projectId) {
+        MemberDTO member = memberQueryMapper.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
+        int beforeLevel = member.getLevel();
+        int currentLevel = member.getLevel();
+        int currentExp = member.getExp() + amount;
+        boolean levelUp = false;
+
+        expHistoryCommandMapper.insertExpHistoryId(memberId, amount, projectId);
+
+
+        /* 2. 추가 이후에도 레벨업이 남아있다면? 남은 만큼 추가 */
+        log.info("시작 전 경험치 : {}, 시작 전 레벨 : {}", member.getExp(), member.getLevel());
+        log.info("currentExp: {}, 레벨업 요구 레벨: {}", member.getExp(), MemberLevel.getTotalExpByLevel(currentLevel + 1));
+        while(currentLevel < MAX_LEVEL && currentExp > MemberLevel.getTotalExpByLevel(currentLevel + 1)){
+            // 2.1. currentExp 획득량 만큼 감소 시켜주기!
+            currentExp -= MemberLevel.getTotalExpByLevel(currentLevel + 1);
+            // 2.2. currentLevel 1 올려주기
+            currentLevel += 1;
+            /* 2.3. 레벨업 했으면 아이템, 칭호 지급해주기!*/
+            itemCommandService.addItem(memberId, currentLevel);
+            badgeCommandService.addBadge(memberId, currentLevel);
+        }
+
+        if(currentLevel != beforeLevel){
+            levelUp = true;
+        }
+
+        log.info("현재 레벨 : {}, 현재 경험치 : {}", currentLevel, currentExp);
+
+        member.setLevel(currentLevel);
+        member.setExp(currentExp);
+        memberCommandMapper.updateLevelAndExp(member);
+
+        return ExpResponse.builder()
+                .memberId(memberId)
+                .updatedExp(currentExp)
+                .updatedLevel(currentLevel)
+                .levelUp(levelUp)
+                .build();
+    }
+
     @Transactional
     public void changePlanetName(Long memberId, PlanetNameRequest request) {
         Member member = memberRepository.findById(memberId)

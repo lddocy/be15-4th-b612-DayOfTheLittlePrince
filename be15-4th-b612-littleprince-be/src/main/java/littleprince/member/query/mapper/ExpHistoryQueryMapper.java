@@ -12,4 +12,10 @@ public interface ExpHistoryQueryMapper {
 
     /* 획득 경험치 조회 */
     List<GetExpHistoryDTO> getExpHistory(Long memberId);
+
+    int getTaskExp(Long memberId);
+
+    int getProjectExp(Long memberId, Long taskProjectId);
+
+    Long getProjectIdExp(Long memberId, Long taskProjectId);
 }

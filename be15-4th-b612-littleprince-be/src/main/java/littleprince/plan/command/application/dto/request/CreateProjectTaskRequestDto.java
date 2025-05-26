@@ -3,6 +3,9 @@ package littleprince.plan.command.application.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +13,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Schema(description = "장기 프로젝트 하위 체크리스트 생성 요청 DTO")
 public class CreateProjectTaskRequestDto {
 
@@ -19,7 +24,9 @@ public class CreateProjectTaskRequestDto {
     private List<ProjectTaskDto> tasks;
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
+    @Builder
     @Schema(description = "개별 체크리스트 항목 DTO")
     public static class ProjectTaskDto {
         @NotBlank

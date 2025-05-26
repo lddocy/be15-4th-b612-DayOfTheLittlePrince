@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/plans/project-tasks")
-@Tag(name = "투두 리스트")
+@Tag(name = "장기 투두 리스트")
 public class ProjectTaskCommandController {
 
     private final ProjectTaskCommandService projectTaskCommandService;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/plans/projects")
-@Tag(name = "투두 리스트")
+@Tag(name = "장기 투두 리스트")
 public class ProjectCommandController {
 
     private final ProjectCommandService projectCommandService;

@@ -14,6 +14,7 @@ import { useUserStore } from '@/stores/user.js';
 import { fetchExpInfo, getSelectedBadge, updatePlanetName } from '@/features/main/api.js';
 import { useToast } from 'vue-toastification';
 import { fetchMyItems } from '@/features/user/api.js';
+import WeatherRecommendation from '@/features/main/components/WeatherRecommendation.vue';
 
 const emit = defineEmits(['loaded']);
 
@@ -186,6 +187,7 @@ watch(
 <template>
     <div class="scene-wrapper relative w-full h-full">
         <div ref="container" class="scene-container"></div>
+        <!--   아이템 배치     -->
         <SceneItemManager
             v-if="sceneRef && isSceneReady && Object.keys(itemVisibilityMap).length > 0"
             :scene="sceneRef"
@@ -193,15 +195,21 @@ watch(
             :memberLevel="memberLevel"
             :itemVisibilityMap="itemVisibilityMap"
         />
-        <MainIconItem />
+
+        <!--   오늘의 할 일, 알림 아이콘     -->
+        <MainIconItem v-if="isSceneReady" />
         <div class="fixed bottom-6 right-6 z-0">
             <MemberInfoItem
                 :memberInfo="memberInfo"
                 :max="totalExp"
                 :badge="badge"
                 @edit-planet-name="editPlanetName"
+                v-if="isSceneReady"
             />
         </div>
+
+        <!--    날씨    -->
+        <WeatherRecommendation v-if="isSceneReady" />
     </div>
 </template>
 

@@ -16,7 +16,7 @@ public interface ShortListQueryMapper {
     List<ShortListDTO> getShortList(Long memberId, Date date);
 
     /* 단기 리스트 전체 조회 */
-    List<ShortListsAllDTO> getShortListsAll(Long memberId, Date date);
+    List<ShortListsAllDTO> getShortListsAll(Long memberId);
 
     /* 단기 플랜 여부 조회 */
     List<ShortPlanDateDTO> getShortDates(Long memberId);
