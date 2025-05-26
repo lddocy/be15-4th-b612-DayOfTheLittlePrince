@@ -209,7 +209,7 @@ watch(
         </div>
 
         <!--    날씨    -->
-        <WeatherRecommendation v-if="isSceneReady" />
+        <WeatherRecommendation v-if="isSceneReady && route.path === '/'" />
     </div>
 </template>
 
