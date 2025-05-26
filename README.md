@@ -1,5 +1,6 @@
 <img src="https://github.com/user-attachments/assets/9e9d201a-1f3e-40ce-a266-f44450217ac3" />
 
+<img src="https://github.com/user-attachments/assets/38b280ca-56fe-4308-bc14-3b5d8d546b00"/>
 
 <br><br>
 ## 👑 B612 팀원 소개
@@ -199,6 +200,33 @@
 <p>- 오전/오후 알림</p>
 <p>- 레벨업 알림</p>
 <br>
+</div>
+</details>
+
+<br><br>
+
+### <p id="1-3">1-3. 사용자 메뉴얼</p>
+<details>
+<summary><strong>사용자 메뉴얼 보러가기</strong></summary>
+<div>
+<img src="https://github.com/user-attachments/assets/13b4c142-aa19-4108-883d-c9b284022469"/>
+<img src="https://github.com/user-attachments/assets/4e465160-b596-4d5e-8e4e-075a9e7f3a1c"/>
+<img src="https://github.com/user-attachments/assets/22d9af87-3bf4-4dad-b370-ee2eeabd05d9"/>
+<img src="https://github.com/user-attachments/assets/0eabc5fd-6f6f-4723-a559-a898bcf462ba"/>
+<img src="https://github.com/user-attachments/assets/a54acd27-6661-4389-8846-469a8e115264"/>
+<img src="https://github.com/user-attachments/assets/d8e01ba6-d45f-4b52-a804-0193d44c0f36"/>
+<img src="https://github.com/user-attachments/assets/85974028-ee46-4ca9-a4be-50cffd638123"/>
+<img src="https://github.com/user-attachments/assets/f59fef5a-608d-4654-b423-902f1962ccbf"/>
+<img src="https://github.com/user-attachments/assets/9a7e64c2-6320-4ffe-bba2-3911f070b718"/>
+<img src="https://github.com/user-attachments/assets/ea5cb157-94cc-48cc-9437-aa67a8a1aedb"/>
+<img src="https://github.com/user-attachments/assets/7b35d29a-acd9-4c5e-bcbe-1db48c4f7ec3"/>
+<img src="https://github.com/user-attachments/assets/f00b551d-944e-46f7-b66e-9e6290f44249"/>
+<img src="https://github.com/user-attachments/assets/8f7430c6-668c-4954-937f-1108d611c342"/>
+<img src="https://github.com/user-attachments/assets/e45f62bb-3c5b-4368-b6d1-55a75bdc9a40"/>
+<img src="https://github.com/user-attachments/assets/fc5f6c9c-2458-46ba-b403-c7abfc4f3409"/>
+<img src="https://github.com/user-attachments/assets/6978f7ea-903e-4cd6-bbd5-be9d8098d012"/>
+<img src="https://github.com/user-attachments/assets/008e78d1-a0ee-4a14-bf28-2bef039e0e74"/>
+
 </div>
 </details>
 
@@ -521,22 +549,46 @@ pipeline {
 <br><br>
 ## <p id="6"> 🔧 6. 기술 스택 </p>
 <div align="center">
+  
+<h3>Backend & Database</h3>
 <div dir="auto">
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"/>
-<img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white"/>
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
-<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white"/>
-<img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white">
-</div>
-<div dir="auto">
-<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
-<img src="https://img.shields.io/badge/ERDCLOUD-339AF0?style=for-the-badge&logoColor=white">
-<img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 <img src="https://img.shields.io/badge/mariaDB-003545?style=for-the-badge&logo=mariaDB&logoColor=white">
 <img src="https://img.shields.io/badge/Redis-FF4438?style=for-the-badge&logo=redis&logoColor=white">
+<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
 </div>
+
+<h3>Frontend</h3>
+<div dir="auto">
+<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> 
+<img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> 
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> 
+<img src="https://img.shields.io/badge/vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white"> 
+<img src="https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
+<img src="https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white"/>
+<img src="https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white"/>
+</div>
+
+<h3>Devops</h3>
+<div dir="auto">
+<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white"/>
+<img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white">
+<img src="https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white"/>
+<img src="https://img.shields.io/badge/Argo-EF7B4D?style=for-the-badge&logo=argo&logoColor=white"/>
+</div>
+
+<h3>Tools & Communication</h3>
+<div dir="auto">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white"/>
+<img src="https://img.shields.io/badge/ERDCLOUD-339AF0?style=for-the-badge&logoColor=white">
+<img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+<img src="https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white"/>
+<img src="https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white"/>
+</div>
+
 </div>
 
 <br><br>
@@ -688,7 +740,7 @@ const longEvents = longPlans.map((plan, index) => {
 |:-----------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |박장우|수행 기간이 길지 않았던지라 걱정도 많이 되었고 불확실성으로 가득 찼었던 이번 프로젝트였는데, 팀원 모두가 원활한 소통을 기반으로 합심해서 수행한 덕분에 수월하게 마칠 수 있었습니다. 직전 프로젝트에서 놓치고, 만들어보지 못했었던 코드들을 이번 프로젝트를 통해서 팀원 분들의 많은 도움을 받아 가며 만들어내보며 전체적인 감을 잡는 데 큰 도움이 되었던 것 같습니다. 다만, 데브옵스 프로젝트에서 데브옵스에 관련한 일을 수행해 보지 못한 것은 많이 아쉽게 남습니다. 따라서, 최종 프로젝트에 들어가서는 배포 기능 구현에도 힘을 보태고자 하며, 마지막인 만큼 완성도 높은 결과물을 도출해낼 수 있도록 후회 없이 최선을 다해서 임하도록 하겠습니다. 짧은 시간 모두 고생 많으셨습니다 !|
 |박준서|이번 프로젝트는 Docker를 활용하여 배포까지 직접 경험해볼 수 있었던 소중한 기회였습니다. 프로젝트 기간이 짧았던 만큼, 기능적인 범위는 이전 프로젝트에 비해 다소 축소되었지만, 주제가 Todolist였기 때문에 구현 난이도가 낮아 전체적인 진행은 비교적 수월했습니다. 이를 통해 프로젝트의 난이도와 주어진 기간을 고려하여 기능을 어떻게 조절할지에 대한 감각을 점차 익힐 수 있었습니다. 이번 프로젝트에서는 새로운 기술과 API를 적용해볼 수 있는 기회가 많았습니다. Three.js와 Web Push처럼 처음 접해보는 기술을 실제 코드에 적용하면서, 단순한 구현을 넘어서 UX 측면에서도 어떻게 구성할지 고민하며 개발에 임했습니다. 특히 프론트엔드에서 애니메이션을 직접 구현해본 경험은 매우 인상 깊었습니다. 전체적으로 기능 구현, 새로운 기술 학습, UX에 대한 고민, 그리고 배포 환경까지 경험하면서 개발자로서 한 단계 성장할 수 있었던 프로젝트였습니다. 이번 경험을 바탕으로, 다가올 최종 프로젝트에서는 보다 완성도 높은 결과물을 만들 수 있도록 더욱 적극적이고 주도적으로 임하겠습니다.|
-|오유경|이번 프로젝트는 CI/CD 파이프라인 구축 및 실제 배포를 목표로 설계되었습니다. 배포를 우선 과제로 삼기 위해 필수 기능만을 엄선하여 풀스택 개발에 집중했고, 덕분에 기획 → 개발 → 테스트 → 배포의 전 과정을 체계적으로 경험할 수 있었습니다. 아쉽게도 실제 배포 단계에는 제가 직접 참여하지 못했지만, 다음 프로젝트에서는 배포까지 온전히 책임질 수 있도록 개인적으로 복습과 실습을 진행할 예정입니다. 단기간에 완전한 개발 사이클을 완성해야 한다고 생각했지만, 불필요한 기능을 과감히 줄이고 팀원 간 효율적인 협업을 이뤄낸 덕분에 예상보다 여유롭게 마무리할 수 있었습니다. 특히 테스트와 검토 단계에 충분한 시간을 들여 안정성을 확보했고, 그 결과 배포 직전에도 큰 문제 없이 릴리즈 준비를 완료할 수 있었습니다. 이번 경험을 바탕으로, 다음에는 직접 배포까지 담당하며 **더욱 견고한 CI/CD 파이프라인**을 구현하고, 배포 자동화를 한층 고도화해 볼 생각입니다. 짧은 기간 안에 핵심에 집중하는 방법을 확실히 익힌 만큼, 앞으로는 기능과 안정성 모두를 놓치지 않는 개발자가 되도록 노력하겠습니다.|
+|오유경|이번 프로젝트는 CI/CD 파이프라인 구축 및 실제 배포를 목표로 설계되었습니다. 배포를 우선 과제로 삼기 위해 필수 기능만을 기획하여 풀스택 개발에 집중했고, 덕분에 기획 → 개발 → 테스트 → 배포의 전 과정을 체계적으로 경험할 수 있었습니다. 아쉽게도 실제 배포 단계에는 제가 직접 참여하지 못했지만, 다음 프로젝트에서는 배포까지 온전히 책임질 수 있도록 개인적으로 복습과 실습을 진행할 예정입니다. 단기간에 완전한 개발 사이클을 완성해야 한다고 생각했지만, 불필요한 기능을 과감히 줄이고 팀원 간 효율적인 협업을 이뤄낸 덕분에 예상보다 여유롭게 마무리할 수 있었습니다. 특히 테스트와 검토 단계에 충분한 시간을 들여 안정성을 확보했고, 그 결과 배포 직전에도 큰 문제 없이 릴리즈 준비를 완료할 수 있었습니다. 이번 경험을 바탕으로, 다음에는 직접 배포까지 담당하며 더욱 견고한 ****CI/CD 파이프라인을 구현하고, 배포 자동화를 시도해 볼 생각입니다. 짧은 기간 안에 핵심에 집중하는 방법을 확실히 익힌 만큼, 앞으로는 기능과 안정성 모두를 놓치지 않는 개발자가 되도록 노력하겠습니다.|
 |윤채영|Three.js를 활용한 3D 아이템 배치 기능과 게임 요소를 결합한 웹 서비스를 팀 프로젝트로 개발하며, 단순한 기술 구현을 넘어서 사용자 경험과 상업성까지 함께 고민했습니다. 프론트엔드에서는 직관적인 UI/UX의 중요성을, 백엔드에서는 사용자 상태를 정교하게 관리하기 위한 데이터 흐름과 구조 설계의 필요성을 절감했습니다. 특히 자유도 높은 아이템 배치를 통해 의미 있는 상호작용을 제공하려 노력했고, 그 과정에서 게임성과 실용성, 시장성 간의 균형을 추구했습니다. 또한 CI/CD 파이프라인과 자동 배포 환경 구축을 통해 개발 효율성과 안정성을 동시에 확보한 것도 큰 성과였습니다. GitHub Actions와 같은 자동화 도구를 활용해 테스트 및 빌드, 배포 과정이 매끄럽게 이루어졌고, 이를 통해 개발-운영 간의 피드백 루프가 빨라졌습니다. 버전 관리, 브랜치 전략, 그리고 배포 주기 설계 등에서 체계적인 협업 문화를 경험할 수 있었으며, 이러한 DevOps적인 접근이 서비스의 완성도 향상에 큰 기여를 했습니다. 무엇보다 각자의 영역을 책임감 있게 수행해준 팀원들과의 협업을 통해, 혼자였다면 구현하기 어려웠을 완성도를 이끌어낼 수 있었고, 커뮤니케이션의 중요성과 팀워크의 시너지를 다시 한 번 실감한 프로젝트였습니다.|
 |이승재|이번 4차 프로젝트는 배포가 주된 목적이었기 때문에 기능 구현은 최소한으로 진행했습니다. 백엔드의 경우, 복잡한 기능 없이 기본적인 구조만 구현했기 때문에 비교적 수월하게 마무리할 수 있었습니다. 반면, 프론트엔드는 아직 미숙한 부분이 많다는 것을 느꼈고, 앞으로 더 보완이 필요하다는 생각이 들었습니다. 실제 배포는 팀원 한 분이 전담해주셨기 때문에, 큰 어려움 없이 프로젝트를 마칠 수 있었지만, 개인적으로는 Kubernetes와 Docker에 대한 이해가 부족해 아쉬움이 남았습니다. 최종 프로젝트 전까지 배포 환경에 대한 이해를 높여, 직접 실습해보고 팀에 도움이 되는 역할을 할 수 있도록 준비해야겠습니다.|
 |조현승|처음으로 배포 과정을 직접 경험하면서, 그동안 개념적으로만 알고 있던 Docker와 Kubernetes를 실제로 활용해볼 수 있어 뜻깊은 시간이었습니다. 특히 Jenkins를 활용한 테스트 및 버전 관리 자동화를 통해 DevOps 환경에 대한 이해도 함께 높일 수 있었습니다. 또한 OpenAI API를 적용해 AI 기반 서비스 개발도 직접 경험해보며, 단순한 구현을 넘어 실제 사용자에게 가치를 줄 수 있는 AI 활용 방식에 대해 고민할 수 있는 좋은 기회가 되었습니다.|
