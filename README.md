@@ -1,7 +1,5 @@
 <img src="https://github.com/user-attachments/assets/9e9d201a-1f3e-40ce-a266-f44450217ac3" />
 
-<img src="https://github.com/user-attachments/assets/38b280ca-56fe-4308-bc14-3b5d8d546b00"/>
-
 <br><br>
 ## 👑 B612 팀원 소개
 <div align="center">
