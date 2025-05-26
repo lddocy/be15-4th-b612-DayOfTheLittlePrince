@@ -69,7 +69,7 @@
 > 
 ![little_prince_banner_twinkle](https://github.com/user-attachments/assets/02937fa2-9fe8-4e76-b25a-06c3e358af88)
 
-**어린왕자의 하루(Day Of The Little Prince)**는 '어린왕자' 세계관을 기반으로 구성된 감성적인 **투두리스트** 서비스입니다. 사용자들은 자신만의 행성을 꾸미고, 할 일을 통해 경험치를 얻고, 성장하며, 다양한 아이템과 칭호를 획득할 수 있습니다. 단순한 일정 관리 이상의 정서적 동기부여와 성취감을 제공하는 것이 핵심입니다.
+**어린왕자의 하루**는 '어린왕자' 세계관을 기반으로 구성된 감성적인 **투두리스트** 서비스입니다. 사용자들은 자신만의 행성을 꾸미고, 할 일을 통해 경험치를 얻고, 성장하며, 다양한 아이템과 칭호를 획득할 수 있습니다. 단순한 일정 관리 이상의 정서적 동기부여와 성취감을 제공하는 것이 핵심입니다.
 <br> <br>
 
 > #### 기획 배경
@@ -177,6 +177,7 @@
 <p>- 아이템 획득<p>
 <p>- 캡처 모드<p>
 <p>- BGM 재생/중단<p>
+<p>- 행성 캡처 모드<p>
 <br>
 </div>
 </details>
@@ -209,22 +210,23 @@
 ### <p id="2-1">2-1. 요구사항 명세서</p>
 [![요구사항명세서](https://img.shields.io/badge/요구사항명세서-바로가기-yellow?style=for-the-badge)](https://docs.google.com/spreadsheets/d/1SZNyWQLIJLVS90pm35UEcq7Z-KEai1p2RJoas12Ae-Q/edit?gid=0#gid=0) 
 <div>
-  <img src="https://github.com/user-attachments/assets/f8c971b2-acb1-4291-84bc-6c55475e0398" />  
+  <img src="https://github.com/user-attachments/assets/4ea42e49-c2c2-489b-9d14-de5eadb43681" />
 </div>
 
+<br><br>
+
 ### <p id="2-2">2-2. 화면 설계</p>
-[![화면설계서](https://img.shields.io/badge/Figma-바로가기-yellow?style=for-the-badge)](https://www.figma.com/design/ysz1Fl7uJ3ZB3P6qS7LCXz/%EC%96%B4%EB%A6%B0%EC%99%95%EC%9E%90%EC%9D%98-%ED%95%98%EB%A3%A8?node-id=0-1&t=In65T3vSkLxL2pr7-1) 
+[![화면설계서](https://img.shields.io/badge/Figma-바로가기-blue?style=for-the-badge)](https://www.figma.com/design/ysz1Fl7uJ3ZB3P6qS7LCXz/%EC%96%B4%EB%A6%B0%EC%99%95%EC%9E%90%EC%9D%98-%ED%95%98%EB%A3%A8?node-id=0-1&t=In65T3vSkLxL2pr7-1) 
 <div>
   <img src="https://github.com/user-attachments/assets/081fee3f-3c91-43ef-b54d-4be998716f23" />
 </div>
-
 
 <br><br>
 
 ##  <p id="2-3">2-3. DB 모델링</p>
 [![DB모델링](https://img.shields.io/badge/ERDCloud-바로가기-green?style=for-the-badge)](https://www.erdcloud.com/d/BybX9eAbfxLva38Fs)
 <div>
-  <img src="https://github.com/user-attachments/assets/7da742a0-4fd4-4a22-85b0-d3f2dd280a95"/>
+  <img src="https://github.com/user-attachments/assets/b03bee15-b85f-462f-813f-29a9071b9980"/>
 </div>
 
 <br><br>
@@ -238,6 +240,7 @@
 
 ## <p id="3"> 🧩 3. 프로젝트 아키텍처 구조도 </p>
 내용추가예정
+
 <br><br>
 
 ## <p id="4"> 🤖 4. 빌드 및 배포 </p>
@@ -248,7 +251,6 @@
 내용 추가
 </div>
 </details>
-
 
 <br><br>
 
@@ -348,19 +350,19 @@
 
 > ### 🚧 GitHub 대용량 파일 푸시 오류 <br>
 > #### **1️⃣ 문제 상황** <br>
-> .exr 확장자의 고해상도 HDRI 배경 이미지를 git add 후 커밋
-> GitHub는 100MB 초과 단일 파일에 대해 푸시 자체를 거절
-> .gitignore을 추가해도, 이미 커밋된 히스토리는 여전히 남아 있음
+> - .exr 확장자의 고해상도 HDRI 배경 이미지를 git add 후 커밋<br>
+> - GitHub는 100MB 초과 단일 파일에 대해 푸시 자체를 거절<br>
+> - .gitignore을 추가해도, 이미 커밋된 히스토리는 여전히 남아 있음<br>
 > #### **2️⃣ 원인** <br>
-> 대용량 .exr 파일이 커밋 이력에 포함되어 있음
-> 단일 파일 최대 100MB, 권장 50MB 이하
-> .gitignore만으로는 커밋 이력 제거 불가
+> - 대용량 .exr 파일이 커밋 이력에 포함되어 있음<br>
+> - 단일 파일 최대 100MB, 권장 50MB 이하<br>
+> - .gitignore만으로는 커밋 이력 제거 불가<br>
 > #### **3️⃣ 해결 방법** <br>
-> .gitignore에 예외 등록
->  Git 기록 정리를 위한 새 clone
-> git filter-repo로 Git 히스토리에서 완전 삭제
-> .gitignore 반영 커밋
-> 강제 푸시 (push --force)
+> - .gitignore에 예외 등록<br>
+> - Git 기록 정리를 위한 새 clone<br>
+> - git filter-repo로 Git 히스토리에서 완전 삭제<br>
+> - .gitignore 반영 커밋<br>
+> - 강제 푸시 (push --force)
 
 <br><br>
 
