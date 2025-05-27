@@ -24,7 +24,6 @@ const showTodayModal = ref(false);
 const showNotificationModal = ref(false);
 const showMyPageModal = ref(false)
 
-
 const closeModals = () => {
     showTodayModal.value = false;
     showNotificationModal.value = false;
@@ -38,8 +37,6 @@ const handleShowToday = () => {
   showNotificationModal.value = false
   showTodayModal.value = true
 }
-
-const aiSuggestions = ref([]);
 
 const notifications = ref([])
 const fetchNotifications = async () => {
@@ -130,6 +127,8 @@ const addSuggestedTodo = (content) => {
     editable.value[newId] = true
 };
 
+const emit = defineEmits(['update-todos']);
+
 const handleConfirm = async () => {
   const newTodos = todos.value.filter(todo => editable.value[todo.task_id]);
   if (newTodos.length === 0) {
@@ -144,8 +143,8 @@ const handleConfirm = async () => {
       });
     }
     toast.success('할 일이 저장되었습니다.');
-    await fetchTodayTodos();
-    editable.value = {};
+      const updatedTodos = await fetchTodayTodos(); // 응답값 받아오기
+      emit('update-todos', updatedTodos);           // 부모에서 상태 갱신
   } catch (err) {
     console.error('저장 실패:', err);
     toast.error('할 일을 저장하는 데 실패했어요.');
@@ -217,6 +216,7 @@ const isMainOrCalendar = computed(() =>
                     :editable="editable"
                     :is-modal-open="isModalOpen"
                     @update-content="updateTodoContent"
+                    @update-todos="todos = $event"
                     @toggle-checked="toggleTodoChecked"
                     @delete-todo="deleteTodo"
                     @add-todo="addTodo"
