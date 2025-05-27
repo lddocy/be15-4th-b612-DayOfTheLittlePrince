@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted} from 'vue';
+import {computed, ref, onMounted, watch} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ShortTermList from '@/features/calendar/components/ShortTermList.vue'
 import MyPageModal from '@/features/user/components/MyPageModal.vue'
@@ -76,10 +76,22 @@ const fetchTodayTodos = async () => {
   }
 };
 
-onMounted(() => {
+function resetData() {
   fetchNotifications();
   fetchTodayTodos();
+}
+
+onMounted(() => {
+  resetData()
 })
+
+watch(() => authStore.isAuthenticated, (newVal) => {
+  if (newVal) {
+    resetData(); // 로그인 시 재초기화
+  } else {
+    // 로그아웃 시 초기화 or 클리어할 게 있으면 여기도 추가
+  }
+});
 
 const addTodo = () => {
     const newId = Date.now()
