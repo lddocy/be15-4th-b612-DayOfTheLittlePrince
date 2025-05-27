@@ -1,0 +1,84 @@
+:root {
+    /* === Colors === */
+    /* 기본 색상 */
+    --dlp-purple-100: rgba(143, 135, 241, 1);
+    --dlp-lavender-100: rgba(198, 142, 253, 1);
+    --dlp-lilacpink-100: rgba(233, 165, 241, 1);
+    --dlp-babypink-100: rgba(254, 210, 226, 1);
+    --dlp-yellow-100: rgba(255, 252, 203, 1);
+    --dlp-purple-50: rgba(143, 135, 241, 0.5);
+    --dlp-lavender-50: rgba(198, 142, 253, 0.5);
+    --dlp-lilacpink-50: rgba(233, 165, 241, 0.5);
+    --dlp-babypink-50: rgba(254, 210, 226, 0.5);
+    --dlp-yellow-50: rgba(255, 252, 203, 0.5);
+    --dlp-purple-40: rgba(143, 135, 241, 0.4);
+    --dlp-lavender-40: rgba(198, 142, 253, 0.4);
+    --dlp-lilacpink-40: rgba(233, 165, 241, 0.4);
+    --dlp-babypink-40: rgba(254, 210, 226, 0.4);
+    --dlp-yellow-40: rgba(255, 252, 203, 0.4);
+
+
+    /* === Layout 색상 === */
+    --dlp-color-bg-frame: rgba(253, 254, 254, 0.4);
+    --dlp-color-bg-modal-element: rgba(201, 195, 227, 0.8);
+    --dlp-color-bg-button-primary: rgba(143, 135, 241, 0.8);
+
+    --dlp-font-size-title-lg: 40px;          /* 페이지 타이틀 */
+    --dlp-font-size-title-md: 30px;          /* 모달 타이틀 */
+    --dlp-font-size-text-lg: 25px;
+    --dlp-font-size-text-md: 20px;           /* 인풋/체크리스트 항목 */
+    --dlp-font-size-text-sm: 16px;           /* 일반 텍스트 */
+    --dlp-font-size-button: 13px;
+
+    /* === Button === */
+    --dlp-btn-primary-width: 461px;
+    --dlp-btn-primary-height: 56px;
+    --dlp-btn-primary-font-size: 20px;
+    --dlp-btn-primary-radius: 8px;
+
+    /* === Input === */
+    --dlp-input-width: 461px;
+    --dlp-input-height: 44px;
+    --dlp-input-font-size: 20px;
+
+    /* === Checklist === */
+    --dlp-checklist-font-size: 20px;
+    --dlp-checklist-label-font-size: 16px;
+
+    /* === Shadow === */
+    --inner-shdow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    --drop-shdow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+    /* 공통 토스트 스타일 */
+    .custom-toast {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 12px;
+        font-family: 'Cafe24Oneprettynight', sans-serif;
+        font-size: var(--dlp-font-size-text-sm);
+        padding: 12px 16px;
+        backdrop-filter: blur(6px);
+        box-shadow: var(--drop-shdow);
+        color: #333;
+        border: 1px solid transparent;
+    }
+
+    /* 본문 스타일 */
+    .custom-toast-body {
+        letter-spacing: 0.5px;
+    }
+
+    /* 성공 메세지 : 연핑크 */
+    .success-toast {
+        background-color: var(--dlp-babypink-100);
+        border-color: var(--dlp-lilacpink-50);
+    }
+
+    /* 에러 메세지 : 빨강 */
+    .error-toast {
+        background-color: #D61F1F;
+        border-color: var(--dlp-lilacpink-50);
+    }
+
+}

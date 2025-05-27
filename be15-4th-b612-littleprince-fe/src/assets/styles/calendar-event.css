@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .bg-event-1 { background-color: rgba(255, 216, 245, 0.5) !important; }
+    .bg-event-2 { background-color: rgba(255, 252, 216, 0.5) !important; }
+    .bg-event-3 { background-color: rgba(216, 255, 251, 0.5) !important; }
+    .bg-event-4 { background-color: rgba(255, 194, 215, 0.5) !important; }
+    .bg-event-5 { background-color: rgba(198, 255, 188, 0.5) !important; }
+    .fc-event-bar {
+        @apply text-white border-none px-0.5 py-0.5 leading-tight mb-0.5;
+    }
+    .fc-event-dot {
+        @apply invisible
+    }
+}
