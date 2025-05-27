@@ -1,6 +1,6 @@
 ## 1. 빌드 스테이지 시작
 # Gradle 이미지를 가져오고, 빌드 스테이지를 'build'라는 이름으로 설정한다.
-FROM gradle:jdk17-alpine AS build
+FROM openjdk:17-slim AS build
 
 # 컨테이너 내부의 작업 디렉토리를 /app으로 설정한다.
 WORKDIR /app
@@ -9,11 +9,11 @@ WORKDIR /app
 COPY . .
 
 # Gradle을 사용하여 프로젝트를 빌드한다. (daemon 프로세스는 사용하지 않는다.)
-RUN gradle clean bootJar --no-daemon
+RUN ./gradlew clean bootJar --no-daemon
 
 ## 2. 실행 스테이지 시작
 # OpenJDK 17 버전의 이미지를 가져와 JVM 환경을 구축한다.
-FROM openjdk:17-alpine
+FROM openjdk:17-slim
 
 # 빌드 스테이지에서 생성된 JAR 파일을 복사한다.
 COPY --from=build /app/build/libs/*.jar ./
