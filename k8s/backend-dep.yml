@@ -6,8 +6,8 @@ spec:
   selector:
     matchLabels:
       app: backend-kube
-  replicas: 3
-#  replicas: 1
+#  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:

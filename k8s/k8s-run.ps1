@@ -1,4 +1,4 @@
-kubectl delete --all pods,deployments,services,ingress,configmap,secret
+kubectl delete --all pods,deployments,services,ingress
 
 kubectl apply -f secret.yml
 kubectl create configmap db-init-script --from-file=init.sql=db-init/init.sql

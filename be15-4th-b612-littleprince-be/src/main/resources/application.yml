@@ -65,3 +65,11 @@ webpush:
     private-key: ${PRIVATE_KEY}
     subject: ${SUBJECT}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  endpoint:
+    prometheus:
+      enabled: true
