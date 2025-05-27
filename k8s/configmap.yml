@@ -46,8 +46,8 @@ data:
   init.sql: |
     GRANT ALL PRIVILEGES ON little_prince.* TO 'b612'@'%';
     ALTER DATABASE little_prince CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
-    ALTER TABLE badge CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
     SET NAMES utf8mb4;
+    USE little_prince;
     CREATE TABLE `member` (
     	`member_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '회원ID',
     	`email` VARCHAR(30) NOT NULL UNIQUE COMMENT '이메일',
@@ -105,6 +105,7 @@ data:
     	`level` INT NOT NULL COMMENT '획득레벨',
     	PRIMARY KEY (`badge_id`)
     );
+    ALTER TABLE badge CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
     CREATE TABLE `get_badge` (
     	`badge_id` BIGINT NOT NULL COMMENT '칭호ID',
@@ -200,6 +201,7 @@ data:
     ('지혜로운 행성지기', '나의 별, 나의 책임을 성실히 돌보는 사람', 8),
     ('온전한 친구', '진심 어린 관계와 꾸준함의 결정체', 9),
     ('영원의 별의 수호자 🌌', '모든 것을 품은 완성형, 최고의 성숙과 헌신', 10);
+
 
     INSERT INTO item (item_name, x_coord, y_coord, z_coord, `level`, `size`, is_fixed) VALUES
     ('행성', 0, -15, 0, 0, 0.6, 'Y'),
