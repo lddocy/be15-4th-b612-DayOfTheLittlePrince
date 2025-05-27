@@ -2,19 +2,6 @@ CREATE USER IF NOT EXISTS 'b612'@'%' IDENTIFIED BY 'b612';
 GRANT ALL PRIVILEGES ON little_prince.* TO 'b612'@'%';
 USE little_prince;
 
-# DROP TABLE IF EXISTS `notification`;
-# DROP TABLE IF EXISTS `task`;
-# DROP TABLE IF EXISTS `project`;
-# DROP TABLE IF EXISTS `exp_history`;
-# DROP TABLE IF EXISTS `get_badge`;
-# DROP TABLE IF EXISTS `badge`;
-# DROP TABLE IF EXISTS `notification_type`;
-# DROP TABLE IF EXISTS `review`;
-# DROP TABLE IF EXISTS `get_item`;
-# DROP TABLE IF EXISTS `item`;
-# DROP TABLE IF EXISTS `member`;
-# DROP TABLE IF EXISTS `famous_quotes`;
-
 CREATE TABLE member(member_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '회원ID',email VARCHAR(30) NOT NULL UNIQUE COMMENT '이메일',password VARCHAR(255) NOT NULL COMMENT '비밀번호',is_deleted ENUM('Y','N') NOT NULL DEFAULT 'N' COMMENT '탈퇴 여부',created_at TIMESTAMP NOT NULL DEFAULT NOW() COMMENT '생성날짜',exp INT NOT NULL DEFAULT 0 COMMENT '경험치',level INT NOT NULL DEFAULT 0 COMMENT '레벨',planet_name VARCHAR(255) NOT NULL DEFAULT '외로운 행성' COMMENT '행성이름',is_notification_enabled ENUM('Y','N') NOT NULL DEFAULT 'N' COMMENT '알림설정여부',PRIMARY KEY(member_id));
 
 CREATE TABLE item(item_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '아이템 ID',item_name VARCHAR(100) NOT NULL COMMENT '아이템 이름',x_coord DECIMAL(15,8) NOT NULL COMMENT 'X좌표',y_coord DECIMAL(15,8) NOT NULL COMMENT 'Y좌표',z_coord DECIMAL(15,8) NOT NULL COMMENT 'Z좌표',level INT NOT NULL COMMENT '획득 레벨',size DECIMAL(15,8) NOT NULL COMMENT '아이템 크기',is_fixed ENUM('Y','N') NOT NULL DEFAULT 'N' COMMENT '고정여부',PRIMARY KEY(item_id));

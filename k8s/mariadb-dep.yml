@@ -42,10 +42,19 @@ spec:
           volumeMounts:
             - name: mariadb-storage
               mountPath: /var/lib/mysql
+            - name: init-script
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
       volumes:
         - name: mariadb-storage
           persistentVolumeClaim:
             claimName: mariadb-pvc
+        - name: init-script
+          configMap:
+            name: db-init-script
+            items:
+              - key: init.sql
+                path: init.sql
 ---
 apiVersion: v1
 kind: Service
@@ -60,17 +69,6 @@ spec:
   type: ClusterIP
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mariadb-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 2Gi
----
-apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: mariadb-pv
@@ -81,3 +79,16 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: "/mnt/mysql-data"
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 2Gi
