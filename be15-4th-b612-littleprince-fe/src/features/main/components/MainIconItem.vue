@@ -186,7 +186,9 @@ const isMainOrCalendar = computed(() =>
           {{ unreadCount > 9 ? '9+' : unreadCount }}
         </div>
 
-        <div v-if="showNotificationModal" class="modal-content" @click.self="closeModals">
+        <div v-if="showNotificationModal"
+             class="modal-content z-99 bg-white/90 rounded-2xl w-[500px] h-[90vh] flex items-center justify-center"
+             @click.self="closeModals">
           <NotificationModal
               :selected-date="todayDate"
               @cancel="closeModals"
@@ -203,7 +205,11 @@ const isMainOrCalendar = computed(() =>
                 class="icon-img cursor-pointer"
                 @click="toggleTodayModal"
             />
-            <div v-if="showTodayModal" class="modal-content z-99" @click.self="closeModals">
+            <div
+                v-if="showTodayModal"
+                class="modal-content z-99 bg-white/90 rounded-2xl w-[500px] h-[90vh] flex items-center justify-center"
+                @click.self="closeModals"
+            >
                 <ShortTermList
                     :selected-date="todayDate"
                     :todos="todos"
@@ -242,12 +248,11 @@ const isMainOrCalendar = computed(() =>
 }
 .modal-content {
     position: absolute;
-    top: 0;
-    right: 60%;
-    padding: 1rem;
+    top: 20%;
+    right: 90%;
     z-index: 100;
-    width: 540px;
-    max-height: 80vh;
+    width: 430px;
+    max-height: 75vh;
     overflow-y: auto;
 }
 
